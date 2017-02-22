@@ -11,6 +11,8 @@ class rRpg {
 
 	public:
 	rRpg();
+	void update();
+	void render();
 };
 
 #endif

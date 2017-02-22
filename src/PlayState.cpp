@@ -5,10 +5,12 @@ const std::string PlayState::s_stateID = "PLAY";
 PlayState::PlayState() : engine(rRpg()) {}
 
 void PlayState::update() {
+	engine.update();
 	GameState::update();
 }
 
 void PlayState::render() {
+	engine.render();
 	GameState::render();
 }
 
