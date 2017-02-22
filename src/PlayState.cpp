@@ -2,6 +2,8 @@
 
 const std::string PlayState::s_stateID = "PLAY";
 
+PlayState::PlayState() : engine(rRpg()) {}
+
 void PlayState::update() {
 	GameState::update();
 }
@@ -11,6 +13,7 @@ void PlayState::render() {
 }
 
 bool PlayState::onEnter() {
+	engine = rRpg();
 	return true;
 }
 

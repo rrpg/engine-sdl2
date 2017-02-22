@@ -2,12 +2,15 @@
 #define __PLAY_STATE__
 
 #include "SDL2_framework/GameState.h"
+#include "rRpg.hpp"
 
 class PlayState : public GameState {
 	private:
 	static const std::string s_stateID;
+	rRpg engine;
 
 	public:
+	PlayState();
 	virtual void update();
 	virtual void render();
 	virtual bool onEnter();
