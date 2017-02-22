@@ -14,6 +14,7 @@ class Map {
 
 	public:
 	void addActor(Actor *actor);
+	void clean();
 };
 
 #endif
