@@ -1,0 +1,4 @@
+#name;type;id
+#name;type;key
+#name;type;stickAxis
+#name;type;stickAxis;stickDirection
