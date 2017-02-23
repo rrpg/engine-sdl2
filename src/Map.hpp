@@ -12,7 +12,7 @@ class Map {
 	private:
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
-	uint8_t *m_aGrid = 0;
+	std::vector<char> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
 
 	int _parseLine(const char *line, S_ParsingState &state);
@@ -20,7 +20,6 @@ class Map {
 	public:
 	S_MapParsingResult setMap(const char* mapFile);
 	void addActor(Actor *actor);
-	void clean();
 };
 
 #endif

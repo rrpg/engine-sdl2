@@ -5,7 +5,6 @@ rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
 }
 
 rRpg::~rRpg() {
-	m_map.clean();
 }
 
 void rRpg::update() {
