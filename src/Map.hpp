@@ -6,7 +6,7 @@
 #include <vector>
 
 enum S_MapParsingResult {OK, ERROR_OPENING_FILE, INVALID_DIMENSIONS_FORMAT};
-enum S_ParsingState {GET_DIMENSIONS};
+enum S_ParsingState {DIMENSIONS};
 
 class Map {
 	private:

@@ -5,7 +5,7 @@
 const int MAX_CHARS_PER_LINE = 1024;
 
 S_MapParsingResult Map::setMap(const char* mapFile) {
-	S_ParsingState state = GET_DIMENSIONS;
+	S_ParsingState state = DIMENSIONS;
 	std::ifstream fin;
 	fin.open(mapFile);
 	if (!fin.good()) {
