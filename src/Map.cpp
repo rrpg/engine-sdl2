@@ -30,7 +30,28 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 }
 
 int Map::_parseLine(const char *line, S_ParsingState &state) {
-	return 0;
+	int retValue = OK;
+	switch (state) {
+		case DIMENSIONS:
+			retValue = sscanf(line, "%u %u\n", &m_iWidth, &m_iHeight);
+			if (retValue != 2) {
+				retValue = INVALID_DIMENSIONS_FORMAT;
+			}
+			else {
+				state = MAP_DATA;
+			}
+			break;
+		case MAP_DATA:
+			while (*line != '\n' && *line != '\0') {
+				m_vGrid.push_back(*line);
+				++line;
+			}
+			break;
+		default:
+			break;
+	}
+
+	return retValue;
 }
 
 void Map::addActor(Actor *actor) {

@@ -5,8 +5,12 @@
 #include <stdint.h>
 #include <vector>
 
-enum S_MapParsingResult {OK, ERROR_OPENING_FILE, INVALID_DIMENSIONS_FORMAT};
-enum S_ParsingState {DIMENSIONS};
+enum S_MapParsingResult {
+	OK,
+	ERROR_OPENING_FILE,
+	INVALID_DIMENSIONS_FORMAT
+};
+enum S_ParsingState {DIMENSIONS, MAP_DATA};
 
 class Map {
 	private:
