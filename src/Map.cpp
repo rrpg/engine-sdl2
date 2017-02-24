@@ -1,11 +1,11 @@
 #include "Map.hpp"
 
+#include <string.h>
 #include <fstream>
 
 const int MAX_CHARS_PER_LINE = 1024;
 
 S_MapParsingResult Map::setMap(const char* mapFile) {
-	S_ParsingState state = DIMENSIONS;
 	std::ifstream fin;
 	fin.open(mapFile);
 	if (!fin.good()) {
@@ -22,26 +22,30 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 			continue;
 		}
 
-		_parseLine(buf, state);
+		_parseLine(buf);
 	}
 
 	fin.close();
 	return OK;
 }
 
-int Map::_parseLine(const char *line, S_ParsingState &state) {
+int Map::_parseLine(const char *line) {
 	int retValue = OK;
-	switch (state) {
-		case DIMENSIONS:
+
+	if (strlen(line) < 3) {
+		return INVALID_LINE_FORMAT;
+	}
+
+	char type = *line;
+	line += 2;
+	switch (type) {
+		case 'd':
 			retValue = sscanf(line, "%u %u\n", &m_iWidth, &m_iHeight);
 			if (retValue != 2) {
 				retValue = INVALID_DIMENSIONS_FORMAT;
 			}
-			else {
-				state = MAP_DATA;
-			}
 			break;
-		case MAP_DATA:
+		case 'c':
 			while (*line != '\n' && *line != '\0') {
 				m_vGrid.push_back(*line);
 				++line;

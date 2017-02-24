@@ -8,9 +8,9 @@
 enum S_MapParsingResult {
 	OK,
 	ERROR_OPENING_FILE,
+	INVALID_LINE_FORMAT,
 	INVALID_DIMENSIONS_FORMAT
 };
-enum S_ParsingState {DIMENSIONS, MAP_DATA};
 
 class Map {
 	private:
@@ -19,7 +19,7 @@ class Map {
 	std::vector<char> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
 
-	int _parseLine(const char *line, S_ParsingState &state);
+	int _parseLine(const char *line);
 
 	public:
 	S_MapParsingResult setMap(const char* mapFile);
