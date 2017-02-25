@@ -3,6 +3,7 @@
 
 #include "Actor.hpp"
 #include "Map.hpp"
+#include <string>
 
 class rRpg {
 	private:
@@ -12,6 +13,7 @@ class rRpg {
 	public:
 	rRpg();
 	~rRpg();
+	void loadMap(std::string filePath);
 	void update();
 	void render();
 };

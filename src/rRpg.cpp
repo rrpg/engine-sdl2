@@ -5,7 +5,10 @@ rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
 }
 
 rRpg::~rRpg() {
-	m_map.clean();
+}
+
+void rRpg::loadMap(std::string filePath) {
+	m_map.setMap(filePath.c_str());
 }
 
 void rRpg::update() {
