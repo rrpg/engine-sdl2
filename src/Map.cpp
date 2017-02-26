@@ -64,14 +64,17 @@ E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 			retValue = _parseTileset(mapDir, line);
 			break;
 		case 's':
+			int x, y;
 			sscanfResult = sscanf(
 				line,
 				"%d %d\n",
-				&m_sStartPoint.x, &m_sStartPoint.y
+				&x, &y
 			);
 			if (sscanfResult != 2) {
 				retValue = INVALID_START_POINT_FORMAT;
 			}
+			m_sStartPoint.setX((float) x);
+			m_sStartPoint.setY((float) y);
 			break;
 		default:
 			break;
@@ -122,7 +125,7 @@ E_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
 	return OK;
 }
 
-S_Coordinate Map::getStartPoint() {
+Vector2D Map::getStartPoint() {
 	return m_sStartPoint;
 }
 

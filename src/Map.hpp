@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <vector>
 #include "SDL2_framework/Level.h"
+#include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
 
 enum E_MapParsingResult {
@@ -16,16 +17,11 @@ enum E_MapParsingResult {
 	INVALID_TILESET_DEFINITION
 };
 
-typedef struct {
-	int x = 0;
-	int y = 0;
-} S_Coordinate;
-
 class Map {
 	private:
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
-	S_Coordinate m_sStartPoint;
+	Vector2D m_sStartPoint;
 	Tileset m_tileset;
 	std::vector<int> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
@@ -36,7 +32,7 @@ class Map {
 
 	public:
 	E_MapParsingResult setMap(const char* mapFile);
-	S_Coordinate getStartPoint();
+	Vector2D getStartPoint();
 	void addActor(Actor *actor);
 	void render(SDL_Rect camera, int centerX, int centerY);
 };
