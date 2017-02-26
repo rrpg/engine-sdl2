@@ -3,8 +3,8 @@
 
 class Actor {
 	private:
-	int m_x = 0;
-	int m_y = 0;
+	int m_iX = 0;
+	int m_iY = 0;
 
 	public:
 	void setX(int x);
