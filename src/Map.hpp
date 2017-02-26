@@ -19,7 +19,7 @@ class Map {
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
 	Tileset m_tileset;
-	std::vector<char> m_vGrid = {};
+	std::vector<int> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
 
 	S_MapParsingResult _parseLine(const char *mapDir, const char *line);

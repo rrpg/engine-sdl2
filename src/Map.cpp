@@ -72,7 +72,7 @@ S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 
 void Map::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
-		m_vGrid.push_back(*line);
+		m_vGrid.push_back(*line - '0');
 		++line;
 	}
 }
