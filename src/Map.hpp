@@ -31,6 +31,7 @@ class Map {
 	void _parseMapContent(const char *line);
 
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
+	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 
 	public:
 	E_MapParsingResult setMap(const char* mapFile);

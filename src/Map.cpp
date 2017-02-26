@@ -152,6 +152,7 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	_renderTerrain(camera, visibleArea, shift);
+	_renderActors(camera, visibleArea, shift);
 }
 
 void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
@@ -188,5 +189,36 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 				game->getRenderer()
 			);
 		}
+	}
+}
+
+void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
+	TextureManager *manager = TextureManager::Instance();
+	Game *game = Game::Instance();
+
+	int shiftX = (int) shift.getX();
+	int shiftY = (int) shift.getY();
+	for (auto actor : m_vActors) {
+		if (actor->getX() < visibleArea.x || actor->getX() > visibleArea.x + visibleArea.w
+			|| actor->getY() < visibleArea.y || actor->getY() > visibleArea.y + visibleArea.h
+		) {
+			continue;
+		}
+
+		int xScreen, yScreen;
+		xScreen = actor->getX() * m_tileset.tileWidth - shiftX + camera.x;
+		yScreen = actor->getY() * m_tileset.tileHeight - shiftY + camera.y;
+		manager->drawTile(
+			m_tileset.name,
+			0, // margin
+			0, // spacing
+			xScreen,
+			yScreen,
+			m_tileset.tileWidth,
+			m_tileset.tileHeight,
+			actor->getTilesetRowIndex() + 1,
+			actor->getFrame(),
+			game->getRenderer()
+		);
 	}
 }
