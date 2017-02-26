@@ -10,7 +10,7 @@ const int MAX_CHARS_PER_LINE = 1024;
 const int MAX_CHAR_TILESET_NAME = 100;
 const int MAX_CHAR_TILESET_FILE = 100;
 
-S_MapParsingResult Map::setMap(const char* mapFile) {
+E_MapParsingResult Map::setMap(const char* mapFile) {
 	std::ifstream fin;
 	fin.open(mapFile);
 	if (!fin.good()) {
@@ -18,7 +18,7 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 		return ERROR_OPENING_FILE;
 	}
 
-	S_MapParsingResult retValue = OK;
+	E_MapParsingResult retValue = OK;
 	char *mapDir = dirname(const_cast<char*>(mapFile));
 	while (!fin.eof()) {
 		char buf[MAX_CHARS_PER_LINE];
@@ -39,7 +39,7 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 	return retValue;
 }
 
-S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
+E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 	int retValue = OK,
 		sscanfResult;
 	char type;
@@ -63,11 +63,21 @@ S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 		case 't':
 			retValue = _parseTileset(mapDir, line);
 			break;
+		case 's':
+			sscanfResult = sscanf(
+				line,
+				"%d %d\n",
+				&m_sStartPoint.x, &m_sStartPoint.y
+			);
+			if (sscanfResult != 2) {
+				retValue = INVALID_START_POINT_FORMAT;
+			}
+			break;
 		default:
 			break;
 	}
 
-	return (S_MapParsingResult) retValue;
+	return (E_MapParsingResult) retValue;
 }
 
 void Map::_parseMapContent(const char *line) {
@@ -77,7 +87,7 @@ void Map::_parseMapContent(const char *line) {
 	}
 }
 
-S_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
+E_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
 	Tileset tileset;
 	char tilesetPath[MAX_CHAR_TILESET_FILE],
 		 tilesetName[MAX_CHAR_TILESET_NAME];
@@ -112,19 +122,20 @@ S_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
 	return OK;
 }
 
+S_Coordinate Map::getStartPoint() {
+	return m_sStartPoint;
+}
+
 void Map::addActor(Actor *actor) {
 	m_vActors.push_back(actor);
 }
 
-void Map::render(SDL_Rect camera, int center) {
+void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// camera is in pixels in the window
-	// center is a cell index
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
 	// x,y coords in the grid
-	int centerX = center % m_iWidth;
-	int centerY = center / m_iWidth;
 	unsigned int cameraHalfWidthGrid = (camera.w / 2) / m_tileset.tileWidth,
 				 cameraHalfHeightGrid = (camera.h / 2) / m_tileset.tileHeight;
 
