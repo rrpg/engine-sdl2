@@ -10,7 +10,7 @@ const int MAX_CHARS_PER_LINE = 1024;
 const int MAX_CHAR_TILESET_NAME = 100;
 const int MAX_CHAR_TILESET_FILE = 100;
 
-S_MapParsingResult Map::setMap(const char* mapFile) {
+E_MapParsingResult Map::setMap(const char* mapFile) {
 	std::ifstream fin;
 	fin.open(mapFile);
 	if (!fin.good()) {
@@ -18,7 +18,7 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 		return ERROR_OPENING_FILE;
 	}
 
-	S_MapParsingResult retValue = OK;
+	E_MapParsingResult retValue = OK;
 	char *mapDir = dirname(const_cast<char*>(mapFile));
 	while (!fin.eof()) {
 		char buf[MAX_CHARS_PER_LINE];
@@ -39,7 +39,7 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 	return retValue;
 }
 
-S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
+E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 	int retValue = OK,
 		sscanfResult;
 	char type;
@@ -67,7 +67,7 @@ S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 			break;
 	}
 
-	return (S_MapParsingResult) retValue;
+	return (E_MapParsingResult) retValue;
 }
 
 void Map::_parseMapContent(const char *line) {
@@ -77,7 +77,7 @@ void Map::_parseMapContent(const char *line) {
 	}
 }
 
-S_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
+E_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
 	Tileset tileset;
 	char tilesetPath[MAX_CHAR_TILESET_FILE],
 		 tilesetName[MAX_CHAR_TILESET_NAME];
