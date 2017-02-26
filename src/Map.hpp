@@ -38,7 +38,7 @@ class Map {
 	E_MapParsingResult setMap(const char* mapFile);
 	S_Coordinate getStartPoint();
 	void addActor(Actor *actor);
-	void render(SDL_Rect camera, int center);
+	void render(SDL_Rect camera, int centerX, int centerY);
 };
 
 #endif

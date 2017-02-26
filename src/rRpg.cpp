@@ -25,6 +25,5 @@ void rRpg::render() {
 	SDL_Rect camera = {
 		10, 10, 300, 300
 	};
-	int center = 180;
-	m_map.render(camera, center);
+	m_map.render(camera, 10, 10);
 }

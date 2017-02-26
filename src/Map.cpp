@@ -130,15 +130,12 @@ void Map::addActor(Actor *actor) {
 	m_vActors.push_back(actor);
 }
 
-void Map::render(SDL_Rect camera, int center) {
+void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// camera is in pixels in the window
-	// center is a cell index
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
 	// x,y coords in the grid
-	int centerX = center % m_iWidth;
-	int centerY = center / m_iWidth;
 	unsigned int cameraHalfWidthGrid = (camera.w / 2) / m_tileset.tileWidth,
 				 cameraHalfHeightGrid = (camera.h / 2) / m_tileset.tileHeight;
 
