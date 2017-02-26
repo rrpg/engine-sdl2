@@ -22,7 +22,7 @@ class Map {
 	std::vector<char> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
 
-	int _parseLine(const char *mapDir, const char *line);
+	S_MapParsingResult _parseLine(const char *mapDir, const char *line);
 	S_MapParsingResult _parseTileset(const char *mapDir, const char *line);
 
 	public:

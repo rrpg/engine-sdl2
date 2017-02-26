@@ -18,7 +18,7 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 		return ERROR_OPENING_FILE;
 	}
 
-
+	S_MapParsingResult retValue = OK;
 	char *mapDir = dirname(const_cast<char*>(mapFile));
 	while (!fin.eof()) {
 		char buf[MAX_CHARS_PER_LINE];
@@ -29,14 +29,17 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 			continue;
 		}
 
-		_parseLine(mapDir, buf);
+		retValue = _parseLine(mapDir, buf);
+		if (retValue != OK) {
+			break;
+		}
 	}
 
 	fin.close();
-	return OK;
+	return retValue;
 }
 
-int Map::_parseLine(const char *mapDir, const char *line) {
+S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 	int retValue = OK,
 		sscanfResult;
 	char type;
@@ -67,7 +70,7 @@ int Map::_parseLine(const char *mapDir, const char *line) {
 			break;
 	}
 
-	return retValue;
+	return (S_MapParsingResult) retValue;
 }
 
 S_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
