@@ -15,6 +15,8 @@ void rRpg::loadMap(std::string filePath) {
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
 	}
+	m_hero.setX(m_map.getStartPoint().x);
+	m_hero.setY(m_map.getStartPoint().y);
 }
 
 void rRpg::update() {
@@ -25,5 +27,5 @@ void rRpg::render() {
 	SDL_Rect camera = {
 		10, 10, 300, 300
 	};
-	m_map.render(camera, 10, 10);
+	m_map.render(camera, m_hero.getX(), m_hero.getY());
 }
