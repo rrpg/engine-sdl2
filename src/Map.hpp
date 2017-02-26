@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <vector>
 #include "SDL2_framework/Level.h"
+#include <SDL2/SDL.h>
 
 enum S_MapParsingResult {
 	OK,
@@ -29,6 +30,7 @@ class Map {
 	public:
 	S_MapParsingResult setMap(const char* mapFile);
 	void addActor(Actor *actor);
+	void render(SDL_Rect camera, int center);
 };
 
 #endif
