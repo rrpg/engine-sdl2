@@ -1,5 +1,6 @@
 #include "rRpg.hpp"
 #include <SDL2/SDL.h>
+#include <iostream>
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
 	m_map.addActor(&m_hero);
@@ -9,7 +10,11 @@ rRpg::~rRpg() {
 }
 
 void rRpg::loadMap(std::string filePath) {
-	m_map.setMap(filePath.c_str());
+	S_MapParsingResult res;
+	res = m_map.setMap(filePath.c_str());
+	if (res != OK) {
+		std::cout << "error parsing map: " << res << std::endl;
+	}
 }
 
 void rRpg::update() {
