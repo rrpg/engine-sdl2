@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "SDL2_framework/ServiceProvider.h"
+#include "SDL2_framework/Game.h"
 #include "SDL2_framework/UserActions.h"
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
@@ -41,7 +42,8 @@ void rRpg::update() {
 
 void rRpg::render() {
 	SDL_Rect camera = {
-		10, 10, 300, 300
+		0, 0,
+		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
 	m_map.render(camera, m_hero.getX(), m_hero.getY());
 }
