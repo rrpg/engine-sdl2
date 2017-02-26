@@ -24,6 +24,7 @@ class Map {
 
 	S_MapParsingResult _parseLine(const char *mapDir, const char *line);
 	S_MapParsingResult _parseTileset(const char *mapDir, const char *line);
+	void _parseMapContent(const char *line);
 
 	public:
 	S_MapParsingResult setMap(const char* mapFile);

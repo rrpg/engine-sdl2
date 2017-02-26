@@ -58,10 +58,7 @@ S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 			}
 			break;
 		case 'c':
-			while (*line != '\n' && *line != '\0') {
-				m_vGrid.push_back(*line);
-				++line;
-			}
+			_parseMapContent(line);
 			break;
 		case 't':
 			retValue = _parseTileset(mapDir, line);
@@ -71,6 +68,13 @@ S_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 	}
 
 	return (S_MapParsingResult) retValue;
+}
+
+void Map::_parseMapContent(const char *line) {
+	while (*line != '\n' && *line != '\0') {
+		m_vGrid.push_back(*line);
+		++line;
+	}
 }
 
 S_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
