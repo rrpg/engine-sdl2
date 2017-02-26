@@ -37,7 +37,8 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 }
 
 int Map::_parseLine(const char *mapDir, const char *line) {
-	int retValue = OK;
+	int retValue = OK,
+		sscanfResult;
 	char type;
 
 	if (strlen(line) < 3) {
@@ -48,8 +49,8 @@ int Map::_parseLine(const char *mapDir, const char *line) {
 	line += 2;
 	switch (type) {
 		case 'd':
-			retValue = sscanf(line, "%u %u\n", &m_iWidth, &m_iHeight);
-			if (retValue != 2) {
+			sscanfResult = sscanf(line, "%u %u\n", &m_iWidth, &m_iHeight);
+			if (sscanfResult != 2) {
 				retValue = INVALID_DIMENSIONS_FORMAT;
 			}
 			break;
