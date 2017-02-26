@@ -38,12 +38,13 @@ S_MapParsingResult Map::setMap(const char* mapFile) {
 
 int Map::_parseLine(const char *mapDir, const char *line) {
 	int retValue = OK;
+	char type;
 
 	if (strlen(line) < 3) {
 		return INVALID_LINE_FORMAT;
 	}
 
-	char type = *line;
+	type = *line;
 	line += 2;
 	switch (type) {
 		case 'd':
