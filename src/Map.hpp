@@ -12,13 +12,20 @@ enum E_MapParsingResult {
 	ERROR_OPENING_FILE,
 	INVALID_LINE_FORMAT,
 	INVALID_DIMENSIONS_FORMAT,
+	INVALID_START_POINT_FORMAT,
 	INVALID_TILESET_DEFINITION
 };
+
+typedef struct {
+	int x = 0;
+	int y = 0;
+} S_Coordinate;
 
 class Map {
 	private:
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
+	S_Coordinate m_sStartPoint;
 	Tileset m_tileset;
 	std::vector<int> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
@@ -29,6 +36,7 @@ class Map {
 
 	public:
 	E_MapParsingResult setMap(const char* mapFile);
+	S_Coordinate getStartPoint();
 	void addActor(Actor *actor);
 	void render(SDL_Rect camera, int center);
 };

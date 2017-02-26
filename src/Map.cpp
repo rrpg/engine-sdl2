@@ -63,6 +63,16 @@ E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 		case 't':
 			retValue = _parseTileset(mapDir, line);
 			break;
+		case 's':
+			sscanfResult = sscanf(
+				line,
+				"%d %d\n",
+				&m_sStartPoint.x, &m_sStartPoint.y
+			);
+			if (sscanfResult != 2) {
+				retValue = INVALID_START_POINT_FORMAT;
+			}
+			break;
 		default:
 			break;
 	}
@@ -110,6 +120,10 @@ E_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
 	m_tileset.name = tilesetName;
 	m_tileset.numColumns = tilesetWidth;
 	return OK;
+}
+
+S_Coordinate Map::getStartPoint() {
+	return m_sStartPoint;
 }
 
 void Map::addActor(Actor *actor) {
