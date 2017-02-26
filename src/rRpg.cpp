@@ -3,7 +3,6 @@
 #include <iostream>
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
-	m_map.addActor(&m_hero);
 }
 
 rRpg::~rRpg() {
@@ -17,6 +16,9 @@ void rRpg::loadMap(std::string filePath) {
 	}
 	m_hero.setX((int) m_map.getStartPoint().getX());
 	m_hero.setY((int) m_map.getStartPoint().getY());
+	// @TODO Move this somewhere else
+	m_hero.setTilesetRowIndex(1);
+	m_map.addActor(&m_hero);
 }
 
 void rRpg::update() {
