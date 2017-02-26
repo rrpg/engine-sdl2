@@ -5,7 +5,7 @@
 #include "PlayState.hpp"
 #include <libgen.h>
 
-const int FPS = 60;
+const int FPS = 25;
 const int DELAY_TIME = 1000 / FPS;
 
 int main(int argc, char* args[]) {

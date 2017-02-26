@@ -135,8 +135,8 @@ void Map::addActor(Actor *actor) {
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
-	int cameraWidthGrid = (camera.w / 2) / m_tileset.tileWidth,
-		 cameraHeightGrid = (camera.h / 2) / m_tileset.tileHeight;
+	int cameraWidthGrid = camera.w / m_tileset.tileWidth,
+		 cameraHeightGrid = camera.h / m_tileset.tileHeight;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible

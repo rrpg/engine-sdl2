@@ -1,6 +1,9 @@
 #include "rRpg.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
+#include "SDL2_framework/ServiceProvider.h"
+#include "SDL2_framework/Game.h"
+#include "SDL2_framework/UserActions.h"
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
 }
@@ -22,12 +25,25 @@ void rRpg::loadMap(std::string filePath) {
 }
 
 void rRpg::update() {
-
+	UserActions* userActions = ServiceProvider::getUserActions();
+	if (userActions->getActionState("MOVE_PLAYER_UP")) {
+		m_hero.setY(m_hero.getY() - 1);
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_DOWN")) {
+		m_hero.setY(m_hero.getY() + 1);
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_LEFT")) {
+		m_hero.setX(m_hero.getX() - 1);
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_RIGHT")) {
+		m_hero.setX(m_hero.getX() + 1);
+	}
 }
 
 void rRpg::render() {
 	SDL_Rect camera = {
-		10, 10, 300, 300
+		0, 0,
+		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
 	m_map.render(camera, m_hero.getX(), m_hero.getY());
 }
