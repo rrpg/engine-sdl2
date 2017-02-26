@@ -3,7 +3,6 @@
 #include <iostream>
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
-	m_map.addActor(&m_hero);
 }
 
 rRpg::~rRpg() {
@@ -15,8 +14,11 @@ void rRpg::loadMap(std::string filePath) {
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
 	}
-	m_hero.setX(m_map.getStartPoint().x);
-	m_hero.setY(m_map.getStartPoint().y);
+	m_hero.setX((int) m_map.getStartPoint().getX());
+	m_hero.setY((int) m_map.getStartPoint().getY());
+	// @TODO Move this somewhere else
+	m_hero.setTilesetRowIndex(1);
+	m_map.addActor(&m_hero);
 }
 
 void rRpg::update() {

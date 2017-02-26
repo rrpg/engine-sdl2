@@ -64,14 +64,17 @@ E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 			retValue = _parseTileset(mapDir, line);
 			break;
 		case 's':
+			int x, y;
 			sscanfResult = sscanf(
 				line,
 				"%d %d\n",
-				&m_sStartPoint.x, &m_sStartPoint.y
+				&x, &y
 			);
 			if (sscanfResult != 2) {
 				retValue = INVALID_START_POINT_FORMAT;
 			}
+			m_sStartPoint.setX((float) x);
+			m_sStartPoint.setY((float) y);
 			break;
 		default:
 			break;
@@ -122,7 +125,7 @@ E_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
 	return OK;
 }
 
-S_Coordinate Map::getStartPoint() {
+Vector2D Map::getStartPoint() {
 	return m_sStartPoint;
 }
 
@@ -131,24 +134,36 @@ void Map::addActor(Actor *actor) {
 }
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
+	// x,y coords in the grid
+	int cameraWidthGrid = (camera.w / 2) / m_tileset.tileWidth,
+		 cameraHeightGrid = (camera.h / 2) / m_tileset.tileHeight;
+
+	SDL_Rect visibleArea = {
+		// portion of the map which is visible
+		centerX - cameraWidthGrid / 2,
+		centerY - cameraHeightGrid / 2,
+		cameraWidthGrid,
+		cameraHeightGrid
+	};
+
+	Vector2D shift = {
+		(float) (visibleArea.x * m_tileset.tileWidth),
+		(float) (visibleArea.y * m_tileset.tileHeight)
+	};
+
+	_renderTerrain(camera, visibleArea, shift);
+	_renderActors(camera, visibleArea, shift);
+}
+
+void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
-	// x,y coords in the grid
-	unsigned int cameraHalfWidthGrid = (camera.w / 2) / m_tileset.tileWidth,
-				 cameraHalfHeightGrid = (camera.h / 2) / m_tileset.tileHeight;
-
-	// portion of the map which is visible
-	int topLeftX = centerX - cameraHalfWidthGrid;
-	int topLeftY = centerY - cameraHalfHeightGrid;
-	int botRightX = centerX + cameraHalfWidthGrid;
-	int botRightY = centerY + cameraHalfHeightGrid;
-
-	int shiftX = topLeftX * m_tileset.tileWidth;
-	int shiftY = topLeftY * m_tileset.tileHeight;
-	for (int y = topLeftY; y < botRightY; ++y) {
-		for (int x = topLeftX; x < botRightX; ++x) {
+	int shiftX = (int) shift.getX();
+	int shiftY = (int) shift.getY();
+	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
+		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
@@ -174,5 +189,36 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 				game->getRenderer()
 			);
 		}
+	}
+}
+
+void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
+	TextureManager *manager = TextureManager::Instance();
+	Game *game = Game::Instance();
+
+	int shiftX = (int) shift.getX();
+	int shiftY = (int) shift.getY();
+	for (auto actor : m_vActors) {
+		if (actor->getX() < visibleArea.x || actor->getX() > visibleArea.x + visibleArea.w
+			|| actor->getY() < visibleArea.y || actor->getY() > visibleArea.y + visibleArea.h
+		) {
+			continue;
+		}
+
+		int xScreen, yScreen;
+		xScreen = actor->getX() * m_tileset.tileWidth - shiftX + camera.x;
+		yScreen = actor->getY() * m_tileset.tileHeight - shiftY + camera.y;
+		manager->drawTile(
+			m_tileset.name,
+			0, // margin
+			0, // spacing
+			xScreen,
+			yScreen,
+			m_tileset.tileWidth,
+			m_tileset.tileHeight,
+			actor->getTilesetRowIndex() + 1,
+			actor->getFrame(),
+			game->getRenderer()
+		);
 	}
 }
