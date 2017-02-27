@@ -21,8 +21,8 @@ class Map {
 	private:
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
-	Vector2D m_sStartPoint;
-	Tileset m_tileset;
+	Vector2D m_sStartPoint = Vector2D();
+	Tileset m_tileset = Tileset();
 	std::vector<int> m_vGrid = {};
 	std::vector<Actor*> m_vActors = {};
 
