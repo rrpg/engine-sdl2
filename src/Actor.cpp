@@ -9,3 +9,7 @@ int Actor::getFrame() { return m_iFrame; }
 void Actor::setFrame(int frame) { m_iFrame = frame; }
 int Actor::getTilesetRowIndex() { return m_iTilesetRowIndex; }
 void Actor::setTilesetRowIndex(int tilesetRowIndex) { m_iTilesetRowIndex = tilesetRowIndex; }
+
+std::string Actor::getCoordsKey() {
+	return std::to_string(m_iX) + "-" + std::to_string(m_iY);
+}

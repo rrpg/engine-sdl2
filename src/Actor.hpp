@@ -1,6 +1,8 @@
 #ifndef __ACTOR__
 #define __ACTOR__
 
+#include <string>
+
 class Actor {
 	private:
 	int m_iX = 0;
@@ -18,6 +20,8 @@ class Actor {
 	void setFrame(int frame);
 	int getTilesetRowIndex();
 	void setTilesetRowIndex(int tilesetRowIndex);
+
+	std::string getCoordsKey();
 };
 
 #endif
