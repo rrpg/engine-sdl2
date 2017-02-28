@@ -1,14 +1,16 @@
 #include "rRpg.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "SDL2_framework/ServiceProvider.h"
 #include "SDL2_framework/Game.h"
-#include "SDL2_framework/UserActions.h"
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
 }
 
 rRpg::~rRpg() {
+}
+
+Actor* rRpg::getHero() {
+	return &m_hero;
 }
 
 void rRpg::loadMap(std::string filePath) {
@@ -22,22 +24,6 @@ void rRpg::loadMap(std::string filePath) {
 	// @TODO Move this somewhere else
 	m_hero.setTilesetRowIndex(1);
 	m_map.addActor(&m_hero);
-}
-
-void rRpg::update() {
-	UserActions* userActions = ServiceProvider::getUserActions();
-	if (userActions->getActionState("MOVE_PLAYER_UP")) {
-		m_hero.setY(m_hero.getY() - 1);
-	}
-	else if (userActions->getActionState("MOVE_PLAYER_DOWN")) {
-		m_hero.setY(m_hero.getY() + 1);
-	}
-	else if (userActions->getActionState("MOVE_PLAYER_LEFT")) {
-		m_hero.setX(m_hero.getX() - 1);
-	}
-	else if (userActions->getActionState("MOVE_PLAYER_RIGHT")) {
-		m_hero.setX(m_hero.getX() + 1);
-	}
 }
 
 void rRpg::render() {
