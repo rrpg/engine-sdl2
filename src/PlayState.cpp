@@ -8,6 +8,7 @@
 #include "Command/MoveRight.hpp"
 
 const std::string PlayState::s_stateID = "PLAY";
+const uint32_t timeBetweenActions = 100;
 
 PlayState::PlayState() : engine(rRpg()) {}
 
@@ -28,7 +29,11 @@ void PlayState::update() {
 	}
 
 	if (command != 0) {
-		command->execute(engine.getHero(), engine.getMap());
+		uint32_t currentTimestamp = SDL_GetTicks();
+		if (currentTimestamp - m_iTimestampLastCommand > timeBetweenActions) {
+			command->execute(engine.getHero(), engine.getMap());
+			m_iTimestampLastCommand = currentTimestamp;
+		}
 		free(command);
 	}
 	GameState::update();
