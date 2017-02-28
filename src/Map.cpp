@@ -13,8 +13,9 @@ const int MAX_CHAR_TILESET_FILE = 100;
 const int CELL_FLAG_WALKABLE = 0x1;
 
 Map::Map() {
-	m_mCellTypeFlags[Floor] = CELL_FLAG_WALKABLE;
 	m_mCellTypeFlags[Wall] = 0;
+	m_mCellTypeFlags[Path] = CELL_FLAG_WALKABLE;
+	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
 }
 
 E_MapParsingResult Map::setMap(const char* mapFile) {
@@ -237,5 +238,6 @@ bool Map::isCellWalkable(int x, int y) {
 	}
 
 	int gridIndex = y * m_iWidth + x;
-	return (m_vGrid[gridIndex] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
+	return (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
 }
