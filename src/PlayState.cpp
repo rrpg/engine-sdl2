@@ -28,7 +28,7 @@ void PlayState::update() {
 	}
 
 	if (command != 0) {
-		command->execute(engine.getHero());
+		command->execute(engine.getHero(), engine.getMap());
 		free(command);
 	}
 	GameState::update();

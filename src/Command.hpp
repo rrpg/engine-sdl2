@@ -2,11 +2,12 @@
 #define __COMMAND__
 
 #include "Actor.hpp"
+#include "Map.hpp"
 
 class Command {
 	public:
 	virtual ~Command() {};
-	virtual void execute(Actor *actor) = 0;
+	virtual void execute(Actor *actor, Map *map) = 0;
 };
 
 #endif

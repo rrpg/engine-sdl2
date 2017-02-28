@@ -1,11 +1,11 @@
 #ifndef __MOVE_LEFT_COMMAND__
 #define __MOVE_LEFT_COMMAND__
 
-#include "../Command.hpp"
+#include "Move.hpp"
 
-class MoveLeftCommand : public Command {
+class MoveLeftCommand : public MoveCommand {
 	public:
-	void execute(Actor* actor);
+	void execute(Actor* actor, Map *map);
 };
 
 #endif

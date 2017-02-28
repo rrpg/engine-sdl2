@@ -1,5 +1,5 @@
 #include "MoveUp.hpp"
 
-void MoveUpCommand::execute(Actor *actor) {
-	actor->setY(actor->getY() - 1);
+void MoveUpCommand::execute(Actor *actor, Map *map) {
+	_execute(actor, map, actor->getX(), actor->getY() - 1);
 }

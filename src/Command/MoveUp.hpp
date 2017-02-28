@@ -1,11 +1,11 @@
 #ifndef __MOVE_UP_COMMAND__
 #define __MOVE_UP_COMMAND__
 
-#include "../Command.hpp"
+#include "Move.hpp"
 
-class MoveUpCommand : public Command {
+class MoveUpCommand : public MoveCommand {
 	public:
-	void execute(Actor* actor);
+	void execute(Actor* actor, Map* map);
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "MoveDown.hpp"
 
-void MoveDownCommand::execute(Actor *actor) {
-	actor->setY(actor->getY() + 1);
+void MoveDownCommand::execute(Actor *actor, Map *map) {
+	_execute(actor, map, actor->getX(), actor->getY() + 1);
 }
