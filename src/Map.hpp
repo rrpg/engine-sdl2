@@ -19,8 +19,8 @@ enum E_MapParsingResult {
 };
 
 enum E_CellType {
-	Floor, // 0
-	Wall // 1
+	Wall, // 0
+	Floor // 1
 };
 
 class Map {
