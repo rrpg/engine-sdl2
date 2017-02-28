@@ -137,7 +137,8 @@ Vector2D Map::getStartPoint() {
 }
 
 void Map::addActor(Actor *actor) {
-	m_vActors.push_back(actor);
+	std::string key = Actor::getCoordsKey(actor->getX(), actor->getY());
+	m_vActors[key] = actor;
 }
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
@@ -206,15 +207,15 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	int shiftX = (int) shift.getX();
 	int shiftY = (int) shift.getY();
 	for (auto actor : m_vActors) {
-		if (actor->getX() < visibleArea.x || actor->getX() > visibleArea.x + visibleArea.w
-			|| actor->getY() < visibleArea.y || actor->getY() > visibleArea.y + visibleArea.h
+		if (actor.second->getX() < visibleArea.x || actor.second->getX() > visibleArea.x + visibleArea.w
+			|| actor.second->getY() < visibleArea.y || actor.second->getY() > visibleArea.y + visibleArea.h
 		) {
 			continue;
 		}
 
 		int xScreen, yScreen;
-		xScreen = actor->getX() * m_tileset.tileWidth - shiftX + camera.x;
-		yScreen = actor->getY() * m_tileset.tileHeight - shiftY + camera.y;
+		xScreen = actor.second->getX() * m_tileset.tileWidth - shiftX + camera.x;
+		yScreen = actor.second->getY() * m_tileset.tileHeight - shiftY + camera.y;
 		manager->drawTile(
 			m_tileset.name,
 			0, // margin
@@ -223,8 +224,8 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 			yScreen,
 			m_tileset.tileWidth,
 			m_tileset.tileHeight,
-			actor->getTilesetRowIndex() + 1,
-			actor->getFrame(),
+			actor.second->getTilesetRowIndex() + 1,
+			actor.second->getFrame(),
 			game->getRenderer()
 		);
 	}
