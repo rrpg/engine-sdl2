@@ -10,6 +10,13 @@ const int MAX_CHARS_PER_LINE = 1024;
 const int MAX_CHAR_TILESET_NAME = 100;
 const int MAX_CHAR_TILESET_FILE = 100;
 
+const int CELL_FLAG_WALKABLE = 0x1;
+
+Map::Map() {
+	m_mCellTypeFlags[Floor] = CELL_FLAG_WALKABLE;
+	m_mCellTypeFlags[Wall] = 0;
+}
+
 E_MapParsingResult Map::setMap(const char* mapFile) {
 	std::ifstream fin;
 	fin.open(mapFile);
