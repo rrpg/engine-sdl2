@@ -13,6 +13,10 @@ Actor* rRpg::getHero() {
 	return &m_hero;
 }
 
+Map* rRpg::getMap() {
+	return &m_map;
+}
+
 void rRpg::loadMap(std::string filePath) {
 	E_MapParsingResult res;
 	res = m_map.setMap(filePath.c_str());
