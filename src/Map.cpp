@@ -13,8 +13,8 @@ const int MAX_CHAR_TILESET_FILE = 100;
 const int CELL_FLAG_WALKABLE = 0x1;
 
 Map::Map() {
-	m_mCellTypeFlags[Floor] = CELL_FLAG_WALKABLE;
 	m_mCellTypeFlags[Wall] = 0;
+	m_mCellTypeFlags[Path] = CELL_FLAG_WALKABLE;
 }
 
 E_MapParsingResult Map::setMap(const char* mapFile) {

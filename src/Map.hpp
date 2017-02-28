@@ -20,7 +20,7 @@ enum E_MapParsingResult {
 
 enum E_CellType {
 	Wall, // 0
-	Floor // 1
+	Path // 1
 };
 
 class Map {
