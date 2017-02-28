@@ -1,9 +1,9 @@
 #ifndef __MOVE_DOWN_COMMAND__
 #define __MOVE_DOWN_COMMAND__
 
-#include "../Command.hpp"
+#include "Move.hpp"
 
-class MoveDownCommand : public Command {
+class MoveDownCommand : public MoveCommand {
 	public:
 	void execute(Actor* actor);
 };
