@@ -14,6 +14,7 @@ class rRpg {
 	rRpg();
 	~rRpg();
 	Actor* getHero();
+	Map* getMap();
 	void loadMap(std::string filePath);
 	void render();
 };

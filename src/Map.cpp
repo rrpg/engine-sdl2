@@ -10,6 +10,13 @@ const int MAX_CHARS_PER_LINE = 1024;
 const int MAX_CHAR_TILESET_NAME = 100;
 const int MAX_CHAR_TILESET_FILE = 100;
 
+const int CELL_FLAG_WALKABLE = 0x1;
+
+Map::Map() {
+	m_mCellTypeFlags[Floor] = CELL_FLAG_WALKABLE;
+	m_mCellTypeFlags[Wall] = 0;
+}
+
 E_MapParsingResult Map::setMap(const char* mapFile) {
 	std::ifstream fin;
 	fin.open(mapFile);
@@ -221,4 +228,13 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 			game->getRenderer()
 		);
 	}
+}
+
+bool Map::isCellWalkable(int x, int y) {
+	if (x < 0 || x >= m_iWidth || y < 0 || y >= m_iHeight) {
+		return false;
+	}
+
+	int gridIndex = y * m_iWidth + x;
+	return (m_vGrid[gridIndex] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
 }
