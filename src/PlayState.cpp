@@ -2,6 +2,10 @@
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/UserActions.h"
 #include "SDL2_framework/ServiceProvider.h"
+#include "Command/MoveUp.hpp"
+#include "Command/MoveDown.hpp"
+#include "Command/MoveLeft.hpp"
+#include "Command/MoveRight.hpp"
 
 const std::string PlayState::s_stateID = "PLAY";
 
@@ -9,17 +13,23 @@ PlayState::PlayState() : engine(rRpg()) {}
 
 void PlayState::update() {
 	UserActions* userActions = ServiceProvider::getUserActions();
+	Command *command = 0;
 	if (userActions->getActionState("MOVE_PLAYER_UP")) {
-		engine.getHero()->setY(engine.getHero()->getY() - 1);
+		command = new MoveUpCommand();
 	}
 	else if (userActions->getActionState("MOVE_PLAYER_DOWN")) {
-		engine.getHero()->setY(engine.getHero()->getY() + 1);
+		command = new MoveDownCommand();
 	}
 	else if (userActions->getActionState("MOVE_PLAYER_LEFT")) {
-		engine.getHero()->setX(engine.getHero()->getX() - 1);
+		command = new MoveLeftCommand();
 	}
 	else if (userActions->getActionState("MOVE_PLAYER_RIGHT")) {
-		engine.getHero()->setX(engine.getHero()->getX() + 1);
+		command = new MoveRightCommand();
+	}
+
+	if (command != 0) {
+		command->execute(engine.getHero());
+		free(command);
 	}
 	GameState::update();
 }
