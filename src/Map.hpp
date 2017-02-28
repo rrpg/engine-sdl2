@@ -46,6 +46,7 @@ class Map {
 	Vector2D getStartPoint();
 	void addActor(Actor *actor);
 	void render(SDL_Rect camera, int centerX, int centerY);
+	bool isCellWalkable(int x, int y);
 };
 
 #endif

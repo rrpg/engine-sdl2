@@ -229,3 +229,12 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		);
 	}
 }
+
+bool Map::isCellWalkable(int x, int y) {
+	if (x < 0 || x >= m_iWidth || y < 0 || y >= m_iHeight) {
+		return false;
+	}
+
+	int gridIndex = y * m_iWidth + x;
+	return (m_vGrid[gridIndex] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+}
