@@ -237,5 +237,6 @@ bool Map::isCellWalkable(int x, int y) {
 	}
 
 	int gridIndex = y * m_iWidth + x;
-	return (m_vGrid[gridIndex] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
+	return (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
 }
