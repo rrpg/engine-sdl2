@@ -1,12 +1,26 @@
 #include "PlayState.hpp"
 #include "SDL2_framework/Game.h"
+#include "SDL2_framework/UserActions.h"
+#include "SDL2_framework/ServiceProvider.h"
 
 const std::string PlayState::s_stateID = "PLAY";
 
 PlayState::PlayState() : engine(rRpg()) {}
 
 void PlayState::update() {
-	engine.update();
+	UserActions* userActions = ServiceProvider::getUserActions();
+	if (userActions->getActionState("MOVE_PLAYER_UP")) {
+		engine.getHero()->setY(engine.getHero()->getY() - 1);
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_DOWN")) {
+		engine.getHero()->setY(engine.getHero()->getY() + 1);
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_LEFT")) {
+		engine.getHero()->setX(engine.getHero()->getX() - 1);
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_RIGHT")) {
+		engine.getHero()->setX(engine.getHero()->getX() + 1);
+	}
 	GameState::update();
 }
 
