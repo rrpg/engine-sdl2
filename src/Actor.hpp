@@ -21,7 +21,7 @@ class Actor {
 	int getTilesetRowIndex();
 	void setTilesetRowIndex(int tilesetRowIndex);
 
-	std::string getCoordsKey();
+	static std::string getCoordsKey(int x, int y);
 };
 
 #endif

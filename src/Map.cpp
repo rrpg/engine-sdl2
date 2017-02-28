@@ -137,7 +137,8 @@ Vector2D Map::getStartPoint() {
 }
 
 void Map::addActor(Actor *actor) {
-	m_vActors[actor->getCoordsKey()] = actor;
+	std::string key = Actor::getCoordsKey(actor->getX(), actor->getY());
+	m_vActors[key] = actor;
 }
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
