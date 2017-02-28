@@ -1,6 +1,8 @@
 #include "Move.hpp"
 
-void MoveCommand::_execute(Actor* actor, int xDest, int yDest) {
-	actor->setX(xDest);
-	actor->setY(yDest);
+void MoveCommand::_execute(Actor* actor, Map* map, int xDest, int yDest) {
+	if (map->isCellWalkable(xDest, yDest)) {
+		actor->setX(xDest);
+		actor->setY(yDest);
+	}
 }

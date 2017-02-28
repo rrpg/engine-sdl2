@@ -5,7 +5,7 @@
 
 class MoveDownCommand : public MoveCommand {
 	public:
-	void execute(Actor* actor);
+	void execute(Actor* actor, Map *map);
 };
 
 #endif

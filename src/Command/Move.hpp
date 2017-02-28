@@ -5,7 +5,7 @@
 
 class MoveCommand : public Command {
 	protected:
-	void _execute(Actor* actor, int xDest, int yDest);
+	void _execute(Actor* actor, Map* map, int xDest, int yDest);
 };
 
 #endif
