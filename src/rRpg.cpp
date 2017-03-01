@@ -1,4 +1,5 @@
 #include "rRpg.hpp"
+#include "BehaviourPlayer.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "SDL2_framework/Game.h"
@@ -27,6 +28,7 @@ void rRpg::loadMap(std::string filePath) {
 	m_hero.setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else
 	m_hero.setTilesetRowIndex(1);
+	m_hero.setBehaviour(new BehaviourPlayer());
 	m_map.addActor(&m_hero);
 }
 
