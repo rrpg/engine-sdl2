@@ -271,5 +271,9 @@ bool Map::isCellWalkable(int x, int y) {
 
 	int gridIndex = y * m_iWidth + x;
 	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
-	return (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	bool hasWalkableFlag = (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	bool hasActorOnCell;
+	auto got = m_mActors.find(getCoordsKey(x, y));
+	hasActorOnCell = got != m_mActors.end();
+	return hasWalkableFlag && !hasActorOnCell;
 }
