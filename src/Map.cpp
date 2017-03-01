@@ -151,7 +151,7 @@ Vector2D Map::getStartPoint() {
 
 void Map::addActor(Actor *actor) {
 	std::string key = getCoordsKey(actor->getX(), actor->getY());
-	m_vActors[key] = actor;
+	m_mActors[key] = actor;
 }
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
@@ -219,7 +219,7 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 
 	int shiftX = (int) shift.getX();
 	int shiftY = (int) shift.getY();
-	for (auto actor : m_vActors) {
+	for (auto actor : m_mActors) {
 		if (actor.second->getX() < visibleArea.x || actor.second->getX() > visibleArea.x + visibleArea.w
 			|| actor.second->getY() < visibleArea.y || actor.second->getY() > visibleArea.y + visibleArea.h
 		) {

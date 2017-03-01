@@ -31,7 +31,7 @@ class Map {
 	Vector2D m_sStartPoint = Vector2D();
 	Tileset m_tileset = Tileset();
 	std::vector<int> m_vGrid = {};
-	std::unordered_map<std::string, Actor*> m_vActors = {};
+	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
 	std::vector<int> m_vEnemySpawnableCells = {};
 
