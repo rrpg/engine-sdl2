@@ -5,6 +5,7 @@
 #include <libgen.h>
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
+#include "EnemyFactory.hpp"
 
 const int MAX_CHARS_PER_LINE = 1024;
 const int MAX_CHAR_TILESET_NAME = 100;
@@ -54,7 +55,20 @@ E_MapParsingResult Map::setMap(const char* mapFile) {
 	}
 
 	fin.close();
+
+	_initEnemies();
+
 	return retValue;
+}
+
+void Map::_initEnemies() {
+	EnemyFactory enemyFactory = EnemyFactory();
+	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
+		Actor* enemy = enemyFactory.createRandomEnemy();
+		enemy->setX(enemySpawnCell % m_iWidth);
+		enemy->setY(enemySpawnCell / m_iWidth);
+		addActor(enemy);
+	}
 }
 
 E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
