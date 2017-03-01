@@ -98,7 +98,13 @@ E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 void Map::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
 		uint32_t cellInfo = *line - '0';
+		bool canSpawnEnemy = cellInfo & 0x1;
 		uint8_t cellTile = (cellInfo >> 0x1) & 255;
+		// the an enemy can spawn on the cell
+		if (canSpawnEnemy) {
+			m_vEnemySpawnableCells.push_back((int) m_vGrid.size());
+		}
+
 		m_vGrid.push_back(cellTile);
 		++line;
 	}

@@ -33,6 +33,7 @@ class Map {
 	std::vector<int> m_vGrid = {};
 	std::unordered_map<std::string, Actor*> m_vActors = {};
 	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
+	std::vector<int> m_vEnemySpawnableCells = {};
 
 	E_MapParsingResult _parseLine(const char *mapDir, const char *line);
 	E_MapParsingResult _parseTileset(const char *mapDir, const char *line);
