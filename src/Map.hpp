@@ -43,6 +43,7 @@ class Map {
 
 	public:
 	Map();
+	static std::string getCoordsKey(int x, int y);
 	E_MapParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();
 	void addActor(Actor *actor);

@@ -18,6 +18,10 @@ Map::Map() {
 	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
 }
 
+std::string Map::getCoordsKey(int x, int y) {
+	return std::to_string(x) + "-" + std::to_string(y);
+}
+
 E_MapParsingResult Map::setMap(const char* mapFile) {
 	std::ifstream fin;
 	fin.open(mapFile);
@@ -138,7 +142,7 @@ Vector2D Map::getStartPoint() {
 }
 
 void Map::addActor(Actor *actor) {
-	std::string key = Actor::getCoordsKey(actor->getX(), actor->getY());
+	std::string key = getCoordsKey(actor->getX(), actor->getY());
 	m_vActors[key] = actor;
 }
 
