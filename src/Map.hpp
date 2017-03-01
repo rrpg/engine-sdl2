@@ -44,6 +44,7 @@ class Map {
 
 	public:
 	Map();
+	~Map();
 	static std::string getCoordsKey(int x, int y);
 	E_MapParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();

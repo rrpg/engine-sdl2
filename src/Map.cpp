@@ -18,6 +18,12 @@ Map::Map() {
 	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
 }
 
+Map::~Map() {
+	for (auto actor : m_mActors) {
+		free(actor.second);
+	}
+}
+
 std::string Map::getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
