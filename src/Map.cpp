@@ -97,7 +97,9 @@ E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 
 void Map::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
-		m_vGrid.push_back(*line - '0');
+		uint32_t cellInfo = *line - '0';
+		uint8_t cellTile = (cellInfo >> 0x1) & 255;
+		m_vGrid.push_back(cellTile);
 		++line;
 	}
 }
