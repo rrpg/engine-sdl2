@@ -5,6 +5,7 @@
 #include <libgen.h>
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
+#include "EnemyFactory.hpp"
 
 const int MAX_CHARS_PER_LINE = 1024;
 const int MAX_CHAR_TILESET_NAME = 100;
@@ -16,6 +17,16 @@ Map::Map() {
 	m_mCellTypeFlags[Wall] = 0;
 	m_mCellTypeFlags[Path] = CELL_FLAG_WALKABLE;
 	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
+}
+
+Map::~Map() {
+	for (auto actor : m_mActors) {
+		free(actor.second);
+	}
+}
+
+std::string Map::getCoordsKey(int x, int y) {
+	return std::to_string(x) + "-" + std::to_string(y);
 }
 
 E_MapParsingResult Map::setMap(const char* mapFile) {
@@ -44,7 +55,20 @@ E_MapParsingResult Map::setMap(const char* mapFile) {
 	}
 
 	fin.close();
+
+	_initEnemies();
+
 	return retValue;
+}
+
+void Map::_initEnemies() {
+	EnemyFactory enemyFactory = EnemyFactory();
+	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
+		Actor* enemy = enemyFactory.createRandomEnemy();
+		enemy->setX(enemySpawnCell % m_iWidth);
+		enemy->setY(enemySpawnCell / m_iWidth);
+		addActor(enemy);
+	}
 }
 
 E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
@@ -93,7 +117,15 @@ E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
 
 void Map::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
-		m_vGrid.push_back(*line - '0');
+		uint32_t cellInfo = *line - '0';
+		bool canSpawnEnemy = cellInfo & 0x1;
+		uint8_t cellTile = (cellInfo >> 0x1) & 255;
+		// the an enemy can spawn on the cell
+		if (canSpawnEnemy) {
+			m_vEnemySpawnableCells.push_back((int) m_vGrid.size());
+		}
+
+		m_vGrid.push_back(cellTile);
 		++line;
 	}
 }
@@ -138,8 +170,8 @@ Vector2D Map::getStartPoint() {
 }
 
 void Map::addActor(Actor *actor) {
-	std::string key = Actor::getCoordsKey(actor->getX(), actor->getY());
-	m_vActors[key] = actor;
+	std::string key = getCoordsKey(actor->getX(), actor->getY());
+	m_mActors[key] = actor;
 }
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
@@ -207,7 +239,7 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 
 	int shiftX = (int) shift.getX();
 	int shiftY = (int) shift.getY();
-	for (auto actor : m_vActors) {
+	for (auto actor : m_mActors) {
 		if (actor.second->getX() < visibleArea.x || actor.second->getX() > visibleArea.x + visibleArea.w
 			|| actor.second->getY() < visibleArea.y || actor.second->getY() > visibleArea.y + visibleArea.h
 		) {
@@ -239,5 +271,9 @@ bool Map::isCellWalkable(int x, int y) {
 
 	int gridIndex = y * m_iWidth + x;
 	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
-	return (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	bool hasWalkableFlag = (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	bool hasActorOnCell;
+	auto got = m_mActors.find(getCoordsKey(x, y));
+	hasActorOnCell = got != m_mActors.end();
+	return hasWalkableFlag && !hasActorOnCell;
 }

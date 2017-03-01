@@ -31,18 +31,23 @@ class Map {
 	Vector2D m_sStartPoint = Vector2D();
 	Tileset m_tileset = Tileset();
 	std::vector<int> m_vGrid = {};
-	std::unordered_map<std::string, Actor*> m_vActors = {};
+	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
+	std::vector<int> m_vEnemySpawnableCells = {};
 
 	E_MapParsingResult _parseLine(const char *mapDir, const char *line);
 	E_MapParsingResult _parseTileset(const char *mapDir, const char *line);
 	void _parseMapContent(const char *line);
+
+	void _initEnemies();
 
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 
 	public:
 	Map();
+	~Map();
+	static std::string getCoordsKey(int x, int y);
 	E_MapParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();
 	void addActor(Actor *actor);

@@ -20,8 +20,6 @@ class Actor {
 	void setFrame(int frame);
 	int getTilesetRowIndex();
 	void setTilesetRowIndex(int tilesetRowIndex);
-
-	static std::string getCoordsKey(int x, int y);
 };
 
 #endif
