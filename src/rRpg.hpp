@@ -13,7 +13,6 @@ class rRpg {
 	public:
 	rRpg();
 	~rRpg();
-	Actor* getHero();
 	Map* getMap();
 	void loadMap(std::string filePath);
 	void update();

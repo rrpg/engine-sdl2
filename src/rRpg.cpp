@@ -10,10 +10,6 @@ rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
 rRpg::~rRpg() {
 }
 
-Actor* rRpg::getHero() {
-	return &m_hero;
-}
-
 Map* rRpg::getMap() {
 	return &m_map;
 }
