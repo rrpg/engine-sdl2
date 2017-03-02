@@ -6,7 +6,7 @@ class Actor;
 
 class Behaviour {
 	public:
-	virtual void update(Map *map, Actor *actor) = 0;
+	virtual bool update(Map *map, Actor *actor) = 0;
 };
 
 #endif

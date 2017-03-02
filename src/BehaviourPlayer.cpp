@@ -1,4 +1,4 @@
 #include "BehaviourPlayer.hpp"
 
-void BehaviourPlayer::update(Map *map, Actor *actor) {
+bool BehaviourPlayer::update(Map *map, Actor *actor) {
 }

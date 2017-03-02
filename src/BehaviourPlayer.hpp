@@ -5,7 +5,7 @@
 
 class BehaviourPlayer : public Behaviour {
 	public:
-	void update(Map *map, Actor *actor);
+	bool update(Map *map, Actor *actor);
 };
 
 #endif
