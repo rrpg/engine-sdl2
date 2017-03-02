@@ -277,3 +277,7 @@ bool Map::isCellWalkable(int x, int y) {
 	hasActorOnCell = got != m_mActors.end();
 	return hasWalkableFlag && !hasActorOnCell;
 }
+
+std::unordered_map<std::string, Actor*> &Map::getActors() {
+	return m_mActors;
+}

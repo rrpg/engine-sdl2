@@ -36,6 +36,7 @@ void PlayState::update() {
 		}
 		free(command);
 	}
+	engine.update();
 	GameState::update();
 }
 

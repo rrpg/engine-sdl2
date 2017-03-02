@@ -32,6 +32,12 @@ void rRpg::loadMap(std::string filePath) {
 	m_map.addActor(&m_hero);
 }
 
+void rRpg::update() {
+	for (auto actor : m_map.getActors()) {
+		actor.second->update(&m_map);
+	}
+}
+
 void rRpg::render() {
 	SDL_Rect camera = {
 		0, 0,

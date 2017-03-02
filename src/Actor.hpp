@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Behaviour.hpp"
+#include "Map.hpp"
 
 class Actor {
 	private:
@@ -25,6 +26,8 @@ class Actor {
 	void setFrame(int frame);
 	int getTilesetRowIndex();
 	void setTilesetRowIndex(int tilesetRowIndex);
+
+	void update(Map *map);
 };
 
 #endif

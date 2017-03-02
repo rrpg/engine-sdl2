@@ -21,3 +21,8 @@ void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;
 }
 
+void Actor::update(Map *map) {
+	if (m_behaviour != 0) {
+		m_behaviour->update(map, this);
+	}
+}
