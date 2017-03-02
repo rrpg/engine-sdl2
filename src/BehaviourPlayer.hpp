@@ -9,7 +9,7 @@ class BehaviourPlayer : public Behaviour {
 	uint32_t m_iLastTimeActed = 0;
 
 	public:
-	bool update(Map *map, Actor *actor);
+	bool update(rRpg *engine, Actor *actor);
 };
 
 #endif

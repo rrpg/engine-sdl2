@@ -5,7 +5,7 @@
 
 class BehaviourMonster : public Behaviour {
 	public:
-	bool update(Map *map, Actor *actor);
+	bool update(rRpg *engine, Actor *actor);
 };
 
 #endif

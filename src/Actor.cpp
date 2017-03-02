@@ -1,4 +1,5 @@
 #include "Actor.hpp"
+#include "rRpg.hpp"
 
 Actor::Actor() : m_behaviour(0) {
 }
@@ -21,8 +22,8 @@ void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;
 }
 
-void Actor::update(Map *map) {
+void Actor::update(rRpg *engine) {
 	if (m_behaviour != 0) {
-		m_behaviour->update(map, this);
+		m_behaviour->update(engine, this);
 	}
 }

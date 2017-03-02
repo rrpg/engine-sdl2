@@ -3,7 +3,8 @@
 
 #include <string>
 #include "Behaviour.hpp"
-#include "Map.hpp"
+
+class rRpg;
 
 class Actor {
 	private:
@@ -27,7 +28,7 @@ class Actor {
 	int getTilesetRowIndex();
 	void setTilesetRowIndex(int tilesetRowIndex);
 
-	void update(Map *map);
+	void update(rRpg *engine);
 };
 
 #endif

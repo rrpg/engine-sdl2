@@ -1,4 +1,5 @@
 #include "BehaviourPlayer.hpp"
+#include "rRpg.hpp"
 #include "Command/MoveUp.hpp"
 #include "Command/MoveDown.hpp"
 #include "Command/MoveLeft.hpp"
@@ -8,7 +9,7 @@
 
 const uint32_t timeBetweenActions = 100;
 
-bool BehaviourPlayer::update(Map *map, Actor *actor) {
+bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	bool updated = false;
 	uint32_t currentTimestamp = SDL_GetTicks();
 	if (currentTimestamp - m_iLastTimeActed <= timeBetweenActions) {
@@ -32,7 +33,7 @@ bool BehaviourPlayer::update(Map *map, Actor *actor) {
 	}
 
 	if (command != 0) {
-		updated = command->execute(actor, map);
+		updated = command->execute(actor, engine->getMap());
 		free(command);
 	}
 

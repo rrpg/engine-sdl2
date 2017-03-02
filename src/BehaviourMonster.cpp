@@ -1,8 +1,9 @@
 #include "BehaviourMonster.hpp"
+#include "rRpg.hpp"
 #include <iostream>
 
-bool BehaviourMonster::update(Map *map, Actor *actor) {
+bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	bool updated = false;
-	std::cout << "actor " << actor << " updated in map " << map << std::endl;
+	std::cout << "actor " << actor << " updated in engine->getMap() " << engine->getMap() << std::endl;
 	return updated;
 }

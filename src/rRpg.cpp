@@ -30,7 +30,7 @@ void rRpg::loadMap(std::string filePath) {
 
 void rRpg::update() {
 	for (auto actor : m_map.getActors()) {
-		actor.second->update(&m_map);
+		actor.second->update(this);
 	}
 }
 
