@@ -13,6 +13,7 @@ class Actor {
 	int m_iFrame = 0;
 	int m_iTilesetRowIndex = 0;
 	Behaviour* m_behaviour;
+	uint32_t m_iLastTimeActed = 0;
 
 	public:
 	Actor();
