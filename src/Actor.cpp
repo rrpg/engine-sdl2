@@ -1,7 +1,5 @@
 #include "Actor.hpp"
 
-const uint32_t timeBetweenActions = 100;
-
 Actor::Actor() : m_behaviour(0) {
 }
 
@@ -24,11 +22,7 @@ void Actor::setBehaviour(Behaviour *b) {
 }
 
 void Actor::update(Map *map) {
-	uint32_t currentTimestamp = SDL_GetTicks();
-	if (m_behaviour != 0
-		&& currentTimestamp - m_iLastTimeActed > timeBetweenActions
-	) {
+	if (m_behaviour != 0) {
 		m_behaviour->update(map, this);
-		m_iLastTimeActed = currentTimestamp;
 	}
 }

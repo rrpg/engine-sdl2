@@ -6,8 +6,16 @@
 #include "SDL2_framework/UserActions.h"
 #include "SDL2_framework/ServiceProvider.h"
 
+const uint32_t timeBetweenActions = 100;
+
 bool BehaviourPlayer::update(Map *map, Actor *actor) {
 	bool updated = false;
+	uint32_t currentTimestamp = SDL_GetTicks();
+	if (currentTimestamp - m_iLastTimeActed <= timeBetweenActions) {
+		return updated;
+	}
+
+	m_iLastTimeActed = currentTimestamp;
 	UserActions* userActions = ServiceProvider::getUserActions();
 	Command *command = 0;
 	if (userActions->getActionState("MOVE_PLAYER_UP")) {
