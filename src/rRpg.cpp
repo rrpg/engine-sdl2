@@ -2,6 +2,7 @@
 #include "BehaviourPlayer.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <iterator>
 #include "SDL2_framework/Game.h"
 
 rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
@@ -25,12 +26,24 @@ void rRpg::loadMap(std::string filePath) {
 	// @TODO Move this somewhere else
 	m_hero.setTilesetRowIndex(1);
 	m_hero.setBehaviour(new BehaviourPlayer());
+	m_hero.startTurn();
 	m_map.addActor(&m_hero);
 }
 
 void rRpg::update() {
-	for (auto actor : m_map.getActors()) {
-		actor.second->update(this);
+	std::unordered_map<std::string, Actor*> actors = m_map.getActors();
+	std::unordered_map<std::string, Actor*>::iterator nextActor;
+	for (std::unordered_map<std::string, Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+		it->second->update(this);
+		if (it->second->isTurn() && it->second->playedTurn()) {
+			it->second->endTurn();
+			nextActor = std::next(it, 1);
+			if (nextActor == actors.end()) {
+				nextActor = actors.begin();
+			}
+
+			nextActor->second->startTurn();
+		}
 	}
 }
 
