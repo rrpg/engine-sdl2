@@ -54,6 +54,7 @@ class Map {
 	void render(SDL_Rect camera, int centerX, int centerY);
 	bool isCellWalkable(int x, int y);
 	std::unordered_map<std::string, Actor*> &getActors();
+	void moveActor(Actor* actor, int newX, int newY);
 };
 
 #endif

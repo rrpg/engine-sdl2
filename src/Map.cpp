@@ -281,3 +281,19 @@ bool Map::isCellWalkable(int x, int y) {
 std::unordered_map<std::string, Actor*> &Map::getActors() {
 	return m_mActors;
 }
+
+void Map::moveActor(Actor *a, int newX, int newY) {
+	std::string key = getCoordsKey(a->getX(), a->getY());
+	std::string newKey = getCoordsKey(newX, newY);
+	auto it = m_mActors.find(key);
+	if (it != m_mActors.end()) {
+		it->second->setX(newX);
+		it->second->setY(newY);
+		// Swap value from oldKey to newKey, note that a default constructed value
+		// is created by operator[] if 'm_mActors' does not contain newKey.
+		std::swap(m_mActors[newKey], it->second);
+
+		// Erase old key-value from map
+		m_mActors.erase(it);
+	}
+}
