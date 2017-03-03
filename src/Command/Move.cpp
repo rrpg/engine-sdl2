@@ -1,8 +1,11 @@
 #include "Move.hpp"
 
-void MoveCommand::_execute(Actor* actor, Map* map, int xDest, int yDest) {
+bool MoveCommand::_execute(Actor* actor, Map* map, int xDest, int yDest) {
+	bool ret = false;
 	if (map->isCellWalkable(xDest, yDest)) {
-		actor->setX(xDest);
-		actor->setY(yDest);
+		map->moveActor(actor, xDest, yDest);
+		ret = true;
 	}
+
+	return ret;
 }
