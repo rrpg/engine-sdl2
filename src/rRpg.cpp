@@ -16,7 +16,7 @@ Map* rRpg::getMap() {
 }
 
 void rRpg::loadMap(std::string filePath) {
-	E_MapParsingResult res;
+	E_FileParsingResult res;
 	res = m_map.setMap(filePath.c_str());
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
