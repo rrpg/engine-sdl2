@@ -20,6 +20,7 @@ void rRpg::loadMap(std::string filePath) {
 	res = m_map.setMap(filePath.c_str());
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
+		return;
 	}
 	m_hero.setX((int) m_map.getStartPoint().getX());
 	m_hero.setY((int) m_map.getStartPoint().getY());
