@@ -1,19 +1,21 @@
 #ifndef __ACTOR_FACTORY__
 #define __ACTOR_FACTORY__
 
-#include <unordered_map>
+#include <vector>
 #include "ActorRace.hpp"
 #include "FileParser.hpp"
 
+enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, NB_RACES};
+
 class ActorFactory {
 	private:
-	std::unordered_map<const char*, ActorRace*> m_mTaxonomy = {};
+	std::vector<ActorRace*> m_mTaxonomy = {};
 
 	public:
 	ActorFactory();
 	~ActorFactory();
 	E_FileParsingResult parseTaxonomy(const char* taxonomyFile);
-	void addActorRaceTaxonomy(const char* name, ActorRace* race);
+	void addActorRaceTaxonomy(ActorRace* race);
 };
 
 #endif

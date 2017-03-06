@@ -10,7 +10,7 @@ ActorFactory::ActorFactory() {
 
 ActorFactory::~ActorFactory() {
 	for (auto race : m_mTaxonomy) {
-		free(race.second);
+		free(race);
 	}
 }
 
@@ -20,6 +20,6 @@ E_FileParsingResult ActorFactory::parseTaxonomy(const char* taxonomyFile) {
 	return result;
 }
 
-void ActorFactory::addActorRaceTaxonomy(const char* name, ActorRace* race) {
-	m_mTaxonomy[name] = race;
+void ActorFactory::addActorRaceTaxonomy(ActorRace* race) {
+	m_mTaxonomy.push_back(race);
 }
