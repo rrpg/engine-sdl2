@@ -55,6 +55,11 @@ class Map {
 	bool isCellWalkable(int x, int y);
 	std::unordered_map<std::string, Actor*> &getActors();
 	void moveActor(Actor* actor, int newX, int newY);
+	void setStartPoint(float x, float y);
+	void setDimensions(unsigned int x, unsigned int y);
+	void setTileset(Tileset tileset);
+	void addEnemySpawnableCell(int cellIndex);
+	std::vector<int>* getGrid();
 };
 
 #endif

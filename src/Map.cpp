@@ -29,6 +29,28 @@ std::string Map::getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
 
+void Map::setStartPoint(float x, float y) {
+	m_sStartPoint.setX(x);
+	m_sStartPoint.setY(y);
+}
+
+void Map::setDimensions(unsigned int w, unsigned int h) {
+	m_iWidth = w;
+	m_iHeight = h;
+}
+
+void Map::setTileset(Tileset tileset) {
+	m_tileset = tileset;
+}
+
+std::vector<int>* Map::getGrid() {
+	return &m_vGrid;
+}
+
+void Map::addEnemySpawnableCell(int cellIndex) {
+	m_vEnemySpawnableCells.push_back(cellIndex);
+}
+
 E_MapParsingResult Map::setMap(const char* mapFile) {
 	std::ifstream fin;
 	fin.open(mapFile);
