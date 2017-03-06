@@ -1,15 +1,8 @@
 #include "Map.hpp"
 
-#include <string.h>
-#include <fstream>
-#include <libgen.h>
-#include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include "EnemyFactory.hpp"
-
-const int MAX_CHARS_PER_LINE = 1024;
-const int MAX_CHAR_TILESET_NAME = 100;
-const int MAX_CHAR_TILESET_FILE = 100;
+#include "MapParser.hpp"
 
 const int CELL_FLAG_WALKABLE = 0x1;
 
@@ -29,36 +22,33 @@ std::string Map::getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
 
-E_MapParsingResult Map::setMap(const char* mapFile) {
-	std::ifstream fin;
-	fin.open(mapFile);
-	if (!fin.good()) {
-		fin.close();
-		return ERROR_OPENING_FILE;
-	}
+void Map::setStartPoint(float x, float y) {
+	m_sStartPoint.setX(x);
+	m_sStartPoint.setY(y);
+}
 
-	E_MapParsingResult retValue = OK;
-	char *mapDir = dirname(const_cast<char*>(mapFile));
-	while (!fin.eof()) {
-		char buf[MAX_CHARS_PER_LINE];
-		// @check too long lines
-		fin.getline(buf, MAX_CHARS_PER_LINE);
+void Map::setDimensions(unsigned int w, unsigned int h) {
+	m_iWidth = w;
+	m_iHeight = h;
+}
 
-		if (buf[0] == '\0' || buf[0] == '#') {
-			continue;
-		}
+void Map::setTileset(Tileset tileset) {
+	m_tileset = tileset;
+}
 
-		retValue = _parseLine(mapDir, buf);
-		if (retValue != OK) {
-			break;
-		}
-	}
-
-	fin.close();
-
+E_FileParsingResult Map::setMap(const char* mapFile) {
+	MapParser parser = MapParser(this);
+	E_FileParsingResult result = parser.parseFile(mapFile);
 	_initEnemies();
+	return result;
+}
 
-	return retValue;
+std::vector<int>* Map::getGrid() {
+	return &m_vGrid;
+}
+
+void Map::addEnemySpawnableCell(int cellIndex) {
+	m_vEnemySpawnableCells.push_back(cellIndex);
 }
 
 void Map::_initEnemies() {
@@ -69,100 +59,6 @@ void Map::_initEnemies() {
 		enemy->setY(enemySpawnCell / m_iWidth);
 		addActor(enemy);
 	}
-}
-
-E_MapParsingResult Map::_parseLine(const char *mapDir, const char *line) {
-	int retValue = OK,
-		sscanfResult;
-	char type;
-
-	if (strlen(line) < 3) {
-		return INVALID_LINE_FORMAT;
-	}
-
-	type = *line;
-	line += 2;
-	switch (type) {
-		case 'd':
-			sscanfResult = sscanf(line, "%u %u\n", &m_iWidth, &m_iHeight);
-			if (sscanfResult != 2) {
-				retValue = INVALID_DIMENSIONS_FORMAT;
-			}
-			break;
-		case 'c':
-			_parseMapContent(line);
-			break;
-		case 't':
-			retValue = _parseTileset(mapDir, line);
-			break;
-		case 's':
-			int x, y;
-			sscanfResult = sscanf(
-				line,
-				"%d %d\n",
-				&x, &y
-			);
-			if (sscanfResult != 2) {
-				retValue = INVALID_START_POINT_FORMAT;
-			}
-			m_sStartPoint.setX((float) x);
-			m_sStartPoint.setY((float) y);
-			break;
-		default:
-			break;
-	}
-
-	return (E_MapParsingResult) retValue;
-}
-
-void Map::_parseMapContent(const char *line) {
-	while (*line != '\n' && *line != '\0') {
-		uint32_t cellInfo = *line - '0';
-		bool canSpawnEnemy = cellInfo & 0x1;
-		uint8_t cellTile = (cellInfo >> 0x1) & 255;
-		// the an enemy can spawn on the cell
-		if (canSpawnEnemy) {
-			m_vEnemySpawnableCells.push_back((int) m_vGrid.size());
-		}
-
-		m_vGrid.push_back(cellTile);
-		++line;
-	}
-}
-
-E_MapParsingResult Map::_parseTileset(const char *mapDir, const char *line) {
-	Tileset tileset;
-	char tilesetPath[MAX_CHAR_TILESET_FILE],
-		 tilesetName[MAX_CHAR_TILESET_NAME];
-	unsigned int tilesetWidth, tileSize;
-	// format is:
-	// tilesetname filepath tilesize tilesetwidth
-	int res = sscanf(
-		line,
-		"%s %s %u %u",
-		tilesetName, tilesetPath, &tileSize, &tilesetWidth
-	);
-
-	if (res != 4) {
-		return INVALID_TILESET_DEFINITION;
-	}
-
-	m_tileset.name = tilesetName;
-	std::string textureFile = std::string(mapDir) + "/" + tilesetPath;
-
-	// first add the tileset to texture manager
-	TextureManager::Instance()->load(
-		textureFile,
-		m_tileset.name,
-		Game::Instance()->getRenderer()
-	);
-
-	m_tileset.tileWidth = tileSize;
-	m_tileset.tileHeight = tileSize;
-	m_tileset.width = tileSize * tilesetWidth;
-	m_tileset.name = tilesetName;
-	m_tileset.numColumns = tilesetWidth;
-	return OK;
 }
 
 Vector2D Map::getStartPoint() {

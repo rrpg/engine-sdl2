@@ -2,21 +2,13 @@
 #define __MAP__
 
 #include "Actor.hpp"
+#include "FileParser.hpp"
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
 #include "SDL2_framework/Level.h"
 #include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
-
-enum E_MapParsingResult {
-	OK,
-	ERROR_OPENING_FILE,
-	INVALID_LINE_FORMAT,
-	INVALID_DIMENSIONS_FORMAT,
-	INVALID_START_POINT_FORMAT,
-	INVALID_TILESET_DEFINITION
-};
 
 enum E_CellType {
 	Wall, // 0
@@ -35,10 +27,6 @@ class Map {
 	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
 	std::vector<int> m_vEnemySpawnableCells = {};
 
-	E_MapParsingResult _parseLine(const char *mapDir, const char *line);
-	E_MapParsingResult _parseTileset(const char *mapDir, const char *line);
-	void _parseMapContent(const char *line);
-
 	void _initEnemies();
 
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
@@ -48,13 +36,18 @@ class Map {
 	Map();
 	~Map();
 	static std::string getCoordsKey(int x, int y);
-	E_MapParsingResult setMap(const char* mapFile);
+	E_FileParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();
 	void addActor(Actor *actor);
 	void render(SDL_Rect camera, int centerX, int centerY);
 	bool isCellWalkable(int x, int y);
 	std::unordered_map<std::string, Actor*> &getActors();
 	void moveActor(Actor* actor, int newX, int newY);
+	void setStartPoint(float x, float y);
+	void setDimensions(unsigned int x, unsigned int y);
+	void setTileset(Tileset tileset);
+	void addEnemySpawnableCell(int cellIndex);
+	std::vector<int>* getGrid();
 };
 
 #endif
