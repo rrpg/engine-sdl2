@@ -16,7 +16,6 @@ void PlayState::render() {
 }
 
 bool PlayState::onEnter() {
-	engine = rRpg();
 	engine.loadMap(
 		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
 	);
