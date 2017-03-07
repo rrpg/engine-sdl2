@@ -28,8 +28,8 @@ rRpg & rRpg::operator=(const rRpg &r) {
 rRpg::~rRpg() {
 }
 
-Map* rRpg::getMap() {
-	return &m_map;
+Map &rRpg::getMap() {
+	return m_map;
 }
 
 void rRpg::loadMap(std::string filePath) {

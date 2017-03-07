@@ -15,7 +15,7 @@ class rRpg {
 	rRpg(const rRpg &r); // copy constructor
 	rRpg & operator=(const rRpg &r); // assignment
 	~rRpg();
-	Map* getMap();
+	Map &getMap();
 	void loadMap(std::string filePath);
 	void update();
 	void render();

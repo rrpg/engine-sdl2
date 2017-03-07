@@ -7,7 +7,7 @@
 class Command {
 	public:
 	virtual ~Command() {};
-	virtual bool execute(Actor *actor, Map *map) = 0;
+	virtual bool execute(Actor *actor, Map &map) = 0;
 };
 
 #endif
