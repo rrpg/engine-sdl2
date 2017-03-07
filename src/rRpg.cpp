@@ -33,26 +33,32 @@ Map &rRpg::getMap() {
 	return m_map;
 }
 
-void rRpg::loadMap(std::string filePath) {
+bool rRpg::loadMap(std::string filePath) {
 	E_FileParsingResult res;
 	res = m_map.setMap(filePath.c_str());
+	bool ret = true;
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
-		return;
+		ret = false;
 	}
+
+	return ret;
 }
 
-void rRpg::loadTaxonomy(std::string filePath) {
+bool rRpg::loadTaxonomy(std::string filePath) {
 	E_FileParsingResult res;
 	res = m_actorFactory.parseTaxonomy(filePath.c_str());
 	std::cout << "Taxonomy parsed\n";
+	bool ret = true;
 	if (res != OK) {
 		std::cout << "error parsing taxonomy: " << res << std::endl;
-		return;
+		ret = false;
 	}
+
+	return ret;
 }
 
-void rRpg::initialiseHero() {
+bool rRpg::initialiseHero() {
 	m_hero->setX((int) m_map.getStartPoint().getX());
 	m_hero->setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else
@@ -60,6 +66,7 @@ void rRpg::initialiseHero() {
 	m_hero->setBehaviour(new BehaviourPlayer());
 	m_hero->startTurn();
 	m_map.addActor(m_hero);
+	return true;
 }
 
 void rRpg::update() {

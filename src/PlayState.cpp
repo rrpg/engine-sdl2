@@ -22,14 +22,15 @@ void PlayState::render() {
 }
 
 bool PlayState::onEnter() {
-	engine.loadTaxonomy(
+	bool ret = true;
+	ret &= engine.loadTaxonomy(
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
 	);
-	engine.loadMap(
+	ret &= engine.loadMap(
 		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
 	);
-	engine.initialiseHero();
-	return true;
+	ret &= engine.initialiseHero();
+	return ret;
 }
 
 bool PlayState::onExit() {
