@@ -2,6 +2,7 @@
 #name;type;key
 #name;type;stickAxis
 #name;type;stickAxis;stickDirection
+QUIT;0;41
 MOVE_PLAYER_UP;0;82
 MOVE_PLAYER_DOWN;0;81
 MOVE_PLAYER_LEFT;0;80

@@ -1,11 +1,17 @@
 #include "PlayState.hpp"
 #include "SDL2_framework/Game.h"
+#include "SDL2_framework/ServiceProvider.h"
 
 const std::string PlayState::s_stateID = "PLAY";
 
 PlayState::PlayState() : engine(rRpg()) {}
 
 void PlayState::update() {
+	if (ServiceProvider::getUserActions()->getActionState("QUIT")) {
+		Game::Instance()->quit();
+		return;
+	}
+
 	engine.update();
 	GameState::update();
 }
