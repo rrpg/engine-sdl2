@@ -22,11 +22,11 @@ void PlayState::render() {
 }
 
 bool PlayState::onEnter() {
-	engine.loadMap(
-		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
-	);
 	engine.loadTaxonomy(
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
+	);
+	engine.loadMap(
+		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
 	);
 	engine.initialiseHero();
 	return true;
