@@ -1,13 +1,14 @@
 #ifndef __RRPG__
 #define __RRPG__
 
-#include "Actor.hpp"
+#include "ActorFactory.hpp"
 #include "Map.hpp"
 #include <string>
 
 class rRpg {
 	private:
 	Actor* m_hero = 0;
+	ActorFactory m_actorFactory;
 	Map m_map;
 
 	public:

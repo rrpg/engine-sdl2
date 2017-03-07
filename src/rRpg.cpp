@@ -5,13 +5,14 @@
 #include <iterator>
 #include "SDL2_framework/Game.h"
 
-rRpg::rRpg() : m_map(Map()) {
+rRpg::rRpg() : m_actorFactory(ActorFactory()), m_map(Map()) {
 	m_hero = new Actor();
 }
 
-rRpg::rRpg(const rRpg &r) : m_map(Map()) {
+rRpg::rRpg(const rRpg &r) : m_actorFactory(ActorFactory()), m_map(Map()) {
 	m_hero = r.m_hero;
 	m_map = r.m_map;
+	m_actorFactory = r.m_actorFactory;
 }
 
 rRpg & rRpg::operator=(const rRpg &r) {
