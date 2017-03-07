@@ -1,9 +1,11 @@
 #include "BehaviourMonster.hpp"
+#include "Command/MoveDown.hpp"
 #include "rRpg.hpp"
 #include <iostream>
 
 bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	bool updated = true;
-	std::cout << "actor " << actor << " updated in engine->getMap() " << engine->getMap() << std::endl;
+	MoveDownCommand c = MoveDownCommand();
+	c.execute(actor, engine->getMap());
 	return updated;
 }
