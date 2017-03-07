@@ -42,6 +42,16 @@ void rRpg::loadMap(std::string filePath) {
 	}
 }
 
+void rRpg::loadTaxonomy(std::string filePath) {
+	E_FileParsingResult res;
+	res = m_actorFactory.parseTaxonomy(filePath.c_str());
+	std::cout << "Taxonomy parsed\n";
+	if (res != OK) {
+		std::cout << "error parsing taxonomy: " << res << std::endl;
+		return;
+	}
+}
+
 void rRpg::initialiseHero() {
 	m_hero->setX((int) m_map.getStartPoint().getX());
 	m_hero->setY((int) m_map.getStartPoint().getY());

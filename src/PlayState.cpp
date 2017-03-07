@@ -25,6 +25,9 @@ bool PlayState::onEnter() {
 	engine.loadMap(
 		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
 	);
+	engine.loadTaxonomy(
+		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
+	);
 	engine.initialiseHero();
 	return true;
 }
