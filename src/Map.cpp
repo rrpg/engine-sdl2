@@ -37,7 +37,7 @@ void Map::setTileset(Tileset tileset) {
 }
 
 E_FileParsingResult Map::setMap(const char* mapFile) {
-	MapParser parser = MapParser(this);
+	MapParser parser = MapParser(*this);
 	E_FileParsingResult result = parser.parseFile(mapFile);
 	_initEnemies();
 	return result;
