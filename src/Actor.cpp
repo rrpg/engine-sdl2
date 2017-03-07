@@ -37,9 +37,9 @@ Actor::~Actor() {
 }
 
 void Actor::setHealth(int health) { m_iHealth = health; }
-void Actor::setMaxHealth(int maxHealth) { m_iMaxHealth = maxHealth; }
+void Actor::setMaxHealth(unsigned int maxHealth) { m_iMaxHealth = maxHealth; }
 int Actor::getHealth() { return m_iHealth; }
-int Actor::getMaxHealth() { return m_iMaxHealth; }
+unsigned int Actor::getMaxHealth() { return m_iMaxHealth; }
 
 void Actor::setX(int x) { m_iX = x; }
 void Actor::setY(int y) { m_iY = y; }
