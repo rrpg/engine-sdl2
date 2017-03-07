@@ -5,7 +5,24 @@
 #include <iterator>
 #include "SDL2_framework/Game.h"
 
-rRpg::rRpg() : m_hero(Actor()), m_map(Map()) {
+rRpg::rRpg() : m_map(Map()) {
+	m_hero = new Actor();
+}
+
+rRpg::rRpg(const rRpg &r) : m_map(Map()) {
+	m_hero = r.m_hero;
+	m_map = r.m_map;
+}
+
+rRpg & rRpg::operator=(const rRpg &r) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &r) {
+		return *this;
+	}
+
+	m_hero = r.m_hero;
+	m_map = r.m_map;
+	return *this;
 }
 
 rRpg::~rRpg() {
@@ -22,13 +39,13 @@ void rRpg::loadMap(std::string filePath) {
 		std::cout << "error parsing map: " << res << std::endl;
 		return;
 	}
-	m_hero.setX((int) m_map.getStartPoint().getX());
-	m_hero.setY((int) m_map.getStartPoint().getY());
+	m_hero->setX((int) m_map.getStartPoint().getX());
+	m_hero->setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else
-	m_hero.setTilesetRowIndex(1);
-	m_hero.setBehaviour(new BehaviourPlayer());
-	m_hero.startTurn();
-	m_map.addActor(&m_hero);
+	m_hero->setTilesetRowIndex(1);
+	m_hero->setBehaviour(new BehaviourPlayer());
+	m_hero->startTurn();
+	m_map.addActor(m_hero);
 }
 
 void rRpg::update() {
@@ -53,5 +70,5 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_map.render(camera, m_hero.getX(), m_hero.getY());
+	m_map.render(camera, m_hero->getX(), m_hero->getY());
 }
