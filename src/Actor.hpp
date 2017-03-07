@@ -8,6 +8,9 @@ class rRpg;
 
 class Actor {
 	private:
+	int m_iHealth = 0;
+	int m_iMaxHealth = 0;
+
 	int m_iX = 0;
 	int m_iY = 0;
 	// @TODO move in TileRenderer class to create
@@ -27,6 +30,12 @@ class Actor {
 	Actor & operator=(const Actor &L); // assignment
 	~Actor();
 	void setBehaviour(Behaviour* b);
+
+	int getHealth();
+	int getMaxHealth();
+	void setHealth(int health);
+	void setMaxHealth(int maxHealth);
+
 	void setX(int x);
 	void setY(int y);
 	int getX();
