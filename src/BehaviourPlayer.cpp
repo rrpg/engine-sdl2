@@ -34,7 +34,7 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 
 	if (command != 0) {
 		updated = command->execute(actor, engine->getMap());
-		free(command);
+		delete command;
 	}
 
 	return updated;

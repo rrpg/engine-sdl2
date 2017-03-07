@@ -12,6 +12,7 @@ class FileParser {
 	virtual bool _parseLine(const char *fileDir, const char *line) = 0;
 
 	public:
+	virtual ~FileParser() {}
 	E_FileParsingResult parseFile(const char* file);
 };
 

@@ -4,8 +4,36 @@
 Actor::Actor() : m_behaviour(0) {
 }
 
+Actor::Actor(const Actor &r) :
+	m_iX(r.m_iX),
+	m_iY(r.m_iY),
+	m_iFrame(r.m_iFrame),
+	m_iTilesetRowIndex(r.m_iTilesetRowIndex),
+	m_behaviour(r.m_behaviour),
+	m_bIsTurn(r.m_bIsTurn),
+	m_bPlayedTurn(r.m_bPlayedTurn)
+{
+}
+
+Actor & Actor::operator=(const Actor &r) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &r) {
+		return *this;
+	}
+
+	m_iX = r.m_iX;
+	m_iY = r.m_iY;
+	m_iFrame = r.m_iFrame;
+	m_iTilesetRowIndex = r.m_iTilesetRowIndex;
+	m_behaviour = r.m_behaviour;
+	m_bIsTurn = r.m_bIsTurn;
+	m_bPlayedTurn = r.m_bPlayedTurn;
+	return *this;
+}
+
 Actor::~Actor() {
-	free(m_behaviour);
+	//@TODO store the bhaviours in a manager and provide them as reference
+	delete m_behaviour;
 }
 
 void Actor::setX(int x) { m_iX = x; }

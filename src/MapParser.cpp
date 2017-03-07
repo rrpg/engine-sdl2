@@ -9,6 +9,23 @@ const int MAX_CHAR_TILESET_FILE = 100;
 MapParser::MapParser(Map* map) : m_map(map) {
 }
 
+MapParser::MapParser(const MapParser &r) : m_map(r.m_map) {
+}
+
+MapParser & MapParser::operator=(const MapParser &r) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &r) {
+		return *this;
+	}
+
+	m_map = r.m_map;
+	return *this;
+}
+
+MapParser::~MapParser() {
+
+}
+
 bool MapParser::_parseLine(const char *mapDir, const char *line) {
 	bool retValue = true;
 	int sscanfResult;

@@ -7,13 +7,15 @@
 
 class rRpg {
 	private:
-	Actor m_hero;
+	Actor* m_hero = 0;
 	Map m_map;
 
 	public:
 	rRpg();
+	rRpg(const rRpg &r); // copy constructor
+	rRpg & operator=(const rRpg &r); // assignment
 	~rRpg();
-	Map* getMap();
+	Map &getMap();
 	void loadMap(std::string filePath);
 	void update();
 	void render();

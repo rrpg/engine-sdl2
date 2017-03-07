@@ -14,6 +14,9 @@ class MapParser : public FileParser {
 
 	public:
 	MapParser(Map* map);
+	MapParser(const MapParser &L); // copy constructor
+	MapParser & operator=(const MapParser &L); // assignment
+	~MapParser();
 };
 
 #endif
