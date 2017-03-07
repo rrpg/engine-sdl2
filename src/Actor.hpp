@@ -21,6 +21,8 @@ class Actor {
 
 	public:
 	Actor();
+	Actor(const Actor &L); // copy constructor
+	Actor & operator=(const Actor &L); // assignment
 	~Actor();
 	void setBehaviour(Behaviour* b);
 	void setX(int x);
