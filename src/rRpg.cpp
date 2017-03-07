@@ -39,6 +39,9 @@ void rRpg::loadMap(std::string filePath) {
 		std::cout << "error parsing map: " << res << std::endl;
 		return;
 	}
+}
+
+void rRpg::initialiseHero() {
 	m_hero->setX((int) m_map.getStartPoint().getX());
 	m_hero->setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else

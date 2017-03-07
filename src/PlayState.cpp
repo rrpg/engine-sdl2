@@ -25,6 +25,7 @@ bool PlayState::onEnter() {
 	engine.loadMap(
 		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
 	);
+	engine.initialiseHero();
 	return true;
 }
 
