@@ -32,6 +32,7 @@ Actor & Actor::operator=(const Actor &r) {
 }
 
 Actor::~Actor() {
+	//@TODO store the bhaviours in a manager and provide them as reference
 	delete m_behaviour;
 }
 
