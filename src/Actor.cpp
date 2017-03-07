@@ -5,7 +5,7 @@ Actor::Actor() : m_behaviour(0) {
 }
 
 Actor::~Actor() {
-	free(m_behaviour);
+	delete m_behaviour;
 }
 
 void Actor::setX(int x) { m_iX = x; }

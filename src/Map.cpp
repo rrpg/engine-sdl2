@@ -14,7 +14,7 @@ Map::Map() {
 
 Map::~Map() {
 	for (auto actor : m_mActors) {
-		free(actor.second);
+		delete actor.second;
 	}
 }
 
