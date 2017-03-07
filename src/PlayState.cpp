@@ -1,11 +1,17 @@
 #include "PlayState.hpp"
 #include "SDL2_framework/Game.h"
+#include "SDL2_framework/ServiceProvider.h"
 
 const std::string PlayState::s_stateID = "PLAY";
 
 PlayState::PlayState() : engine(rRpg()) {}
 
 void PlayState::update() {
+	if (ServiceProvider::getUserActions()->getActionState("QUIT")) {
+		Game::Instance()->quit();
+		return;
+	}
+
 	engine.update();
 	GameState::update();
 }
@@ -16,10 +22,10 @@ void PlayState::render() {
 }
 
 bool PlayState::onEnter() {
-	engine = rRpg();
 	engine.loadMap(
 		Game::Instance()->getBinaryPath() + "/../resources/map1.map"
 	);
+	engine.initialiseHero();
 	return true;
 }
 

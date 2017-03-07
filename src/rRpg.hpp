@@ -17,6 +17,7 @@ class rRpg {
 	~rRpg();
 	Map &getMap();
 	void loadMap(std::string filePath);
+	void initialiseHero();
 	void update();
 	void render();
 };
