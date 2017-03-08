@@ -1,5 +1,6 @@
 #include "ActorFactory.hpp"
 #include "TaxonomyParser.hpp"
+#include "BehaviourMonster.hpp"
 #include <fstream>
 #include <libgen.h>
 
@@ -30,4 +31,12 @@ Actor* ActorFactory::createActor(E_ActorRaces race) {
 	}
 
 	return m_mTaxonomy[race]->createActor();
+}
+
+Actor* ActorFactory::createRandomFoe() {
+	E_ActorRaces race = (E_ActorRaces) (rand() % NB_RACES);
+	Actor* actor = createActor(race);
+	actor->setBehaviour(new BehaviourMonster());
+	actor->setTilesetRowIndex(2);
+	return actor;
 }

@@ -41,6 +41,7 @@ bool rRpg::loadMap(std::string filePath) {
 		ret = false;
 	}
 
+	m_map.initEnemies(m_actorFactory);
 	return ret;
 }
 

@@ -9,6 +9,8 @@ const int FPS = 60;
 const int DELAY_TIME = 1000 / FPS;
 
 int main(int argc, char* args[]) {
+	time_t t;
+	srand((unsigned) time(&t));
 	Game* g;
 	bool fullScreen = false;
 	char buffer[1024];

@@ -1,8 +1,8 @@
 #ifndef __MAP__
 #define __MAP__
 
-#include "Actor.hpp"
 #include "FileParser.hpp"
+#include "ActorFactory.hpp"
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
@@ -27,8 +27,6 @@ class Map {
 	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
 	std::vector<int> m_vEnemySpawnableCells = {};
 
-	void _initEnemies();
-
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 
@@ -48,6 +46,7 @@ class Map {
 	void setTileset(Tileset tileset);
 	void addEnemySpawnableCell(int cellIndex);
 	std::vector<int>* getGrid();
+	void initEnemies(ActorFactory &actorFactory);
 };
 
 #endif
