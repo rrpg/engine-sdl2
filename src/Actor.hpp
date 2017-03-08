@@ -14,8 +14,8 @@ class Actor {
 	int m_iX = 0;
 	int m_iY = 0;
 	// @TODO move in TileRenderer class to create
-	int m_iFrame = 0;
-	int m_iTilesetRowIndex = 0;
+	int m_iFrameX = 0;
+	int m_iFrameY = 0;
 
 	Behaviour* m_behaviour;
 
@@ -46,10 +46,10 @@ class Actor {
 	bool isTurn();
 	bool playedTurn();
 
-	int getFrame();
-	void setFrame(int frame);
-	int getTilesetRowIndex();
-	void setTilesetRowIndex(int tilesetRowIndex);
+	int getFrameX();
+	void setFrameX(int frameX);
+	int getFrameY();
+	void setFrameY(int frameY);
 
 	void update(rRpg *engine);
 };

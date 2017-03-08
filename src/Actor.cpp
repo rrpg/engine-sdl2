@@ -7,8 +7,8 @@ Actor::Actor() : m_behaviour(0) {
 Actor::Actor(const Actor &r) :
 	m_iX(r.m_iX),
 	m_iY(r.m_iY),
-	m_iFrame(r.m_iFrame),
-	m_iTilesetRowIndex(r.m_iTilesetRowIndex),
+	m_iFrameX(r.m_iFrameX),
+	m_iFrameY(r.m_iFrameY),
 	m_behaviour(r.m_behaviour),
 	m_bIsTurn(r.m_bIsTurn),
 	m_bPlayedTurn(r.m_bPlayedTurn)
@@ -23,8 +23,8 @@ Actor & Actor::operator=(const Actor &r) {
 
 	m_iX = r.m_iX;
 	m_iY = r.m_iY;
-	m_iFrame = r.m_iFrame;
-	m_iTilesetRowIndex = r.m_iTilesetRowIndex;
+	m_iFrameX = r.m_iFrameX;
+	m_iFrameY = r.m_iFrameY;
 	m_behaviour = r.m_behaviour;
 	m_bIsTurn = r.m_bIsTurn;
 	m_bPlayedTurn = r.m_bPlayedTurn;
@@ -48,10 +48,10 @@ int Actor::getY() { return m_iY; }
 bool Actor::isTurn() { return m_bIsTurn; }
 bool Actor::playedTurn() { return m_bPlayedTurn; }
 
-int Actor::getFrame() { return m_iFrame; }
-void Actor::setFrame(int frame) { m_iFrame = frame; }
-int Actor::getTilesetRowIndex() { return m_iTilesetRowIndex; }
-void Actor::setTilesetRowIndex(int tilesetRowIndex) { m_iTilesetRowIndex = tilesetRowIndex; }
+int Actor::getFrameX() { return m_iFrameX; }
+void Actor::setFrameX(int frameX) { m_iFrameX = frameX; }
+int Actor::getFrameY() { return m_iFrameY; }
+void Actor::setFrameY(int frameY) { m_iFrameY = frameY; }
 
 void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;

@@ -150,8 +150,8 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 			yScreen,
 			m_tileset.tileWidth,
 			m_tileset.tileHeight,
-			actor.second->getTilesetRowIndex() + 1,
-			actor.second->getFrame(),
+			actor.second->getFrameY() + 1,
+			actor.second->getFrameX(),
 			game->getRenderer()
 		);
 	}
