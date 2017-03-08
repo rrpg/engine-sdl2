@@ -5,8 +5,7 @@
 #include <iterator>
 #include "SDL2_framework/Game.h"
 
-rRpg::rRpg() : m_actorFactory(ActorFactory()), m_map(Map()) {
-	m_hero = new Actor();
+rRpg::rRpg() : m_hero(0), m_actorFactory(ActorFactory()), m_map(Map()) {
 }
 
 rRpg::rRpg(const rRpg &r) : m_actorFactory(ActorFactory()), m_map(Map()) {
@@ -59,6 +58,12 @@ bool rRpg::loadTaxonomy(std::string filePath) {
 }
 
 bool rRpg::initialiseHero() {
+	m_hero = m_actorFactory.createActor(RACE_HUMAN);
+	if (m_hero == NULL) {
+		std::cout << "error while initialising the hero\n";
+		return false;
+	}
+
 	m_hero->setX((int) m_map.getStartPoint().getX());
 	m_hero->setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else
