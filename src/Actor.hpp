@@ -5,17 +5,17 @@
 #include "Behaviour.hpp"
 
 class rRpg;
+class ActorRace;
 
 class Actor {
 	private:
 	int m_iHealth = 0;
 	unsigned int m_iMaxHealth = 0;
 
+	ActorRace &m_race;
+
 	int m_iX = 0;
 	int m_iY = 0;
-	// @TODO move in TileRenderer class to create
-	int m_iFrame = 0;
-	int m_iTilesetRowIndex = 0;
 
 	Behaviour* m_behaviour;
 
@@ -25,11 +25,13 @@ class Actor {
 	void _setPlayedTurn(bool playedTurn);
 
 	public:
-	Actor();
+	Actor(ActorRace &race);
 	Actor(const Actor &L); // copy constructor
 	Actor & operator=(const Actor &L); // assignment
 	~Actor();
 	void setBehaviour(Behaviour* b);
+
+	ActorRace &getRace();
 
 	int getHealth();
 	unsigned int getMaxHealth();
@@ -45,11 +47,6 @@ class Actor {
 	void endTurn();
 	bool isTurn();
 	bool playedTurn();
-
-	int getFrame();
-	void setFrame(int frame);
-	int getTilesetRowIndex();
-	void setTilesetRowIndex(int tilesetRowIndex);
 
 	void update(rRpg *engine);
 };
