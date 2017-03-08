@@ -5,11 +5,14 @@
 #include "Behaviour.hpp"
 
 class rRpg;
+class ActorRace;
 
 class Actor {
 	private:
 	int m_iHealth = 0;
 	unsigned int m_iMaxHealth = 0;
+
+	ActorRace &m_race;
 
 	int m_iX = 0;
 	int m_iY = 0;
@@ -25,7 +28,7 @@ class Actor {
 	void _setPlayedTurn(bool playedTurn);
 
 	public:
-	Actor();
+	Actor(ActorRace &race);
 	Actor(const Actor &L); // copy constructor
 	Actor & operator=(const Actor &L); // assignment
 	~Actor();
