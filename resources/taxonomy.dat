@@ -1,6 +1,6 @@
 # format:
-# level1HP
+# tilesetFile spriteX spriteY level1HP
 # human
-15
+DawnLike/Characters/Player0.png 2 3 15
 # demon
-20
+DawnLike/Characters/Demon0.png 1 1 20
