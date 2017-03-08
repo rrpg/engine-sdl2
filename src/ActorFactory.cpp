@@ -37,6 +37,5 @@ Actor* ActorFactory::createRandomFoe() {
 	E_ActorRaces race = (E_ActorRaces) (rand() % NB_RACES);
 	Actor* actor = createActor(race);
 	actor->setBehaviour(new BehaviourMonster());
-	actor->setFrameY(2);
 	return actor;
 }

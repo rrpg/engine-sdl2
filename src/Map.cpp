@@ -143,15 +143,15 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		xScreen = actor.second->getX() * m_tileset.tileWidth - shiftX + camera.x;
 		yScreen = actor.second->getY() * m_tileset.tileHeight - shiftY + camera.y;
 		manager->drawTile(
-			m_tileset.name,
+			actor.second->getRace().getTilesetName(),
 			0, // margin
 			0, // spacing
 			xScreen,
 			yScreen,
 			m_tileset.tileWidth,
 			m_tileset.tileHeight,
-			actor.second->getFrameY() + 1,
-			actor.second->getFrameX(),
+			(int) actor.second->getRace().getSpriteY() + 1,
+			(int) actor.second->getRace().getSpriteX(),
 			game->getRenderer()
 		);
 	}

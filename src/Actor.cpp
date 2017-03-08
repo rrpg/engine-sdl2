@@ -8,8 +8,6 @@ Actor::Actor(const Actor &r) :
 	m_race(r.m_race),
 	m_iX(r.m_iX),
 	m_iY(r.m_iY),
-	m_iFrameX(r.m_iFrameX),
-	m_iFrameY(r.m_iFrameY),
 	m_behaviour(r.m_behaviour),
 	m_bIsTurn(r.m_bIsTurn),
 	m_bPlayedTurn(r.m_bPlayedTurn)
@@ -24,8 +22,6 @@ Actor & Actor::operator=(const Actor &r) {
 
 	m_iX = r.m_iX;
 	m_iY = r.m_iY;
-	m_iFrameX = r.m_iFrameX;
-	m_iFrameY = r.m_iFrameY;
 	m_behaviour = r.m_behaviour;
 	m_bIsTurn = r.m_bIsTurn;
 	m_bPlayedTurn = r.m_bPlayedTurn;
@@ -50,11 +46,6 @@ ActorRace &Actor::getRace() { return m_race; }
 
 bool Actor::isTurn() { return m_bIsTurn; }
 bool Actor::playedTurn() { return m_bPlayedTurn; }
-
-int Actor::getFrameX() { return m_iFrameX; }
-void Actor::setFrameX(int frameX) { m_iFrameX = frameX; }
-int Actor::getFrameY() { return m_iFrameY; }
-void Actor::setFrameY(int frameY) { m_iFrameY = frameY; }
 
 void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;

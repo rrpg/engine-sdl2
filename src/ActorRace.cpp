@@ -21,3 +21,15 @@ void ActorRace::setSpriteX(unsigned int spriteX) {
 void ActorRace::setSpriteY(unsigned int spriteY) {
 	m_iSpriteY = spriteY;
 }
+
+std::string ActorRace::getTilesetName() {
+	return m_sTilesetName;
+}
+
+unsigned int ActorRace::getSpriteX() {
+	return m_iSpriteX;
+}
+
+unsigned int ActorRace::getSpriteY() {
+	return m_iSpriteY;
+}

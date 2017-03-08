@@ -17,6 +17,9 @@ class ActorRace {
 	void setTilesetName(std::string name);
 	void setSpriteX(unsigned int spriteX);
 	void setSpriteY(unsigned int spriteY);
+	std::string getTilesetName();
+	unsigned int getSpriteX();
+	unsigned int getSpriteY();
 };
 
 #endif
