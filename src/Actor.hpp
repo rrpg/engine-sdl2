@@ -9,7 +9,7 @@ class rRpg;
 class Actor {
 	private:
 	int m_iHealth = 0;
-	int m_iMaxHealth = 0;
+	unsigned int m_iMaxHealth = 0;
 
 	int m_iX = 0;
 	int m_iY = 0;
@@ -32,9 +32,9 @@ class Actor {
 	void setBehaviour(Behaviour* b);
 
 	int getHealth();
-	int getMaxHealth();
+	unsigned int getMaxHealth();
 	void setHealth(int health);
-	void setMaxHealth(int maxHealth);
+	void setMaxHealth(unsigned int maxHealth);
 
 	void setX(int x);
 	void setY(int y);

@@ -6,24 +6,7 @@
 const int MAX_CHAR_TILESET_NAME = 100;
 const int MAX_CHAR_TILESET_FILE = 100;
 
-MapParser::MapParser(Map* map) : m_map(map) {
-}
-
-MapParser::MapParser(const MapParser &r) : m_map(r.m_map) {
-}
-
-MapParser & MapParser::operator=(const MapParser &r) {
-	// check for "self assignment" and do nothing in that case
-	if (this == &r) {
-		return *this;
-	}
-
-	m_map = r.m_map;
-	return *this;
-}
-
-MapParser::~MapParser() {
-
+MapParser::MapParser(Map &map) : m_map(map) {
 }
 
 bool MapParser::_parseLine(const char *mapDir, const char *line) {
@@ -44,7 +27,7 @@ bool MapParser::_parseLine(const char *mapDir, const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map->setDimensions(w, h);
+			m_map.setDimensions(w, h);
 			break;
 		case 'c':
 			_parseMapContent(line);
@@ -62,7 +45,7 @@ bool MapParser::_parseLine(const char *mapDir, const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map->setStartPoint((float) x, (float) y);
+			m_map.setStartPoint((float) x, (float) y);
 			break;
 		default:
 			break;
@@ -78,10 +61,10 @@ void MapParser::_parseMapContent(const char *line) {
 		uint8_t cellTile = (cellInfo >> 0x1) & 255;
 		// the an enemy can spawn on the cell
 		if (canSpawnEnemy) {
-			m_map->addEnemySpawnableCell((int) m_map->getGrid()->size());
+			m_map.addEnemySpawnableCell((int) m_map.getGrid()->size());
 		}
 
-		m_map->getGrid()->push_back(cellTile);
+		m_map.getGrid()->push_back(cellTile);
 		++line;
 	}
 }
@@ -117,6 +100,6 @@ bool MapParser::_parseTileset(const char *mapDir, const char *line) {
 	tileset.width = tileSize * tilesetWidth;
 	tileset.name = tilesetName;
 	tileset.numColumns = tilesetWidth;
-	m_map->setTileset(tileset);
+	m_map.setTileset(tileset);
 	return true;
 }

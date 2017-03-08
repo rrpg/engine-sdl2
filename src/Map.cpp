@@ -1,7 +1,6 @@
 #include "Map.hpp"
 
 #include "SDL2_framework/Game.h"
-#include "EnemyFactory.hpp"
 #include "MapParser.hpp"
 
 const int CELL_FLAG_WALKABLE = 0x1;
@@ -37,9 +36,8 @@ void Map::setTileset(Tileset tileset) {
 }
 
 E_FileParsingResult Map::setMap(const char* mapFile) {
-	MapParser parser = MapParser(this);
+	MapParser parser = MapParser(*this);
 	E_FileParsingResult result = parser.parseFile(mapFile);
-	_initEnemies();
 	return result;
 }
 
@@ -51,10 +49,9 @@ void Map::addEnemySpawnableCell(int cellIndex) {
 	m_vEnemySpawnableCells.push_back(cellIndex);
 }
 
-void Map::_initEnemies() {
-	EnemyFactory enemyFactory = EnemyFactory();
+void Map::initEnemies(ActorFactory &actorFactory) {
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
-		Actor* enemy = enemyFactory.createRandomEnemy();
+		Actor* enemy = actorFactory.createRandomFoe();
 		enemy->setX(enemySpawnCell % m_iWidth);
 		enemy->setY(enemySpawnCell / m_iWidth);
 		addActor(enemy);

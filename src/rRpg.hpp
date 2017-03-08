@@ -1,13 +1,14 @@
 #ifndef __RRPG__
 #define __RRPG__
 
-#include "Actor.hpp"
+#include "ActorFactory.hpp"
 #include "Map.hpp"
 #include <string>
 
 class rRpg {
 	private:
 	Actor* m_hero = 0;
+	ActorFactory m_actorFactory;
 	Map m_map;
 
 	public:
@@ -16,8 +17,9 @@ class rRpg {
 	rRpg & operator=(const rRpg &r); // assignment
 	~rRpg();
 	Map &getMap();
-	void loadMap(std::string filePath);
-	void initialiseHero();
+	bool loadMap(std::string filePath);
+	bool loadTaxonomy(std::string filePath);
+	bool initialiseHero();
 	void update();
 	void render();
 };
