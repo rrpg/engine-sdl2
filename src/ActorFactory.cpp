@@ -23,3 +23,11 @@ E_FileParsingResult ActorFactory::parseTaxonomy(const char* taxonomyFile) {
 void ActorFactory::addActorRaceTaxonomy(ActorRace* race) {
 	m_mTaxonomy.push_back(race);
 }
+
+Actor* ActorFactory::createActor(E_ActorRaces race) {
+	if ((size_t) race >= m_mTaxonomy.size()) {
+		return NULL;
+	}
+
+	return m_mTaxonomy[race]->createActor();
+}

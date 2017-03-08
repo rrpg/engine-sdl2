@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "ActorRace.hpp"
+#include "Actor.hpp"
 #include "FileParser.hpp"
 
 enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, NB_RACES};
@@ -16,6 +17,7 @@ class ActorFactory {
 	~ActorFactory();
 	E_FileParsingResult parseTaxonomy(const char* taxonomyFile);
 	void addActorRaceTaxonomy(ActorRace* race);
+	Actor* createActor(E_ActorRaces race);
 };
 
 #endif
