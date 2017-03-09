@@ -77,7 +77,8 @@ bool rRpg::initialiseHero() {
 void rRpg::update() {
 	std::unordered_map<std::string, Actor*> actors = m_map.getActors();
 	std::unordered_map<std::string, Actor*>::iterator nextActor;
-	for (std::unordered_map<std::string, Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+	std::unordered_map<std::string, Actor*>::iterator it;
+	for (it = actors.begin(); it != actors.end(); ++it) {
 		it->second->update(this);
 		if (it->second->isTurn() && it->second->playedTurn()) {
 			it->second->endTurn();
