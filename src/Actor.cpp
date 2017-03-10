@@ -8,9 +8,7 @@ Actor::Actor(const Actor &r) :
 	m_race(r.m_race),
 	m_iX(r.m_iX),
 	m_iY(r.m_iY),
-	m_behaviour(r.m_behaviour),
-	m_bIsTurn(r.m_bIsTurn),
-	m_bPlayedTurn(r.m_bPlayedTurn)
+	m_behaviour(r.m_behaviour)
 {
 }
 
@@ -23,8 +21,6 @@ Actor & Actor::operator=(const Actor &r) {
 	m_iX = r.m_iX;
 	m_iY = r.m_iY;
 	m_behaviour = r.m_behaviour;
-	m_bIsTurn = r.m_bIsTurn;
-	m_bPlayedTurn = r.m_bPlayedTurn;
 	return *this;
 }
 
@@ -44,28 +40,12 @@ int Actor::getX() { return m_iX; }
 int Actor::getY() { return m_iY; }
 ActorRace &Actor::getRace() { return m_race; }
 
-bool Actor::isTurn() { return m_bIsTurn; }
-bool Actor::playedTurn() { return m_bPlayedTurn; }
-
 void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;
 }
 
 void Actor::update(rRpg *engine) {
-	if (isTurn() && m_behaviour != 0 && m_behaviour->update(engine, this)) {
-		_setPlayedTurn(true);
+	if (!engine->isBlocked() && m_behaviour != 0) {
+		m_behaviour->update(engine, this);
 	}
-}
-
-void Actor::startTurn() {
-	m_bIsTurn = true;
-	_setPlayedTurn(false);
-}
-
-void Actor::_setPlayedTurn(bool played) {
-	m_bPlayedTurn = played;
-}
-
-void Actor::endTurn() {
-	m_bIsTurn = false;
 }
