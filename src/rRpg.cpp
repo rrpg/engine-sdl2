@@ -69,7 +69,6 @@ bool rRpg::initialiseHero() {
 	m_hero->setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else
 	m_hero->setBehaviour(new BehaviourPlayer());
-	m_hero->startTurn();
 	m_map.addActor(m_hero);
 	return true;
 }
@@ -78,17 +77,17 @@ void rRpg::update() {
 	std::unordered_map<std::string, Actor*> actors = m_map.getActors();
 	std::unordered_map<std::string, Actor*>::iterator nextActor;
 	std::unordered_map<std::string, Actor*>::iterator it;
+	std::vector<Actor*> scheduler;
+	scheduler.push_back(m_hero);
 	for (it = actors.begin(); it != actors.end(); ++it) {
-		it->second->update(this);
-		if (it->second->isTurn() && it->second->playedTurn()) {
-			it->second->endTurn();
-			nextActor = std::next(it, 1);
-			if (nextActor == actors.end()) {
-				nextActor = actors.begin();
-			}
-
-			nextActor->second->startTurn();
+		if (it->second != m_hero) {
+			scheduler.push_back(it->second);
 		}
+	}
+
+	unblock();
+	for (auto actor : scheduler) {
+		actor->update(this);
 	}
 }
 
@@ -98,4 +97,16 @@ void rRpg::render() {
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
 	m_map.render(camera, m_hero->getX(), m_hero->getY());
+}
+
+bool rRpg::isBlocked() {
+	return m_bIsBlocked;
+}
+
+void rRpg::block() {
+	m_bIsBlocked = true;
+}
+
+void rRpg::unblock() {
+	m_bIsBlocked = false;
 }

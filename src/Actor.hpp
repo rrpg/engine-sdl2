@@ -19,11 +19,6 @@ class Actor {
 
 	Behaviour* m_behaviour;
 
-	bool m_bIsTurn = false;
-	bool m_bPlayedTurn = false;
-
-	void _setPlayedTurn(bool playedTurn);
-
 	public:
 	Actor(ActorRace &race);
 	Actor(const Actor &L); // copy constructor
@@ -42,11 +37,6 @@ class Actor {
 	void setY(int y);
 	int getX();
 	int getY();
-
-	void startTurn();
-	void endTurn();
-	bool isTurn();
-	bool playedTurn();
 
 	void update(rRpg *engine);
 };

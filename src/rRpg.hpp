@@ -10,6 +10,7 @@ class rRpg {
 	Actor* m_hero = 0;
 	ActorFactory m_actorFactory;
 	Map m_map;
+	bool m_bIsBlocked = false;
 
 	public:
 	rRpg();
@@ -22,6 +23,9 @@ class rRpg {
 	bool initialiseHero();
 	void update();
 	void render();
+	bool isBlocked();
+	void block();
+	void unblock();
 };
 
 #endif
