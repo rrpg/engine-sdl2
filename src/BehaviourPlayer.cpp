@@ -16,7 +16,6 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 		return updated;
 	}
 
-	m_iLastTimeActed = currentTimestamp;
 	UserActions* userActions = ServiceProvider::getUserActions();
 	Command *command = 0;
 	if (userActions->getActionState("MOVE_PLAYER_UP")) {
@@ -33,8 +32,12 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	}
 
 	if (command != 0) {
+		m_iLastTimeActed = currentTimestamp;
 		updated = command->execute(actor, engine->getMap());
 		delete command;
+	}
+	else {
+		m_iLastTimeActed = 0;
 	}
 
 	return updated;
