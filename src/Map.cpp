@@ -4,9 +4,10 @@
 #include "MapParser.hpp"
 
 const int CELL_FLAG_WALKABLE = 0x1;
+const int CELL_FLAG_OBSTRUCTING_VIEW = 0x2;
 
 Map::Map() {
-	m_mCellTypeFlags[Wall] = 0;
+	m_mCellTypeFlags[Wall] = CELL_FLAG_OBSTRUCTING_VIEW;
 	m_mCellTypeFlags[Path] = CELL_FLAG_WALKABLE;
 	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
 }
@@ -169,6 +170,12 @@ bool Map::isCellWalkable(int x, int y) {
 	auto got = m_mActors.find(getCoordsKey(x, y));
 	hasActorOnCell = got != m_mActors.end();
 	return hasWalkableFlag && !hasActorOnCell;
+}
+
+bool Map::isCellObstructingView(int x, int y) {
+	int gridIndex = y * m_iWidth + x;
+	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
+	return (m_mCellTypeFlags[cellType] & CELL_FLAG_OBSTRUCTING_VIEW) == CELL_FLAG_OBSTRUCTING_VIEW;
 }
 
 std::unordered_map<std::string, Actor*> &Map::getActors() {
