@@ -32,6 +32,10 @@ Map &rRpg::getMap() {
 	return m_map;
 }
 
+Actor *rRpg::getHero() {
+	return m_hero;
+}
+
 bool rRpg::loadMap(std::string filePath) {
 	E_FileParsingResult res;
 	res = m_map.setMap(filePath.c_str());
