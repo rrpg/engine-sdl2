@@ -4,8 +4,9 @@
 #include "../Command.hpp"
 
 class MoveCommand : public Command {
-	protected:
-	bool _execute(Actor* actor, Map &map, int xDest, int yDest);
+	public:
+	bool execute(Actor* actor, Map &map, int xDest, int yDest);
+	virtual bool execute(Actor* actor, Map &map) = 0;
 };
 
 #endif

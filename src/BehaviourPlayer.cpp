@@ -18,7 +18,7 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	}
 
 	UserActions* userActions = ServiceProvider::getUserActions();
-	Command *command = 0;
+	MoveCommand *command = 0;
 	if (userActions->getActionState("MOVE_PLAYER_UP")) {
 		command = new MoveUpCommand();
 	}
