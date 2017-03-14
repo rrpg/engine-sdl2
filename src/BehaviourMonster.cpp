@@ -3,15 +3,23 @@
 #include "Command/MoveDown.hpp"
 #include "Command/MoveLeft.hpp"
 #include "Command/MoveRight.hpp"
+#include "Command/Attack.hpp"
 #include "rRpg.hpp"
 #include <math.h>
 #include <algorithm>
 
 bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	bool updated = true;
-	if (!actor->isNextTo(engine->getHero())
-		&& actor->seesActor(engine->getMap(), engine->getHero())
-	) {
+	if (actor->isNextTo(engine->getHero())) {
+		AttackCommand command = AttackCommand();
+		command.execute(
+			actor,
+			engine->getMap(),
+			engine->getHero()->getX(),
+			engine->getHero()->getY()
+		);
+	}
+	else if (actor->seesActor(engine->getMap(), engine->getHero())) {
 		_executeMove(
 			engine,
 			actor,
