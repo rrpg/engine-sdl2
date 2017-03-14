@@ -43,6 +43,8 @@ class Actor {
 
 	bool isNextTo(Actor *actor);
 	bool seesActor(Map &map, Actor *actor);
+
+	void attack(Actor *target);
 };
 
 #endif

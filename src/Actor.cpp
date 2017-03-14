@@ -1,5 +1,6 @@
 #include "Actor.hpp"
 #include "rRpg.hpp"
+#include <iostream>
 
 #define LIMIT_FIELD_OF_VIEW 6
 
@@ -105,4 +106,8 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	}
 
 	return actor1SeesActor2;
+}
+
+void Actor::attack(Actor *target) {
+	std::cout << this << " attacks " << target << std::endl;
 }
