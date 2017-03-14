@@ -17,7 +17,8 @@ bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 	int x0, y0, x1, y1, x, y,
 		deltaX, deltaY, absDeltaX, absDeltaY,
-		directionX, directionY;
+		directionX, directionY,
+		distance;
 	float slope;
 	bool actor1SeesActor2 = true;
 	x0 = actor1->getX();
@@ -31,6 +32,7 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 
 	directionX = x0 > x1 ? -1 : 1;
 	directionY = y0 > y1 ? -1 : 1;
+	distance = 0;
 
 	slope = 0;
 	if (deltaX != 0) {
@@ -41,20 +43,22 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 	if (absDeltaX < absDeltaY) {
 		for (y = y0 + directionY; y != y1; y += directionY) {
 			x = deltaX == 0 ? x0 : round((y - y0 + slope * x0) / slope);
-			if (map.isCellObstructingView(x, y)) {
+			if (map.isCellObstructingView(x, y) || distance > LIMIT_MONSTER_FIELD_OF_VIEW) {
 				actor1SeesActor2 = false;
 				break;
 			}
+			++distance;
 		}
 	}
 	// actors are horizonal or on a gentle slope
 	else {
 		for (x = x0 + directionX; x != x1; x += directionX) {
 			y = round(slope * x + y0 - slope * x0);
-			if (map.isCellObstructingView(x, y)) {
+			if (map.isCellObstructingView(x, y) || distance > LIMIT_MONSTER_FIELD_OF_VIEW) {
 				actor1SeesActor2 = false;
 				break;
 			}
+			++distance;
 		}
 	}
 
