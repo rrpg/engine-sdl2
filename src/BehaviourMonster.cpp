@@ -15,13 +15,15 @@ bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 }
 
 bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
-	int x0, y0, x1, y1, deltaX, deltaY, directionX, directionY;
+	int x0, y0, x1, y1, deltaX, deltaY, absDeltaX, absDeltaY, directionX, directionY;
 	x0 = actor1->getX();
 	y0 = actor1->getY();
 	x1 = actor2->getX();
 	y1 = actor2->getY();
 	deltaX = x1 - x0;
-	deltaY = abs(y1 - y0);
+	deltaY = y1 - y0;
+	absDeltaX = abs(deltaX);
+	absDeltaY = abs(deltaY);
 
 	directionX = x0 > x1 ? -1 : 1;
 	directionY = y0 > y1 ? -1 : 1;
@@ -42,7 +44,7 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 		}
 	}
 	// diagonale
-	else if (abs(deltaX) == abs(deltaY)) {
+	else if (absDeltaX == absDeltaY) {
 		int x = x0 + directionX;
 		for (int y = y0 + directionY; x != x1; x += directionX, y += directionY) {
 			if (map.isCellObstructingView(x, y)) {
@@ -51,11 +53,11 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 		}
 	}
 	// steep slope
-	else if (deltaX < deltaY) {
+	else if (absDeltaX < absDeltaY) {
 		return false;
 	}
 	// gentle slope
-	else if (deltaX > deltaY) {
+	else if (absDeltaX > absDeltaY) {
 		return false;
 	}
 
