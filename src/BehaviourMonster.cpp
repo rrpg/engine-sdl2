@@ -19,6 +19,7 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 		deltaX, deltaY, absDeltaX, absDeltaY,
 		directionX, directionY;
 	float slope;
+	bool actor1SeesActor2 = true;
 	x0 = actor1->getX();
 	y0 = actor1->getY();
 	x1 = actor2->getX();
@@ -41,7 +42,8 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 		for (y = y0 + directionY; y != y1; y += directionY) {
 			x = deltaX == 0 ? x0 : round((y - y0 + slope * x0) / slope);
 			if (map.isCellObstructingView(x, y)) {
-				return false;
+				actor1SeesActor2 = false;
+				break;
 			}
 		}
 	}
@@ -50,10 +52,11 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 		for (x = x0 + directionX; x != x1; x += directionX) {
 			y = round(slope * x + y0 - slope * x0);
 			if (map.isCellObstructingView(x, y)) {
-				return false;
+				actor1SeesActor2 = false;
+				break;
 			}
 		}
 	}
 
-	return true;
+	return actor1SeesActor2;
 }
