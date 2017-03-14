@@ -41,6 +41,7 @@ class Map {
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
 	std::unordered_map<std::string, Actor*> &getActors();
+	Actor *getActorAt(int x, int y);
 	void moveActor(Actor* actor, int newX, int newY);
 	void setStartPoint(float x, float y);
 	void setDimensions(unsigned int x, unsigned int y);

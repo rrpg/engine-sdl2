@@ -182,6 +182,16 @@ std::unordered_map<std::string, Actor*> &Map::getActors() {
 	return m_mActors;
 }
 
+Actor *Map::getActorAt(int x, int y) {
+	std::string key = getCoordsKey(x, y);
+	auto it = m_mActors.find(key);
+	if (it != m_mActors.end()) {
+		return it->second;
+	}
+
+	return NULL;
+}
+
 void Map::moveActor(Actor *a, int newX, int newY) {
 	std::string key = getCoordsKey(a->getX(), a->getY());
 	std::string newKey = getCoordsKey(newX, newY);
