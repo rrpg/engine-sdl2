@@ -54,7 +54,14 @@ bool BehaviourMonster::_sees(Map &map, Actor *actor1, Actor *actor2) {
 	}
 	// steep slope
 	else if (absDeltaX < absDeltaY) {
-		return false;
+		float a = deltaY / (float) deltaX;
+		float x;
+		for (int y = y0 + directionY; y != y1; y += directionY) {
+			x = (y - y0 + a * x0) / a;
+			if (map.isCellObstructingView(x, round(y))) {
+				return false;
+			}
+		}
 	}
 	// gentle slope
 	else if (absDeltaX > absDeltaY) {
