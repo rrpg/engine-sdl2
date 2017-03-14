@@ -18,6 +18,7 @@ class rRpg {
 	rRpg & operator=(const rRpg &r); // assignment
 	~rRpg();
 	Map &getMap();
+	Actor *getHero();
 	bool loadMap(std::string filePath);
 	bool loadTaxonomy(std::string filePath);
 	bool initialiseHero();
