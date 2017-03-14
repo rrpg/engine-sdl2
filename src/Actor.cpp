@@ -52,6 +52,10 @@ void Actor::update(rRpg *engine) {
 	}
 }
 
+bool Actor::isNextTo(Actor *actor) {
+	return abs(getX() - actor->getX()) <= 1 && abs(getY() - actor->getY()) <= 1;
+}
+
 bool Actor::seesActor(Map &map, Actor *actor) {
 	int x0, y0, x1, y1, x, y,
 		deltaX, deltaY, absDeltaX, absDeltaY,

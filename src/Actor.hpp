@@ -41,6 +41,7 @@ class Actor {
 
 	void update(rRpg *engine);
 
+	bool isNextTo(Actor *actor);
 	bool seesActor(Map &map, Actor *actor);
 };
 
