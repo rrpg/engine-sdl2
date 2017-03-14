@@ -5,6 +5,7 @@
 #include "Behaviour.hpp"
 
 class rRpg;
+class Map;
 class ActorRace;
 
 class Actor {
@@ -39,6 +40,8 @@ class Actor {
 	int getY();
 
 	void update(rRpg *engine);
+
+	bool seesActor(Map &map, Actor *actor);
 };
 
 #endif
