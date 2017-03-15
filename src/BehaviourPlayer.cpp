@@ -1,6 +1,7 @@
 #include "BehaviourPlayer.hpp"
 #include "rRpg.hpp"
 #include "Command/Move.hpp"
+#include "Command/Attack.hpp"
 #include "SDL2_framework/UserActions.h"
 #include "SDL2_framework/ServiceProvider.h"
 
@@ -39,6 +40,13 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	if (moves) {
 		m_iLastTimeActed = currentTimestamp;
 		updated = command.execute(actor, engine->getMap(), xDest, yDest);
+		if (!updated) {
+			Actor *target = engine->getMap().getActorAt(xDest, yDest);
+			if (target != NULL) {
+				AttackCommand attack = AttackCommand();
+				updated = attack.execute(actor, engine->getMap(), xDest, yDest);
+			}
+		}
 	}
 	else {
 		m_iLastTimeActed = 0;
