@@ -9,7 +9,7 @@ const uint32_t timeBetweenActions = 100;
 
 bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	bool updated = false,
-		 moves = false;
+		directionPressed = false;
 	uint32_t currentTimestamp = SDL_GetTicks();
 	int xDest = actor->getX(),
 		yDest = actor->getY();
@@ -18,38 +18,18 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 		return updated;
 	}
 
-	UserActions* userActions = ServiceProvider::getUserActions();
-	MoveCommand command = MoveCommand();
-	if (userActions->getActionState("MOVE_PLAYER_UP")) {
-		--yDest;
-		moves = true;
-	}
-	else if (userActions->getActionState("MOVE_PLAYER_DOWN")) {
-		++yDest;
-		moves = true;
-	}
-	else if (userActions->getActionState("MOVE_PLAYER_LEFT")) {
-		--xDest;
-		moves = true;
-	}
-	else if (userActions->getActionState("MOVE_PLAYER_RIGHT")) {
-		++xDest;
-		moves = true;
-	}
+	directionPressed = _isDirectionPressed(xDest, yDest);
 
-	if (moves) {
-		m_iLastTimeActed = currentTimestamp;
-		updated = command.execute(actor, engine->getMap(), xDest, yDest);
-		if (!updated) {
-			Actor *target = engine->getMap().getActorAt(xDest, yDest);
-			if (target != NULL) {
-				AttackCommand attack = AttackCommand();
-				updated = attack.execute(actor, engine->getMap(), xDest, yDest);
-			}
-		}
+	Map &map = engine->getMap();
+	if (!directionPressed) {
+		m_iLastTimeActed = 0;
 	}
 	else {
-		m_iLastTimeActed = 0;
+		m_iLastTimeActed = currentTimestamp;
+		updated = _tryMove(actor, map, xDest, yDest);
+		if (!updated) {
+			updated = _tryAttack(actor, map, xDest, yDest);
+		}
 	}
 
 	if (!updated) {
@@ -57,4 +37,42 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	}
 
 	return updated;
+}
+
+bool BehaviourPlayer::_isDirectionPressed(int &x, int &y) {
+	bool directionPressed = false;
+	UserActions* userActions = ServiceProvider::getUserActions();
+	if (userActions->getActionState("MOVE_PLAYER_UP")) {
+		--y;
+		directionPressed = true;
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_DOWN")) {
+		++y;
+		directionPressed = true;
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_LEFT")) {
+		--x;
+		directionPressed = true;
+	}
+	else if (userActions->getActionState("MOVE_PLAYER_RIGHT")) {
+		++x;
+		directionPressed = true;
+	}
+
+	return directionPressed;
+}
+
+bool BehaviourPlayer::_tryMove(Actor *actor, Map &map, int x, int y) {
+	MoveCommand command = MoveCommand();
+	return command.execute(actor, map, x, y);
+}
+
+bool BehaviourPlayer::_tryAttack(Actor *actor, Map &map, int x, int y) {
+	Actor *target = map.getActorAt(x, y);
+	if (target == NULL) {
+		return false;
+	}
+
+	AttackCommand attack = AttackCommand();
+	return attack.execute(actor, map, x, y);
 }
