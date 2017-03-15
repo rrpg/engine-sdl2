@@ -34,8 +34,12 @@ Actor::~Actor() {
 
 void Actor::setHealth(int health) { m_iHealth = health; }
 void Actor::setMaxHealth(unsigned int maxHealth) { m_iMaxHealth = maxHealth; }
+void Actor::setDefence(unsigned int defence) { m_iDefence = defence; }
+void Actor::setAttack(unsigned int attack) { m_iAttack = attack; }
 int Actor::getHealth() { return m_iHealth; }
 unsigned int Actor::getMaxHealth() { return m_iMaxHealth; }
+unsigned int Actor::getDefence() { return m_iDefence; }
+unsigned int Actor::getAttack() { return m_iAttack; }
 
 void Actor::setX(int x) { m_iX = x; }
 void Actor::setY(int y) { m_iY = y; }

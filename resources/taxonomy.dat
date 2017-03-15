@@ -1,6 +1,6 @@
 # format:
-# tilesetFile spriteX spriteY level1HP
+# tilesetFile spriteX spriteY level1HP level1Defence level1Attack
 # human
-DawnLike/Characters/Player0.png 2 3 15
+DawnLike/Characters/Player0.png 2 3 15 4 4
 # demon
-DawnLike/Characters/Demon0.png 1 1 20
+DawnLike/Characters/Demon0.png 1 1 20 6 6

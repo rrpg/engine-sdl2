@@ -7,12 +7,14 @@
 class ActorRace {
 	private:
 	unsigned int m_iLevel1HP;
+	unsigned int m_iLevel1Defence;
+	unsigned int m_iLevel1Attack;
 	std::string m_sTilesetName = "";
 	unsigned int m_iSpriteX = 0;
 	unsigned int m_iSpriteY = 0;
 
 	public:
-	ActorRace(unsigned int level1HP);
+	ActorRace(unsigned int level1HP, unsigned int level1Defence, unsigned int level1Attack);
 	Actor* createActor();
 	void setTilesetName(std::string name);
 	void setSpriteX(unsigned int spriteX);

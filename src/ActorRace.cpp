@@ -1,12 +1,18 @@
 #include "ActorRace.hpp"
 
-ActorRace::ActorRace(unsigned int level1HP) : m_iLevel1HP(level1HP) {
+ActorRace::ActorRace(unsigned int level1HP, unsigned int level1Defence, unsigned int level1Attack) :
+	m_iLevel1HP(level1HP),
+	m_iLevel1Defence(level1Defence),
+	m_iLevel1Attack(level1Attack)
+{
 }
 
 Actor* ActorRace::createActor() {
 	Actor* actor = new Actor(*this);
 	actor->setHealth((int) m_iLevel1HP);
 	actor->setMaxHealth(m_iLevel1HP);
+	actor->setDefence(m_iLevel1Defence);
+	actor->setAttack(m_iLevel1Attack);
 	return actor;
 }
 
