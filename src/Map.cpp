@@ -18,6 +18,18 @@ Map::~Map() {
 	}
 }
 
+void Map::clearDeadActors() {
+	for (auto it = m_mActors.begin(); it != m_mActors.end();) {
+		if (it->second->isDead()) {
+			delete it->second;
+			it = m_mActors.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
 std::string Map::getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
@@ -155,6 +167,15 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 			(int) actor.second->getRace().getSpriteX(),
 			game->getRenderer()
 		);
+
+		// render HPs
+		SDL_Rect r;
+		r.x = xScreen;
+		r.y = yScreen;
+		r.w = m_tileset.tileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
+		r.h = 2;
+		SDL_SetRenderDrawColor(game->getRenderer(), 0xff, 0, 0, 255);
+		SDL_RenderFillRect(game->getRenderer(), &r);
 	}
 }
 
@@ -180,6 +201,16 @@ bool Map::isCellObstructingView(int x, int y) {
 
 std::unordered_map<std::string, Actor*> &Map::getActors() {
 	return m_mActors;
+}
+
+Actor *Map::getActorAt(int x, int y) {
+	std::string key = getCoordsKey(x, y);
+	auto it = m_mActors.find(key);
+	if (it != m_mActors.end()) {
+		return it->second;
+	}
+
+	return NULL;
 }
 
 void Map::moveActor(Actor *a, int newX, int newY) {

@@ -1,9 +1,9 @@
-#ifndef __MOVE_COMMAND__
-#define __MOVE_COMMAND__
+#ifndef __ATTACK_COMMAND__
+#define __ATTACK_COMMAND__
 
 #include "../Command.hpp"
 
-class MoveCommand : public Command {
+class AttackCommand : public Command {
 	public:
 	bool execute(Actor* actor, Map &map, int xDest, int yDest);
 };

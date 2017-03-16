@@ -33,8 +33,16 @@ Actor::~Actor() {
 
 void Actor::setHealth(int health) { m_iHealth = health; }
 void Actor::setMaxHealth(unsigned int maxHealth) { m_iMaxHealth = maxHealth; }
+void Actor::setDefence(unsigned int defence) { m_iDefence = defence; }
+void Actor::setAttack(unsigned int attack) { m_iAttack = attack; }
 int Actor::getHealth() { return m_iHealth; }
 unsigned int Actor::getMaxHealth() { return m_iMaxHealth; }
+unsigned int Actor::getDefence() { return m_iDefence; }
+unsigned int Actor::getAttack() { return m_iAttack; }
+
+bool Actor::isDead() {
+	return m_iHealth == 0;
+}
 
 void Actor::setX(int x) { m_iX = x; }
 void Actor::setY(int y) { m_iY = y; }
@@ -53,7 +61,9 @@ void Actor::update(rRpg *engine) {
 }
 
 bool Actor::isNextTo(Actor *actor) {
-	return abs(getX() - actor->getX()) <= 1 && abs(getY() - actor->getY()) <= 1;
+	unsigned int diffX = abs(getX() - actor->getX()),
+		diffY = abs(getY() - actor->getY());
+	return (diffX == 1 && !diffY) || (!diffX && diffY == 1);
 }
 
 bool Actor::seesActor(Map &map, Actor *actor) {
@@ -105,4 +115,14 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	}
 
 	return actor1SeesActor2;
+}
+
+void Actor::attack(Actor *target) {
+	unsigned int attack = rand() % m_iAttack;
+	unsigned int defence = rand() % target->m_iDefence;
+	int damages = attack - defence;
+	// no branching max(0, damages) :p
+	target->m_iHealth -= damages & -(0 < damages);
+	// if the health is < 0 cap it at 0
+	target->m_iHealth = target->m_iHealth & -(0 < target->m_iHealth);
 }

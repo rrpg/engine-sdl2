@@ -12,6 +12,8 @@ class Actor {
 	private:
 	int m_iHealth = 0;
 	unsigned int m_iMaxHealth = 0;
+	unsigned int m_iDefence = 0;
+	unsigned int m_iAttack = 0;
 
 	ActorRace &m_race;
 
@@ -31,8 +33,14 @@ class Actor {
 
 	int getHealth();
 	unsigned int getMaxHealth();
+	unsigned int getDefence();
+	unsigned int getAttack();
 	void setHealth(int health);
 	void setMaxHealth(unsigned int maxHealth);
+	void setDefence(unsigned int defence);
+	void setAttack(unsigned int attack);
+
+	bool isDead();
 
 	void setX(int x);
 	void setY(int y);
@@ -43,6 +51,8 @@ class Actor {
 
 	bool isNextTo(Actor *actor);
 	bool seesActor(Map &map, Actor *actor);
+
+	void attack(Actor *target);
 };
 
 #endif

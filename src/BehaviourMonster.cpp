@@ -1,22 +1,27 @@
 #include "BehaviourMonster.hpp"
-#include "Command/MoveUp.hpp"
-#include "Command/MoveDown.hpp"
-#include "Command/MoveLeft.hpp"
-#include "Command/MoveRight.hpp"
+#include "Command/Move.hpp"
+#include "Command/Attack.hpp"
 #include "rRpg.hpp"
 #include <math.h>
 #include <algorithm>
 
 bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	bool updated = true;
-	if (!actor->isNextTo(engine->getHero())
-		&& actor->seesActor(engine->getMap(), engine->getHero())
-	) {
+	if (actor->isNextTo(engine->getHero())) {
+		AttackCommand command = AttackCommand();
+		command.execute(
+			actor,
+			engine->getMap(),
+			engine->getHero()->getX(),
+			engine->getHero()->getY()
+		);
+	}
+	else if (actor->seesActor(engine->getMap(), engine->getHero())) {
 		_executeMove(
 			engine,
 			actor,
-			engine->getHero()->getX() - actor->getX(),
-			engine->getHero()->getY() - actor->getY()
+			engine->getHero()->getX(),
+			engine->getHero()->getY()
 		);
 	}
 	else {
@@ -25,35 +30,26 @@ bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	return updated;
 }
 
-void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const int x, const int y) {
+void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const int xTarget, const int yTarget) {
 	bool executed = false;
-	Command *command = 0;
-	if (y < 0) {
-		command = new MoveUpCommand();
+	int xActor = actor->getX(),
+		yActor = actor->getY(),
+		deltaX = xActor - xTarget,
+		deltaY = yActor - yTarget,
+		xDest = xActor,
+		yDest = yActor;
+	MoveCommand command = MoveCommand();
+
+	// larger Y, move vertically to close the distance
+	if (abs(deltaX) < abs(deltaY)) {
+		yDest -= (deltaY > 0) - (deltaY < 0);
 	}
-	else if (y > 0) {
-		command = new MoveDownCommand();
+	// larger X, move horizontally to close the distance
+	else {
+		xDest -= (deltaX > 0) - (deltaX < 0);
 	}
 
-	if (command != 0) {
-		executed = command->execute(actor, engine->getMap());
-		delete command;
-		command = 0;
-	}
-
-	if (!executed) {
-		if (x < 0) {
-			command = new MoveLeftCommand();
-		}
-		else if (x > 0) {
-			command = new MoveRightCommand();
-		}
-	}
-
-	if (command != 0) {
-		executed = command->execute(actor, engine->getMap());
-		delete command;
-	}
+	executed = command.execute(actor, engine->getMap(), xDest, yDest);
 
 	if (!executed) {
 		_executeRandomMove(engine, actor);
@@ -61,27 +57,28 @@ void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const int x, con
 }
 
 void BehaviourMonster::_executeRandomMove(rRpg *engine, Actor *actor) {
-	Command *command = 0;
+	MoveCommand command = MoveCommand();
 	bool commandExecuted = false;
-	int directions[4] = {0, 1, 2, 3};
+	int directions[4] = {0, 1, 2, 3},
+		xDest = actor->getX(),
+		yDest = actor->getY();
 	std::random_shuffle(directions, directions + 4);
 	for (int direction = 3; !commandExecuted && direction--;) {
 		switch (directions[direction]) {
 			case 0:
-				command = new MoveUpCommand();
+				--yDest;
 				break;
 			case 1:
-				command = new MoveDownCommand();
+				++yDest;
 				break;
 			case 2:
-				command = new MoveLeftCommand();
+				--xDest;
 				break;
 			default:
-				command = new MoveRightCommand();
+				++xDest;
 				break;
 		}
 
-		commandExecuted = command->execute(actor, engine->getMap());
-		delete command;
+		commandExecuted = command.execute(actor, engine->getMap(), xDest, yDest);
 	}
 }

@@ -13,13 +13,14 @@ bool TaxonomyParser::_parseLine(const char *fileDir, const char *line) {
 	std::cout << fileDir << std::endl;
 	bool retValue = true;
 	char tilesetPath[MAX_CHAR_FILE_PATH];
-	unsigned int raceLevel1HP, spriteX, spriteY;
+	unsigned int raceLevel1HP, raceLevel1Defence, raceLevel1Attack, spriteX, spriteY;
 	int result = sscanf(
 		line,
-		"%s %u %u %u\n",
-		tilesetPath, &spriteX, &spriteY, &raceLevel1HP
+		"%s %u %u %u %u %u\n",
+		tilesetPath, &spriteX, &spriteY,
+		&raceLevel1HP, &raceLevel1Defence, &raceLevel1Attack
 	);
-	if (result != 4) {
+	if (result != 6) {
 		retValue = false;
 	}
 	else {
@@ -30,7 +31,11 @@ bool TaxonomyParser::_parseLine(const char *fileDir, const char *line) {
 			Game::Instance()->getRenderer()
 		);
 
-		ActorRace* race = new ActorRace(raceLevel1HP);
+		ActorRace* race = new ActorRace(
+			raceLevel1HP,
+			raceLevel1Defence,
+			raceLevel1Attack
+		);
 		race->setTilesetName(tilesetPath);
 		race->setSpriteX(spriteX);
 		race->setSpriteY(spriteY);
