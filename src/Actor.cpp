@@ -1,6 +1,5 @@
 #include "Actor.hpp"
 #include "rRpg.hpp"
-#include <iostream>
 
 #define LIMIT_FIELD_OF_VIEW 6
 
@@ -113,5 +112,11 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 }
 
 void Actor::attack(Actor *target) {
-	std::cout << this << " attacks " << target << std::endl;
+	unsigned int attack = rand() % m_iAttack;
+	unsigned int defence = rand() % target->m_iDefence;
+	int damages = attack - defence;
+	// no branching max(0, damages) :p
+	target->m_iHealth -= damages & -(0 < damages);
+	// if the health is < 0 cap it at 0
+	target->m_iHealth = target->m_iHealth & -(0 < target->m_iHealth);
 }
