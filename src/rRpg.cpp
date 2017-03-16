@@ -87,6 +87,10 @@ void rRpg::update() {
 			it->second->update(this);
 		}
 	}
+
+	if (!m_hero->isDead()) {
+		m_map.clearDeadActors();
+	}
 }
 
 void rRpg::render() {

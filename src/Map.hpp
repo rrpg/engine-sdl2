@@ -33,6 +33,7 @@ class Map {
 	public:
 	Map();
 	~Map();
+	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);
 	E_FileParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();

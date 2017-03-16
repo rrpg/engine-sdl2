@@ -40,6 +40,8 @@ class Actor {
 	void setDefence(unsigned int defence);
 	void setAttack(unsigned int attack);
 
+	bool isDead();
+
 	void setX(int x);
 	void setY(int y);
 	int getX();

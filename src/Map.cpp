@@ -18,6 +18,18 @@ Map::~Map() {
 	}
 }
 
+void Map::clearDeadActors() {
+	for (auto it = m_mActors.begin(); it != m_mActors.end();) {
+		if (it->second->isDead()) {
+			delete it->second;
+			it = m_mActors.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
 std::string Map::getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }

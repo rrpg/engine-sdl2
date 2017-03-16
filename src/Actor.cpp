@@ -40,6 +40,10 @@ unsigned int Actor::getMaxHealth() { return m_iMaxHealth; }
 unsigned int Actor::getDefence() { return m_iDefence; }
 unsigned int Actor::getAttack() { return m_iAttack; }
 
+bool Actor::isDead() {
+	return m_iHealth == 0;
+}
+
 void Actor::setX(int x) { m_iX = x; }
 void Actor::setY(int y) { m_iY = y; }
 int Actor::getX() { return m_iX; }
