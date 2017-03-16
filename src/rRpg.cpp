@@ -79,18 +79,13 @@ bool rRpg::initialiseHero() {
 
 void rRpg::update() {
 	std::unordered_map<std::string, Actor*> actors = m_map.getActors();
-	std::unordered_map<std::string, Actor*>::iterator it;
-	std::vector<Actor*> scheduler;
-	scheduler.push_back(m_hero);
-	for (it = actors.begin(); it != actors.end(); ++it) {
-		if (it->second != m_hero) {
-			scheduler.push_back(it->second);
-		}
-	}
-
 	unblock();
-	for (auto actor : scheduler) {
-		actor->update(this);
+
+	m_hero->update(this);
+	for (auto it = actors.begin(); it != actors.end(); ++it) {
+		if (it->second != m_hero) {
+			it->second->update(this);
+		}
 	}
 }
 
