@@ -79,7 +79,6 @@ bool rRpg::initialiseHero() {
 
 void rRpg::update() {
 	std::unordered_map<std::string, Actor*> actors = m_map.getActors();
-	std::unordered_map<std::string, Actor*>::iterator nextActor;
 	std::unordered_map<std::string, Actor*>::iterator it;
 	std::vector<Actor*> scheduler;
 	scheduler.push_back(m_hero);
