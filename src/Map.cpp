@@ -167,6 +167,15 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 			(int) actor.second->getRace().getSpriteX(),
 			game->getRenderer()
 		);
+
+		// render HPs
+		SDL_Rect r;
+		r.x = xScreen;
+		r.y = yScreen;
+		r.w = m_tileset.tileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
+		r.h = 2;
+		SDL_SetRenderDrawColor(game->getRenderer(), 0xff, 0, 0, 255);
+		SDL_RenderFillRect(game->getRenderer(), &r);
 	}
 }
 
