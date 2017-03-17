@@ -1,7 +1,7 @@
-#include "BehaviourPlayer.hpp"
-#include "rRpg.hpp"
-#include "Command/Move.hpp"
-#include "Command/Attack.hpp"
+#include "Player.hpp"
+#include "../rRpg.hpp"
+#include "../Command/Move.hpp"
+#include "../Command/Attack.hpp"
 #include "SDL2_framework/UserActions.h"
 #include "SDL2_framework/ServiceProvider.h"
 
