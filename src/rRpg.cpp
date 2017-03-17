@@ -1,5 +1,5 @@
 #include "rRpg.hpp"
-#include "BehaviourPlayer.hpp"
+#include "Behaviour/Player.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>

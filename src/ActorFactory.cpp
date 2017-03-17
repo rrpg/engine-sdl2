@@ -1,6 +1,6 @@
 #include "ActorFactory.hpp"
 #include "TaxonomyParser.hpp"
-#include "BehaviourMonster.hpp"
+#include "Behaviour/Monster.hpp"
 #include <fstream>
 #include <libgen.h>
 

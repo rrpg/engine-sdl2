@@ -1,4 +1,4 @@
-#include "BehaviourMonster.hpp"
+#include "Monster.hpp"
 #include "Command/Move.hpp"
 #include "Command/Attack.hpp"
 #include "rRpg.hpp"
