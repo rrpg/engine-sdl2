@@ -2,6 +2,7 @@
 #define __RRPG__
 
 #include "ActorFactory.hpp"
+#include "BehaviourFactory.hpp"
 #include "Map.hpp"
 #include <string>
 
@@ -9,6 +10,7 @@ class rRpg {
 	private:
 	Actor* m_hero = 0;
 	ActorFactory m_actorFactory;
+	BehaviourFactory m_behaviourFactory;
 	Map m_map;
 	bool m_bIsBlocked = false;
 

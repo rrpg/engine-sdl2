@@ -5,13 +5,14 @@
 #include <iterator>
 #include "SDL2_framework/Game.h"
 
-rRpg::rRpg() : m_hero(0), m_actorFactory(ActorFactory()), m_map(Map()) {
+rRpg::rRpg() : m_hero(0), m_actorFactory(ActorFactory()), m_behaviourFactory(BehaviourFactory()), m_map(Map()) {
 }
 
-rRpg::rRpg(const rRpg &r) : m_actorFactory(ActorFactory()), m_map(Map()) {
+rRpg::rRpg(const rRpg &r) : m_actorFactory(ActorFactory()), m_behaviourFactory(BehaviourFactory()), m_map(Map()) {
 	m_hero = r.m_hero;
 	m_map = r.m_map;
 	m_actorFactory = r.m_actorFactory;
+	m_behaviourFactory = r.m_behaviourFactory;
 }
 
 rRpg & rRpg::operator=(const rRpg &r) {
@@ -72,7 +73,7 @@ bool rRpg::initialiseHero() {
 	m_hero->setX((int) m_map.getStartPoint().getX());
 	m_hero->setY((int) m_map.getStartPoint().getY());
 	// @TODO Move this somewhere else
-	m_hero->setBehaviour(new BehaviourPlayer());
+	m_hero->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_PLAYER));
 	m_map.addActor(m_hero);
 	return true;
 }
