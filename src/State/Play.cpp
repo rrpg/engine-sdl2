@@ -1,4 +1,5 @@
 #include "Play.hpp"
+#include "GameOver.hpp"
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/ServiceProvider.h"
 
@@ -13,6 +14,12 @@ void PlayState::update() {
 	}
 
 	engine.update();
+	if (engine.getHero()->isDead()) {
+		Game::Instance()->getStateMachine()->changeState(
+			new GameOverState()
+		);
+	}
+
 	GameState::update();
 }
 
