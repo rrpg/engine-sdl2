@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "SDL2_framework/Game.h"
-#include "PlayState.hpp"
+#include "State/Play.hpp"
 #include <libgen.h>
 
 const int FPS = 60;
