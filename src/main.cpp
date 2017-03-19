@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "SDL2_framework/Game.h"
 #include "State/Play.hpp"
+#include "ResourceParser.hpp"
 #include <libgen.h>
 
 const int FPS = 60;
@@ -26,6 +27,9 @@ int main(int argc, char* args[]) {
 		return 1;
 	}
 
+	ResourceParser parser = ResourceParser();
+	std::string tilesetsPath = binaryPath + "/../resources/tilesets.dat";
+	parser.parseFile(tilesetsPath.c_str());
 	g->getStateMachine()->changeState(new PlayState());
 	while (g->isRunning()) {
 		frameStart = SDL_GetTicks();
