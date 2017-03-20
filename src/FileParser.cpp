@@ -1,6 +1,7 @@
 #include "FileParser.hpp"
 #include <fstream>
 #include <libgen.h>
+#include <string.h>
 
 const int MAX_CHARS_PER_LINE = 1024;
 
@@ -14,6 +15,7 @@ E_FileParsingResult FileParser::parseFile(const char* file) {
 
 	E_FileParsingResult retValue = OK;
 	char *fileDir = dirname(const_cast<char*>(file));
+	strncpy(m_sFileDir, fileDir, MAX_CHAR_DIR_PATH);
 	while (!fin.eof()) {
 		char buf[MAX_CHARS_PER_LINE];
 		// @check too long lines
