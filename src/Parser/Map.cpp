@@ -1,5 +1,5 @@
-#include "MapParser.hpp"
-#include "ResourceParser.hpp"
+#include "Map.hpp"
+#include "Resource.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include <string.h>

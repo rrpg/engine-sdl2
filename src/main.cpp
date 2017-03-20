@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "SDL2_framework/Game.h"
 #include "State/Play.hpp"
-#include "ResourceParser.hpp"
+#include "Parser/Resource.hpp"
 #include <libgen.h>
 
 const int FPS = 60;

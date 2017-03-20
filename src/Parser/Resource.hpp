@@ -1,7 +1,7 @@
 #ifndef __RESOURCE_PARSER__
 #define __RESOURCE_PARSER__
 
-#include "FileParser.hpp"
+#include "File.hpp"
 
 class ResourceParser : public FileParser {
 	protected:

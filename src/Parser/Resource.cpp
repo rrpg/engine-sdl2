@@ -1,4 +1,4 @@
-#include "ResourceParser.hpp"
+#include "Resource.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include <iostream>
 
