@@ -1,15 +1,13 @@
-#include "MapParser.hpp"
+#include "Map.hpp"
+#include "Resource.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include <string.h>
 
-const int MAX_CHAR_TILESET_NAME = 100;
-const int MAX_CHAR_TILESET_FILE = 100;
-
 MapParser::MapParser(Map &map) : m_map(map) {
 }
 
-bool MapParser::_parseLine(const char *mapDir, const char *line) {
+bool MapParser::_parseLine(const char *line) {
 	bool retValue = true;
 	int sscanfResult;
 	char type;
@@ -33,7 +31,7 @@ bool MapParser::_parseLine(const char *mapDir, const char *line) {
 			_parseMapContent(line);
 			break;
 		case 't':
-			retValue = _parseTileset(mapDir, line);
+			retValue = _parseTileset(line);
 			break;
 		case 's':
 			int x, y;
@@ -69,28 +67,24 @@ void MapParser::_parseMapContent(const char *line) {
 	}
 }
 
-bool MapParser::_parseTileset(const char *mapDir, const char *line) {
+bool MapParser::_parseTileset(const char *line) {
 	Tileset tileset;
-	char tilesetPath[MAX_CHAR_TILESET_FILE],
-		 tilesetName[MAX_CHAR_TILESET_NAME];
+	char tilesetName[ResourceParser::MAX_CHAR_RESOURCE_NAME];
 	unsigned int tilesetWidth, tileSize;
 	// format is:
 	// tilesetname filepath tilesize tilesetwidth
 	int res = sscanf(
 		line,
-		"%s %s %u %u",
-		tilesetName, tilesetPath, &tileSize, &tilesetWidth
+		"%s %u %u",
+		tilesetName, &tileSize, &tilesetWidth
 	);
 
-	if (res != 4) {
+	if (res != 3) {
 		return false;
 	}
 
-	std::string textureFile = std::string(mapDir) + "/" + tilesetPath;
-
 	// first add the tileset to texture manager
 	TextureManager::Instance()->load(
-		textureFile,
 		tilesetName,
 		Game::Instance()->getRenderer()
 	);

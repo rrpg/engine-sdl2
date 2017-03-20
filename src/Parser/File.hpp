@@ -6,10 +6,13 @@ enum E_FileParsingResult {
 	ERROR_OPENING_FILE,
 	ERROR_LINE_PARSING
 };
+const int MAX_CHAR_DIR_PATH = 255;
 
 class FileParser {
 	protected:
-	virtual bool _parseLine(const char *fileDir, const char *line) = 0;
+	char m_sFileDir[MAX_CHAR_DIR_PATH];
+
+	virtual bool _parseLine(const char *line) = 0;
 
 	public:
 	virtual ~FileParser() {}

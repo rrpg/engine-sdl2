@@ -4,7 +4,7 @@
 #include <vector>
 #include "ActorRace.hpp"
 #include "Actor.hpp"
-#include "FileParser.hpp"
+#include "Parser/File.hpp"
 
 enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, NB_RACES};
 

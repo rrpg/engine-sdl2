@@ -1,7 +1,7 @@
 #ifndef __MAP__
 #define __MAP__
 
-#include "FileParser.hpp"
+#include "Parser/File.hpp"
 #include "ActorFactory.hpp"
 #include <stdint.h>
 #include <vector>

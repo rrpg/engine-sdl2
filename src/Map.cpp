@@ -1,7 +1,7 @@
 #include "Map.hpp"
 
 #include "SDL2_framework/Game.h"
-#include "MapParser.hpp"
+#include "Parser/Map.hpp"
 
 const int CELL_FLAG_WALKABLE = 0x1;
 const int CELL_FLAG_OBSTRUCTING_VIEW = 0x2;
