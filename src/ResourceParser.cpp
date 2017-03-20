@@ -2,9 +2,6 @@
 #include "SDL2_framework/TextureManager.h"
 #include <iostream>
 
-const int MAX_CHAR_RESOURCE_NAME = 32;
-const int MAX_CHAR_RESOURCE_PATH = 255;
-
 bool ResourceParser::_parseLine(const char *line) {
 	bool result = true;
 	char resourceName[MAX_CHAR_RESOURCE_NAME],

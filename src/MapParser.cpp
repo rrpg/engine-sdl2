@@ -1,10 +1,8 @@
 #include "MapParser.hpp"
+#include "ResourceParser.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include <string.h>
-
-const int MAX_CHAR_TILESET_NAME = 100;
-const int MAX_CHAR_TILESET_FILE = 100;
 
 MapParser::MapParser(Map &map) : m_map(map) {
 }
@@ -71,7 +69,7 @@ void MapParser::_parseMapContent(const char *line) {
 
 bool MapParser::_parseTileset(const char *line) {
 	Tileset tileset;
-	char tilesetName[MAX_CHAR_TILESET_NAME];
+	char tilesetName[ResourceParser::MAX_CHAR_RESOURCE_NAME];
 	unsigned int tilesetWidth, tileSize;
 	// format is:
 	// tilesetname filepath tilesize tilesetwidth
