@@ -25,7 +25,7 @@ E_FileParsingResult FileParser::parseFile(const char* file) {
 			continue;
 		}
 
-		if (!_parseLine(fileDir, buf)) {
+		if (!_parseLine(buf)) {
 			retValue = ERROR_LINE_PARSING;
 			break;
 		}

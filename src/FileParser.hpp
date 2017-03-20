@@ -12,7 +12,7 @@ class FileParser {
 	protected:
 	char m_sFileDir[MAX_CHAR_DIR_PATH];
 
-	virtual bool _parseLine(const char *fileDir, const char *line) = 0;
+	virtual bool _parseLine(const char *line) = 0;
 
 	public:
 	virtual ~FileParser() {}

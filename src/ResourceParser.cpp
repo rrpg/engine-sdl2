@@ -5,7 +5,7 @@
 const int MAX_CHAR_RESOURCE_NAME = 32;
 const int MAX_CHAR_RESOURCE_PATH = 255;
 
-bool ResourceParser::_parseLine(const char *fileDir, const char *line) {
+bool ResourceParser::_parseLine(const char *line) {
 	bool result = true;
 	char resourceName[MAX_CHAR_RESOURCE_NAME],
 		resourcePath[MAX_CHAR_RESOURCE_PATH];
@@ -13,7 +13,7 @@ bool ResourceParser::_parseLine(const char *fileDir, const char *line) {
 		std::cout << "Resource found: " << resourceName << " (" << resourcePath << ")\n";
 		if (
 			!TextureManager::Instance()->addTexture(
-				std::string(fileDir) + "/" + resourcePath,
+				std::string(m_sFileDir) + "/" + resourcePath,
 				resourceName
 			)
 		) {

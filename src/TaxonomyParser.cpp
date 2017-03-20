@@ -9,7 +9,7 @@ const int MAX_CHAR_FILE_PATH = 255;
 TaxonomyParser::TaxonomyParser(ActorFactory &actorFactory) : m_actorFactory(actorFactory) {
 }
 
-bool TaxonomyParser::_parseLine(const char *fileDir, const char *line) {
+bool TaxonomyParser::_parseLine(const char *line) {
 	bool retValue = true;
 	char tilesetPath[MAX_CHAR_FILE_PATH];
 	unsigned int raceLevel1HP, raceLevel1Defence, raceLevel1Attack, spriteX, spriteY;
@@ -24,7 +24,7 @@ bool TaxonomyParser::_parseLine(const char *fileDir, const char *line) {
 	}
 	else {
 		TextureManager::Instance()->load(
-			std::string(fileDir) + "/" + tilesetPath,
+			std::string(m_sFileDir) + "/" + tilesetPath,
 			tilesetPath,
 			Game::Instance()->getRenderer()
 		);

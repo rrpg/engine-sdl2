@@ -9,7 +9,7 @@ const int MAX_CHAR_TILESET_FILE = 100;
 MapParser::MapParser(Map &map) : m_map(map) {
 }
 
-bool MapParser::_parseLine(const char *mapDir, const char *line) {
+bool MapParser::_parseLine(const char *line) {
 	bool retValue = true;
 	int sscanfResult;
 	char type;
@@ -33,7 +33,7 @@ bool MapParser::_parseLine(const char *mapDir, const char *line) {
 			_parseMapContent(line);
 			break;
 		case 't':
-			retValue = _parseTileset(mapDir, line);
+			retValue = _parseTileset(line);
 			break;
 		case 's':
 			int x, y;
@@ -69,7 +69,7 @@ void MapParser::_parseMapContent(const char *line) {
 	}
 }
 
-bool MapParser::_parseTileset(const char *mapDir, const char *line) {
+bool MapParser::_parseTileset(const char *line) {
 	Tileset tileset;
 	char tilesetPath[MAX_CHAR_TILESET_FILE],
 		 tilesetName[MAX_CHAR_TILESET_NAME];
@@ -86,7 +86,7 @@ bool MapParser::_parseTileset(const char *mapDir, const char *line) {
 		return false;
 	}
 
-	std::string textureFile = std::string(mapDir) + "/" + tilesetPath;
+	std::string textureFile = std::string(m_sFileDir) + "/" + tilesetPath;
 
 	// first add the tileset to texture manager
 	TextureManager::Instance()->load(

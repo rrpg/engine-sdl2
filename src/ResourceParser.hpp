@@ -5,7 +5,7 @@
 
 class ResourceParser : public FileParser {
 	protected:
-	bool _parseLine(const char *fileDir, const char *line);
+	bool _parseLine(const char *line);
 };
 
 #endif

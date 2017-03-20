@@ -8,8 +8,8 @@ class MapParser : public FileParser {
 	protected:
 	Map &m_map;
 
-	bool _parseLine(const char *fileDir, const char *line);
-	bool _parseTileset(const char *mapDir, const char *line);
+	bool _parseLine(const char *line);
+	bool _parseTileset(const char *line);
 	void _parseMapContent(const char *line);
 
 	public:

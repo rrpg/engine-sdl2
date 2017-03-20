@@ -7,7 +7,7 @@
 class TaxonomyParser : public FileParser {
 	protected:
 	ActorFactory &m_actorFactory;
-	bool _parseLine(const char *fileDir, const char *line);
+	bool _parseLine(const char *line);
 
 	public:
 	TaxonomyParser(ActorFactory &actorFactory);
