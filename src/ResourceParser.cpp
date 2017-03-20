@@ -9,7 +9,6 @@ bool ResourceParser::_parseLine(const char *fileDir, const char *line) {
 	bool result = true;
 	char resourceName[MAX_CHAR_RESOURCE_NAME],
 		resourcePath[MAX_CHAR_RESOURCE_PATH];
-	std::cout << fileDir << std::endl;
 	if (2 == sscanf(line, "%s %s\n", resourceName, resourcePath)) {
 		std::cout << "Resource found: " << resourceName << " (" << resourcePath << ")\n";
 		if (
