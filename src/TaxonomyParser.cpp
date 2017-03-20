@@ -1,22 +1,21 @@
 #include "TaxonomyParser.hpp"
+#include "ResourceParser.hpp"
 #include "ActorRace.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include <iostream>
-
-const int MAX_CHAR_FILE_PATH = 255;
 
 TaxonomyParser::TaxonomyParser(ActorFactory &actorFactory) : m_actorFactory(actorFactory) {
 }
 
 bool TaxonomyParser::_parseLine(const char *line) {
 	bool retValue = true;
-	char tilesetPath[MAX_CHAR_FILE_PATH];
+	char tileset[ResourceParser::MAX_CHAR_RESOURCE_NAME];
 	unsigned int raceLevel1HP, raceLevel1Defence, raceLevel1Attack, spriteX, spriteY;
 	int result = sscanf(
 		line,
 		"%s %u %u %u %u %u\n",
-		tilesetPath, &spriteX, &spriteY,
+		tileset, &spriteX, &spriteY,
 		&raceLevel1HP, &raceLevel1Defence, &raceLevel1Attack
 	);
 	if (result != 6) {
@@ -24,8 +23,7 @@ bool TaxonomyParser::_parseLine(const char *line) {
 	}
 	else {
 		TextureManager::Instance()->load(
-			std::string(m_sFileDir) + "/" + tilesetPath,
-			tilesetPath,
+			tileset,
 			Game::Instance()->getRenderer()
 		);
 
@@ -34,7 +32,7 @@ bool TaxonomyParser::_parseLine(const char *line) {
 			raceLevel1Defence,
 			raceLevel1Attack
 		);
-		race->setTilesetName(tilesetPath);
+		race->setTilesetName(tileset);
 		race->setSpriteX(spriteX);
 		race->setSpriteY(spriteY);
 		m_actorFactory.addActorRaceTaxonomy(race);
