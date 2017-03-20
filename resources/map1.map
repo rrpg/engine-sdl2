@@ -1,6 +1,6 @@
 # dimensions
 d 80 80
-t tileset tileset.png 16 3
+t tileset 16 20
 # when the player spawns
 s 50 50
 # content

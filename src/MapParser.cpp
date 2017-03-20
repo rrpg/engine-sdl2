@@ -71,26 +71,22 @@ void MapParser::_parseMapContent(const char *line) {
 
 bool MapParser::_parseTileset(const char *line) {
 	Tileset tileset;
-	char tilesetPath[MAX_CHAR_TILESET_FILE],
-		 tilesetName[MAX_CHAR_TILESET_NAME];
+	char tilesetName[MAX_CHAR_TILESET_NAME];
 	unsigned int tilesetWidth, tileSize;
 	// format is:
 	// tilesetname filepath tilesize tilesetwidth
 	int res = sscanf(
 		line,
-		"%s %s %u %u",
-		tilesetName, tilesetPath, &tileSize, &tilesetWidth
+		"%s %u %u",
+		tilesetName, &tileSize, &tilesetWidth
 	);
 
-	if (res != 4) {
+	if (res != 3) {
 		return false;
 	}
 
-	std::string textureFile = std::string(m_sFileDir) + "/" + tilesetPath;
-
 	// first add the tileset to texture manager
 	TextureManager::Instance()->load(
-		textureFile,
 		tilesetName,
 		Game::Instance()->getRenderer()
 	);
