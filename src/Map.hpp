@@ -33,22 +33,26 @@ class Map {
 	public:
 	Map();
 	~Map();
+	void setDimensions(unsigned int x, unsigned int y);
 	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);
 	E_FileParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();
-	void addActor(Actor *actor);
-	void render(SDL_Rect camera, int centerX, int centerY);
+
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
+	std::vector<int>* getGrid();
+
+	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
 	Actor *getActorAt(int x, int y);
 	void moveActor(Actor* actor, int newX, int newY);
 	void setStartPoint(float x, float y);
-	void setDimensions(unsigned int x, unsigned int y);
+
 	void addTileset(Tileset tileset);
+	void render(SDL_Rect camera, int centerX, int centerY);
+
 	void addEnemySpawnableCell(int cellIndex);
-	std::vector<int>* getGrid();
 	void initEnemies(ActorFactory &actorFactory);
 };
 
