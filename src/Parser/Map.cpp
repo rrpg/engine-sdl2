@@ -94,6 +94,6 @@ bool MapParser::_parseTileset(const char *line) {
 	tileset.width = tileSize * tilesetWidth;
 	tileset.name = tilesetName;
 	tileset.numColumns = tilesetWidth;
-	m_map.setTileset(tileset);
+	m_map.addTileset(tileset);
 	return true;
 }

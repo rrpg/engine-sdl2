@@ -21,7 +21,7 @@ class Map {
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
 	Vector2D m_sStartPoint = Vector2D();
-	Tileset m_tileset = Tileset();
+	std::vector<Tileset> m_vTilesets = {};
 	std::vector<int> m_vGrid = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
@@ -46,7 +46,7 @@ class Map {
 	void moveActor(Actor* actor, int newX, int newY);
 	void setStartPoint(float x, float y);
 	void setDimensions(unsigned int x, unsigned int y);
-	void setTileset(Tileset tileset);
+	void addTileset(Tileset tileset);
 	void addEnemySpawnableCell(int cellIndex);
 	std::vector<int>* getGrid();
 	void initEnemies(ActorFactory &actorFactory);

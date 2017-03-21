@@ -44,8 +44,8 @@ void Map::setDimensions(unsigned int w, unsigned int h) {
 	m_iHeight = h;
 }
 
-void Map::setTileset(Tileset tileset) {
-	m_tileset = tileset;
+void Map::addTileset(Tileset tileset) {
+	m_vTilesets.push_back(tileset);
 }
 
 E_FileParsingResult Map::setMap(const char* mapFile) {
@@ -82,8 +82,8 @@ void Map::addActor(Actor *actor) {
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / m_tileset.tileWidth,
-		 cameraHeightGrid = camera.h / m_tileset.tileHeight;
+	int cameraWidthGrid = camera.w / m_vTilesets[0].tileWidth,
+		 cameraHeightGrid = camera.h / m_vTilesets[0].tileHeight;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible
@@ -94,8 +94,8 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	Vector2D shift = {
-		(float) (visibleArea.x * m_tileset.tileWidth),
-		(float) (visibleArea.y * m_tileset.tileHeight)
+		(float) (visibleArea.x * m_vTilesets[0].tileWidth),
+		(float) (visibleArea.y * m_vTilesets[0].tileHeight)
 	};
 
 	_renderTerrain(camera, visibleArea, shift);
@@ -116,21 +116,21 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			}
 			int cell = m_vGrid[y * m_iWidth + x];
 			int xScreen, yScreen;
-			xScreen = x * m_tileset.tileWidth - shiftX + camera.x;
-			yScreen = y * m_tileset.tileHeight - shiftY + camera.y;
+			xScreen = x * m_vTilesets[0].tileWidth - shiftX + camera.x;
+			yScreen = y * m_vTilesets[0].tileHeight - shiftY + camera.y;
 
 			// the rows are 1 based, and the columns are 0 based, which is
 			// stupid
-			int tilesetRow = 1 + (cell / m_tileset.numColumns),
-				tilesetCol = cell % m_tileset.numColumns;
+			int tilesetRow = 1 + (cell / m_vTilesets[0].numColumns),
+				tilesetCol = cell % m_vTilesets[0].numColumns;
 			manager->drawTile(
-				m_tileset.name,
+				m_vTilesets[0].name,
 				0, // margin
 				0, // spacing
 				xScreen,
 				yScreen,
-				m_tileset.tileWidth,
-				m_tileset.tileHeight,
+				m_vTilesets[0].tileWidth,
+				m_vTilesets[0].tileHeight,
 				tilesetRow,
 				tilesetCol,
 				game->getRenderer()
@@ -153,16 +153,16 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		}
 
 		int xScreen, yScreen;
-		xScreen = actor.second->getX() * m_tileset.tileWidth - shiftX + camera.x;
-		yScreen = actor.second->getY() * m_tileset.tileHeight - shiftY + camera.y;
+		xScreen = actor.second->getX() * m_vTilesets[0].tileWidth - shiftX + camera.x;
+		yScreen = actor.second->getY() * m_vTilesets[0].tileHeight - shiftY + camera.y;
 		manager->drawTile(
 			actor.second->getRace().getTilesetName(),
 			0, // margin
 			0, // spacing
 			xScreen,
 			yScreen,
-			m_tileset.tileWidth,
-			m_tileset.tileHeight,
+			m_vTilesets[0].tileWidth,
+			m_vTilesets[0].tileHeight,
 			(int) actor.second->getRace().getSpriteY() + 1,
 			(int) actor.second->getRace().getSpriteX(),
 			game->getRenderer()
@@ -172,7 +172,7 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		SDL_Rect r;
 		r.x = xScreen;
 		r.y = yScreen;
-		r.w = m_tileset.tileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
+		r.w = m_vTilesets[0].tileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
 		r.h = 2;
 		SDL_SetRenderDrawColor(game->getRenderer(), 0xff, 0, 0, 255);
 		SDL_RenderFillRect(game->getRenderer(), &r);
