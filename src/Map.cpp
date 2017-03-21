@@ -3,18 +3,12 @@
 #include "SDL2_framework/Game.h"
 #include "Parser/Map.hpp"
 
-const int CELL_FLAG_WALKABLE = 0x1;
-const int CELL_FLAG_OBSTRUCTING_VIEW = 0x2;
-
-Map::Map() {
-	m_mCellTypeFlags[Wall] = CELL_FLAG_OBSTRUCTING_VIEW;
-	m_mCellTypeFlags[Path] = CELL_FLAG_WALKABLE;
-	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
-}
-
 Map::~Map() {
 	for (auto actor : m_mActors) {
 		delete actor.second;
+	}
+	for (auto terrain : m_mTerrains) {
+		delete terrain.second;
 	}
 }
 
@@ -44,6 +38,19 @@ void Map::setDimensions(unsigned int w, unsigned int h) {
 	m_iHeight = h;
 }
 
+Terrain *Map::getTerrain(E_TerrainType type) {
+	if (m_mTerrains.find(type) == m_mTerrains.end()) {
+		Terrain *terrain = new Terrain();
+		if (TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT) {
+			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
+		}
+
+		m_mTerrains[type] = terrain;
+	}
+
+	return m_mTerrains[type];
+}
+
 void Map::addTileset(Tileset tileset) {
 	m_vTilesets.push_back(tileset);
 }
@@ -54,7 +61,7 @@ E_FileParsingResult Map::setMap(const char* mapFile) {
 	return result;
 }
 
-std::vector<int>* Map::getGrid() {
+std::vector<E_TerrainType>* Map::getGrid() {
 	return &m_vGrid;
 }
 
@@ -185,8 +192,9 @@ bool Map::isCellWalkable(int x, int y) {
 	}
 
 	int gridIndex = y * m_iWidth + x;
-	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
-	bool hasWalkableFlag = (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	bool hasWalkableFlag = getTerrain(m_vGrid[gridIndex])->hasFlag(
+		Terrain::TERRAIN_FLAG_WALKABLE
+	);
 	bool hasActorOnCell;
 	auto got = m_mActors.find(getCoordsKey(x, y));
 	hasActorOnCell = got != m_mActors.end();
@@ -195,8 +203,9 @@ bool Map::isCellWalkable(int x, int y) {
 
 bool Map::isCellObstructingView(int x, int y) {
 	int gridIndex = y * m_iWidth + x;
-	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
-	return (m_mCellTypeFlags[cellType] & CELL_FLAG_OBSTRUCTING_VIEW) == CELL_FLAG_OBSTRUCTING_VIEW;
+	return getTerrain(m_vGrid[gridIndex])->hasFlag(
+		Terrain::TERRAIN_FLAG_OBSTRUCTING_VIEW
+	);
 }
 
 std::unordered_map<std::string, Actor*> &Map::getActors() {

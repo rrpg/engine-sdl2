@@ -72,7 +72,7 @@ void MapParser::_parseMapContent(const char *line) {
 			m_map.addEnemySpawnableCell((int) m_map.getGrid()->size());
 		}
 
-		m_map.getGrid()->push_back(cellTile);
+		m_map.getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
 }

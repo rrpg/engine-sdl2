@@ -3,6 +3,7 @@
 
 #include "Parser/File.hpp"
 #include "ActorFactory.hpp"
+#include "Terrain.hpp"
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
@@ -10,28 +11,21 @@
 #include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
 
-enum E_CellType {
-	Wall, // 0
-	Path, // 1
-	Grass
-};
-
 class Map {
 	private:
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
 	Vector2D m_sStartPoint = Vector2D();
 	std::vector<Tileset> m_vTilesets = {};
-	std::vector<int> m_vGrid = {};
+	std::vector<E_TerrainType> m_vGrid = {};
+	std::unordered_map<E_TerrainType, Terrain*> m_mTerrains = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
-	std::unordered_map<E_CellType, int> m_mCellTypeFlags = {};
 	std::vector<int> m_vEnemySpawnableCells = {};
 
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 
 	public:
-	Map();
 	~Map();
 	void setDimensions(unsigned int x, unsigned int y);
 	void clearDeadActors();
@@ -39,9 +33,10 @@ class Map {
 	E_FileParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();
 
+	Terrain *getTerrain(E_TerrainType type);
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
-	std::vector<int>* getGrid();
+	std::vector<E_TerrainType>* getGrid();
 
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
