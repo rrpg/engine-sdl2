@@ -30,6 +30,16 @@ bool MapParser::_parseLine(const char *line) {
 		case 'c':
 			_parseMapContent(line);
 			break;
+		case 'g':
+			sscanfResult = sscanf(
+				line,
+				"%d %d\n",
+				&m_iTileWidth, &m_iTileHeight
+			);
+			if (sscanfResult != 2) {
+				retValue = false;
+			}
+			break;
 		case 't':
 			retValue = _parseTileset(line);
 			break;
@@ -70,16 +80,16 @@ void MapParser::_parseMapContent(const char *line) {
 bool MapParser::_parseTileset(const char *line) {
 	Tileset tileset;
 	char tilesetName[ResourceParser::MAX_CHAR_RESOURCE_NAME];
-	unsigned int tilesetWidth, tileSize;
+	unsigned int tilesetWidth;
 	// format is:
 	// tilesetname filepath tilesize tilesetwidth
 	int res = sscanf(
 		line,
-		"%s %u %u",
-		tilesetName, &tileSize, &tilesetWidth
+		"%s %u",
+		tilesetName, &tilesetWidth
 	);
 
-	if (res != 3) {
+	if (res != 2) {
 		return false;
 	}
 
@@ -89,9 +99,9 @@ bool MapParser::_parseTileset(const char *line) {
 		Game::Instance()->getRenderer()
 	);
 
-	tileset.tileWidth = tileSize;
-	tileset.tileHeight = tileSize;
-	tileset.width = tileSize * tilesetWidth;
+	tileset.tileWidth = m_iTileWidth;
+	tileset.tileHeight = m_iTileHeight;
+	tileset.width = m_iTileWidth * tilesetWidth;
 	tileset.name = tilesetName;
 	tileset.numColumns = tilesetWidth;
 	m_map.addTileset(tileset);

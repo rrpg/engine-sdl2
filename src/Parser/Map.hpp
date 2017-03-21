@@ -7,6 +7,8 @@
 class MapParser : public FileParser {
 	protected:
 	Map &m_map;
+	int m_iTileWidth = 1;
+	int m_iTileHeight = 1;
 
 	bool _parseLine(const char *line);
 	bool _parseTileset(const char *line);
