@@ -5,9 +5,10 @@
 #include <libgen.h>
 #include <fstream>
 
+const char MAX_LENGTH_TILESET_NAME = 32;
 // lenTileset + tileset + width + height + x + y
-// 1 + 255 + 1 + 1 + 1 + 1
-const int MAX_BYTES_PER_CHUNK = 260;
+// 1 + MAX_LENGTH_TILESET_NAME + 1 + 1 + 1 + 1
+const int MAX_BYTES_PER_CHUNK = MAX_LENGTH_TILESET_NAME + 4;
 
 TileParser::TileParser(const char *pathFileOut) {
 	m_file = fopen(pathFileOut, "wb");
@@ -47,6 +48,9 @@ bool TileParser::_parseLine(const char *line) {
 		int sizeTilesetName = strlen(tileset);
 		fputc(sizeTilesetName, m_file);
 		fputs(tileset, m_file);
+		for (int pad = sizeTilesetName; pad < MAX_LENGTH_TILESET_NAME; ++pad) {
+			fputc('0', m_file);
+		}
 		fputc(tileWidth, m_file);
 		fputc(tileHeight, m_file);
 		fputc(tilesetX, m_file);
@@ -68,7 +72,8 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 	char *fileDir = dirname(const_cast<char*>(file));
 	strncpy(m_sFileDir, fileDir, MAX_CHAR_DIR_PATH);
 	while (!fin.eof()) {
-		char buf;
+		char buf,
+			 garbage[MAX_LENGTH_TILESET_NAME];
 		// tileset
 		char sizeTileset = 0;
 		fin.read(&sizeTileset, 1);
@@ -79,6 +84,7 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 			fin.read(&buf, 1);
 			fputc(buf, m_file);
 		}
+		fin.read(garbage, MAX_LENGTH_TILESET_NAME - sizeTileset);
 
 		// width, height, x, y
 		for (char num = 0; num < 4; ++num) {
