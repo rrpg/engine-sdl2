@@ -50,3 +50,11 @@ clean:
 $(PROG): $(OBJ)
 	mkdir -p $(BINDIR)
 	$(CC) $(CCDYNAMICFLAGS)  -o $(BINDIR)/$@ $^
+
+
+tools:
+	@mkdir -p $(BINDIR)/tools
+	$(CC) ${CFLAGS} -Isrc/ src-tools/dataCompiler.cpp src-tools/TileParser.cpp src/Parser/File.cpp \
+		-o $(BINDIR)/tools/data-compiler
+	$(CC) ${CFLAGS} -Isrc/ src-tools/dataDecompiler.cpp src-tools/TileParser.cpp src/Parser/File.cpp \
+		-o $(BINDIR)/tools/data-decompiler
