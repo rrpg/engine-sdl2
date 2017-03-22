@@ -1,7 +1,7 @@
 #ifndef __MAP_PARSER__
 #define __MAP_PARSER__
 
-#include "File.hpp"
+#include "Parser/File.hpp"
 #include "../Map.hpp"
 
 class MapParser : public FileParser {
