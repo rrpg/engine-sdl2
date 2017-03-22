@@ -45,7 +45,7 @@ bool TileParser::_parseLine(const char *line) {
 		retValue = false;
 	}
 	else {
-		int sizeTilesetName = strlen(tileset);
+		int sizeTilesetName = (int) strlen(tileset);
 		fputc(sizeTilesetName, m_file);
 		fputs(tileset, m_file);
 		for (int pad = sizeTilesetName; pad < MAX_LENGTH_TILESET_NAME; ++pad) {
