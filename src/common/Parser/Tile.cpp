@@ -8,7 +8,7 @@
 const char MAX_LENGTH_TILESET_NAME = 32;
 // lenTileset + tileset + width + height + x + y
 // 1 + MAX_LENGTH_TILESET_NAME + 1 + 1 + 1 + 1
-const int MAX_BYTES_PER_CHUNK = MAX_LENGTH_TILESET_NAME + 4;
+const int MAX_BYTES_PER_CHUNK = MAX_LENGTH_TILESET_NAME + 5;
 
 TileParser::TileParser(const char *pathFileOut) {
 	m_file = fopen(pathFileOut, "wb");
