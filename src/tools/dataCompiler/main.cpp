@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
 		if (result != OK) {
 			std::cerr << "Error while parsing file " << fileIn << ": ";
 			std::cerr << result << "\n";
+			return 3;
 		}
 	}
 	else {
