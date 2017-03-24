@@ -22,12 +22,15 @@ class Map {
 	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::vector<int> m_vEnemySpawnableCells = {};
 
+	FILE *m_tilesFile = 0;
+
 	Terrain *_getTerrain(E_TerrainType type);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 
 	public:
 	~Map();
+	void setTileFile(const char *tileFilePath);
 	void setDimensions(unsigned int x, unsigned int y);
 	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);

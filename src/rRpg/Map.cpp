@@ -10,6 +10,14 @@ Map::~Map() {
 	for (auto terrain : m_mTerrains) {
 		delete terrain.second;
 	}
+
+	if (m_tilesFile != 0) {
+		fclose(m_tilesFile);
+	}
+}
+
+void Map::setTileFile(const char *tilesFilePath) {
+	m_tilesFile = fopen(tilesFilePath, "r");
 }
 
 void Map::clearDeadActors() {
