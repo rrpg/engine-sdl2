@@ -4,6 +4,16 @@
 #include "Parser/File.hpp"
 #include <stdio.h>
 
+#define MAX_LENGTH_TILESET_NAME 32
+
+struct S_TileData {
+	char tileset[MAX_LENGTH_TILESET_NAME];
+	char width;
+	char height;
+	char x;
+	char y;
+};
+
 class TileParser : public FileParser {
 	protected:
 	bool _parseLine(const char *line);

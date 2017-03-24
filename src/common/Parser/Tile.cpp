@@ -5,7 +5,6 @@
 #include <libgen.h>
 #include <fstream>
 
-const char MAX_LENGTH_TILESET_NAME = 32;
 // lenTileset + tileset + width + height + x + y
 // 1 + MAX_LENGTH_TILESET_NAME + 1 + 1 + 1 + 1
 const int MAX_BYTES_PER_CHUNK = MAX_LENGTH_TILESET_NAME + 5;
@@ -71,27 +70,29 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 	E_FileParsingResult retValue = OK;
 	char *fileDir = dirname(const_cast<char*>(file));
 	strncpy(m_sFileDir, fileDir, MAX_CHAR_DIR_PATH);
-	while (!fin.eof()) {
-		char buf,
-			 garbage[MAX_LENGTH_TILESET_NAME];
-		// tileset
-		char sizeTileset = 0;
-		fin.read(&sizeTileset, 1);
-		if (fin.eof()) {
-			break;
+	char tileData[MAX_BYTES_PER_CHUNK];
+	while (fin.read(tileData, MAX_BYTES_PER_CHUNK)) {
+		// organise data
+		S_TileData tile;
+		for (int c = 0; c < tileData[0]; ++c) {
+			tile.tileset[c] = tileData[c + 1];
 		}
-		for (char c = 0; c < sizeTileset; ++c) {
-			fin.read(&buf, 1);
-			fputc(buf, m_file);
-		}
-		fin.read(garbage, MAX_LENGTH_TILESET_NAME - sizeTileset);
+		tile.tileset[(int) tileData[0]] = '\0';
+		tile.width = tileData[MAX_LENGTH_TILESET_NAME + 1];
+		tile.height = tileData[MAX_LENGTH_TILESET_NAME + 2];
+		tile.x = tileData[MAX_LENGTH_TILESET_NAME + 3];
+		tile.y = tileData[MAX_LENGTH_TILESET_NAME + 4];
 
-		// width, height, x, y
-		for (char num = 0; num < 4; ++num) {
-			fputc(' ', m_file);
-			fin.read(&buf, 1);
-			fputs(std::to_string(buf).c_str(), m_file);
-		}
+		// export data
+		fputs(tile.tileset, m_file);
+		fputc(' ', m_file);
+		fputs(std::to_string(tile.width).c_str(), m_file);
+		fputc(' ', m_file);
+		fputs(std::to_string(tile.height).c_str(), m_file);
+		fputc(' ', m_file);
+		fputs(std::to_string(tile.x).c_str(), m_file);
+		fputc(' ', m_file);
+		fputs(std::to_string(tile.y).c_str(), m_file);
 		fputc('\n', m_file);
 	}
 
