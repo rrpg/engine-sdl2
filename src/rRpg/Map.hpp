@@ -22,6 +22,7 @@ class Map {
 	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::vector<int> m_vEnemySpawnableCells = {};
 
+	Terrain *_getTerrain(E_TerrainType type);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 
@@ -33,7 +34,6 @@ class Map {
 	E_FileParsingResult setMap(const char* mapFile);
 	Vector2D getStartPoint();
 
-	Terrain *getTerrain(E_TerrainType type);
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
 	std::vector<E_TerrainType>* getGrid();

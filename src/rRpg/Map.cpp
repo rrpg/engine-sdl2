@@ -38,7 +38,7 @@ void Map::setDimensions(unsigned int w, unsigned int h) {
 	m_iHeight = h;
 }
 
-Terrain *Map::getTerrain(E_TerrainType type) {
+Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
 		if (TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT) {
@@ -192,7 +192,7 @@ bool Map::isCellWalkable(int x, int y) {
 	}
 
 	int gridIndex = y * m_iWidth + x;
-	bool hasWalkableFlag = getTerrain(m_vGrid[gridIndex])->hasFlag(
+	bool hasWalkableFlag = _getTerrain(m_vGrid[gridIndex])->hasFlag(
 		Terrain::TERRAIN_FLAG_WALKABLE
 	);
 	bool hasActorOnCell;
@@ -203,7 +203,7 @@ bool Map::isCellWalkable(int x, int y) {
 
 bool Map::isCellObstructingView(int x, int y) {
 	int gridIndex = y * m_iWidth + x;
-	return getTerrain(m_vGrid[gridIndex])->hasFlag(
+	return _getTerrain(m_vGrid[gridIndex])->hasFlag(
 		Terrain::TERRAIN_FLAG_OBSTRUCTING_VIEW
 	);
 }
