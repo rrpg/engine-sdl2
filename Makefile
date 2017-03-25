@@ -26,10 +26,10 @@ CFLAGS := -g -O2 -Wall -Wmissing-declarations -Weffc++ \
 		-Wunused-parameter \
 		-Wvariadic-macros \
 		-Wwrite-strings
-LDFLAGS:=
+LDFLAGS:=-Isrc/rRpg -Isrc/common
 CCDYNAMICFLAGS := ${CFLAGS} ${LDFLAGS} -lSDL2_framework -ltinyxml -lSDL2 -lSDL2_image
 
-SRC := $(shell find $(SRCDIR)/ -type f -name '*.cpp')
+SRC := $(shell find $(SRCDIR)/rRpg/ $(SRCDIR)/common/ -type f -name '*.cpp')
 OBJ := $(patsubst %.cpp,$(BUILDDIR)/%.o,$(SRC))
 DEP := $(patsubst %.o,%.deps,$(OBJ))
 
@@ -50,3 +50,11 @@ clean:
 $(PROG): $(OBJ)
 	mkdir -p $(BINDIR)
 	$(CC) $(CCDYNAMICFLAGS)  -o $(BINDIR)/$@ $^
+
+
+tools:
+	@mkdir -p $(BINDIR)/tools
+	$(CC) ${CFLAGS} ${CFLAGS} ${LDFLAGS} $(shell find src/tools/dataCompiler/ $(SRCDIR)/common/ -name "*.cpp") \
+		-o $(BINDIR)/tools/data-compiler
+	$(CC) ${CFLAGS} ${CFLAGS} ${LDFLAGS} $(shell find src/tools/dataDecompiler/ $(SRCDIR)/common/ -name "*.cpp") \
+		-o $(BINDIR)/tools/data-decompiler

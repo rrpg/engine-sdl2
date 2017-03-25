@@ -1,7 +1,7 @@
 #ifndef __TAXONOMY_PARSER__
 #define __TAXONOMY_PARSER__
 
-#include "File.hpp"
+#include "Parser/File.hpp"
 #include "../ActorFactory.hpp"
 
 class TaxonomyParser : public FileParser {

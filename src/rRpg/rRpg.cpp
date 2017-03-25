@@ -37,7 +37,7 @@ Actor *rRpg::getHero() {
 	return m_hero;
 }
 
-bool rRpg::loadMap(std::string filePath) {
+bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
 	E_FileParsingResult res;
 	res = m_map.setMap(filePath.c_str());
 	bool ret = true;
@@ -47,6 +47,7 @@ bool rRpg::loadMap(std::string filePath) {
 	}
 
 	m_map.initEnemies(m_actorFactory);
+	m_map.setTileFile(tilesFilePath.c_str());
 	return ret;
 }
 

@@ -1,0 +1,33 @@
+#ifndef __TERRAIN__
+#define __TERRAIN__
+
+#include "Parser/Tile.hpp"
+
+enum E_TerrainType {
+	// floors
+	TERRAIN_GRASS_NORMAL_TOPLEFT, TERRAIN_GRASS_CORNER_TOP,
+	TERRAIN_GRASS_NORMAL_TOPRIGHT, TERRAIN_GRASS_NORMAL_LEFT,
+	TERRAIN_GRASS_NORMAL_CENTER, TERRAIN_GRASS_NORMAL_RIGHT,
+	TERRAIN_GRASS_NORMAL_BOTTOMLEFT, TERRAIN_GRASS_NORMAL_BOTTOM,
+	TERRAIN_GRASS_NORMAL_BOTTOMRIGHT,
+	TERRAIN_GRASS_NORMAL_VERT_TOP, TERRAIN_GRASS_NORMAL_VERT, TERRAIN_GRASS_NORMAL_VERT_BOTTOM,
+	TERRAIN_GRASS_NORMAL_SINGLE,
+	TERRAIN_GRASS_NORMAL_HORIZ_LEFT, TERRAIN_GRASS_NORMAL_HORIZ, TERRAIN_GRASS_NORMAL_HORIZ_RIGHT
+};
+
+class Terrain {
+	private:
+	unsigned int m_iFlags = 0;
+	S_TileData m_sTileData = {};
+
+	public:
+	static const int TERRAIN_FLAG_WALKABLE = 0x1;
+	static const int TERRAIN_FLAG_OBSTRUCTING_VIEW = 0x2;
+
+	void setTile(S_TileData tileData);
+	S_TileData getTile();
+	void setFlags(unsigned int flags);
+	bool hasFlag(unsigned int flag);
+};
+
+#endif

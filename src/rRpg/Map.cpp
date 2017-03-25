@@ -2,20 +2,23 @@
 
 #include "SDL2_framework/Game.h"
 #include "Parser/Map.hpp"
-
-const int CELL_FLAG_WALKABLE = 0x1;
-const int CELL_FLAG_OBSTRUCTING_VIEW = 0x2;
-
-Map::Map() {
-	m_mCellTypeFlags[Wall] = CELL_FLAG_OBSTRUCTING_VIEW;
-	m_mCellTypeFlags[Path] = CELL_FLAG_WALKABLE;
-	m_mCellTypeFlags[Grass] = CELL_FLAG_WALKABLE;
-}
+#include "Parser/Tile.hpp"
 
 Map::~Map() {
 	for (auto actor : m_mActors) {
 		delete actor.second;
 	}
+	for (auto terrain : m_mTerrains) {
+		delete terrain.second;
+	}
+
+	if (m_tilesFile != 0) {
+		fclose(m_tilesFile);
+	}
+}
+
+void Map::setTileFile(const char *tilesFilePath) {
+	m_tilesFile = fopen(tilesFilePath, "r");
 }
 
 void Map::clearDeadActors() {
@@ -44,8 +47,24 @@ void Map::setDimensions(unsigned int w, unsigned int h) {
 	m_iHeight = h;
 }
 
-void Map::setTileset(Tileset tileset) {
-	m_tileset = tileset;
+Terrain *Map::_getTerrain(E_TerrainType type) {
+	if (m_mTerrains.find(type) == m_mTerrains.end()) {
+		Terrain *terrain = new Terrain();
+		if (TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT) {
+			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
+			S_TileData tileData;
+			TileParser::getTileInfo(tileData ,m_tilesFile, (int) type);
+			terrain->setTile(tileData);
+		}
+
+		m_mTerrains[type] = terrain;
+	}
+
+	return m_mTerrains[type];
+}
+
+void Map::addTileset(Tileset tileset) {
+	m_vTilesets.push_back(tileset);
 }
 
 E_FileParsingResult Map::setMap(const char* mapFile) {
@@ -54,7 +73,7 @@ E_FileParsingResult Map::setMap(const char* mapFile) {
 	return result;
 }
 
-std::vector<int>* Map::getGrid() {
+std::vector<E_TerrainType>* Map::getGrid() {
 	return &m_vGrid;
 }
 
@@ -82,8 +101,8 @@ void Map::addActor(Actor *actor) {
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / m_tileset.tileWidth,
-		 cameraHeightGrid = camera.h / m_tileset.tileHeight;
+	int cameraWidthGrid = camera.w / m_vTilesets[0].tileWidth,
+		 cameraHeightGrid = camera.h / m_vTilesets[0].tileHeight;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible
@@ -94,8 +113,8 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	Vector2D shift = {
-		(float) (visibleArea.x * m_tileset.tileWidth),
-		(float) (visibleArea.y * m_tileset.tileHeight)
+		(float) (visibleArea.x * m_vTilesets[0].tileWidth),
+		(float) (visibleArea.y * m_vTilesets[0].tileHeight)
 	};
 
 	_renderTerrain(camera, visibleArea, shift);
@@ -114,25 +133,24 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
-			int cell = m_vGrid[y * m_iWidth + x];
-			int xScreen, yScreen;
-			xScreen = x * m_tileset.tileWidth - shiftX + camera.x;
-			yScreen = y * m_tileset.tileHeight - shiftY + camera.y;
+			Terrain *terrain = _getTerrain(m_vGrid[y * m_iWidth + x]);
+			S_TileData tile = terrain->getTile();
+			int xScreen = x * tile.width - shiftX + camera.x,
+				yScreen = y * tile.height - shiftY + camera.y;
 
+			manager->load(tile.tileset, game->getRenderer());
 			// the rows are 1 based, and the columns are 0 based, which is
 			// stupid
-			int tilesetRow = 1 + (cell / m_tileset.numColumns),
-				tilesetCol = cell % m_tileset.numColumns;
 			manager->drawTile(
-				m_tileset.name,
+				tile.tileset,
 				0, // margin
 				0, // spacing
 				xScreen,
 				yScreen,
-				m_tileset.tileWidth,
-				m_tileset.tileHeight,
-				tilesetRow,
-				tilesetCol,
+				tile.width,
+				tile.height,
+				tile.y + 1,
+				tile.x,
 				game->getRenderer()
 			);
 		}
@@ -153,16 +171,16 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		}
 
 		int xScreen, yScreen;
-		xScreen = actor.second->getX() * m_tileset.tileWidth - shiftX + camera.x;
-		yScreen = actor.second->getY() * m_tileset.tileHeight - shiftY + camera.y;
+		xScreen = actor.second->getX() * m_vTilesets[0].tileWidth - shiftX + camera.x;
+		yScreen = actor.second->getY() * m_vTilesets[0].tileHeight - shiftY + camera.y;
 		manager->drawTile(
 			actor.second->getRace().getTilesetName(),
 			0, // margin
 			0, // spacing
 			xScreen,
 			yScreen,
-			m_tileset.tileWidth,
-			m_tileset.tileHeight,
+			m_vTilesets[0].tileWidth,
+			m_vTilesets[0].tileHeight,
 			(int) actor.second->getRace().getSpriteY() + 1,
 			(int) actor.second->getRace().getSpriteX(),
 			game->getRenderer()
@@ -172,7 +190,7 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		SDL_Rect r;
 		r.x = xScreen;
 		r.y = yScreen;
-		r.w = m_tileset.tileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
+		r.w = m_vTilesets[0].tileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
 		r.h = 2;
 		SDL_SetRenderDrawColor(game->getRenderer(), 0xff, 0, 0, 255);
 		SDL_RenderFillRect(game->getRenderer(), &r);
@@ -185,8 +203,9 @@ bool Map::isCellWalkable(int x, int y) {
 	}
 
 	int gridIndex = y * m_iWidth + x;
-	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
-	bool hasWalkableFlag = (m_mCellTypeFlags[cellType] & CELL_FLAG_WALKABLE) == CELL_FLAG_WALKABLE;
+	bool hasWalkableFlag = _getTerrain(m_vGrid[gridIndex])->hasFlag(
+		Terrain::TERRAIN_FLAG_WALKABLE
+	);
 	bool hasActorOnCell;
 	auto got = m_mActors.find(getCoordsKey(x, y));
 	hasActorOnCell = got != m_mActors.end();
@@ -195,8 +214,9 @@ bool Map::isCellWalkable(int x, int y) {
 
 bool Map::isCellObstructingView(int x, int y) {
 	int gridIndex = y * m_iWidth + x;
-	E_CellType cellType = (E_CellType) m_vGrid[gridIndex];
-	return (m_mCellTypeFlags[cellType] & CELL_FLAG_OBSTRUCTING_VIEW) == CELL_FLAG_OBSTRUCTING_VIEW;
+	return _getTerrain(m_vGrid[gridIndex])->hasFlag(
+		Terrain::TERRAIN_FLAG_OBSTRUCTING_VIEW
+	);
 }
 
 std::unordered_map<std::string, Actor*> &Map::getActors() {
