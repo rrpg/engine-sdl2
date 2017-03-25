@@ -25,6 +25,7 @@ class Terrain {
 	static const int TERRAIN_FLAG_OBSTRUCTING_VIEW = 0x2;
 
 	void setTile(S_TileData tileData);
+	S_TileData getTile();
 	void setFlags(unsigned int flags);
 	bool hasFlag(unsigned int flag);
 };

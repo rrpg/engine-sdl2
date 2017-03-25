@@ -133,25 +133,24 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
-			int cell = m_vGrid[y * m_iWidth + x];
-			int xScreen, yScreen;
-			xScreen = x * m_vTilesets[0].tileWidth - shiftX + camera.x;
-			yScreen = y * m_vTilesets[0].tileHeight - shiftY + camera.y;
+			Terrain *terrain = _getTerrain(m_vGrid[y * m_iWidth + x]);
+			S_TileData tile = terrain->getTile();
+			int xScreen = x * tile.width - shiftX + camera.x,
+				yScreen = y * tile.height - shiftY + camera.y;
 
+			manager->load(tile.tileset, game->getRenderer());
 			// the rows are 1 based, and the columns are 0 based, which is
 			// stupid
-			int tilesetRow = 1 + (cell / m_vTilesets[0].numColumns),
-				tilesetCol = cell % m_vTilesets[0].numColumns;
 			manager->drawTile(
-				m_vTilesets[0].name,
+				tile.tileset,
 				0, // margin
 				0, // spacing
 				xScreen,
 				yScreen,
-				m_vTilesets[0].tileWidth,
-				m_vTilesets[0].tileHeight,
-				tilesetRow,
-				tilesetCol,
+				tile.width,
+				tile.height,
+				tile.y + 1,
+				tile.x,
 				game->getRenderer()
 			);
 		}
