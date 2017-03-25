@@ -89,6 +89,22 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 	return retValue;
 }
 
+int TileParser::getTileInfo(S_TileData &tileInfo, FILE *tileFile, int tileIndex) {
+	int ret = fseek(tileFile, tileIndex * MAX_BYTES_PER_CHUNK, SEEK_SET);
+	if (ret == 0) {
+		char tileData[MAX_BYTES_PER_CHUNK];
+		ret = 0;
+		if (fread(tileData, 1, MAX_BYTES_PER_CHUNK, tileFile) == MAX_BYTES_PER_CHUNK) {
+			tileInfo = _extractTile(tileData);
+			std::cout << "Tileset: " << tileInfo.tileset << "\n";
+			std::cout << "Width: " << (int) tileInfo.width << "\n";
+			ret = 1;
+		}
+	}
+
+	return ret;
+}
+
 S_TileData TileParser::_extractTile(char tileData[MAX_BYTES_PER_CHUNK]) {
 	S_TileData tile;
 	for (int c = 0; c < tileData[0]; ++c) {

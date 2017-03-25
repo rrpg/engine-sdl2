@@ -30,6 +30,7 @@ class TileParser : public FileParser {
 	TileParser & operator=(const TileParser &L); // assignment
 	~TileParser();
 	E_FileParsingResult parseBinaryFile(const char* file);
+	static int getTileInfo(S_TileData &tileInfo, FILE *tileFile, int tileIndex);
 };
 
 #endif
