@@ -5,6 +5,9 @@
 #include <stdio.h>
 
 #define MAX_LENGTH_TILESET_NAME 32
+// lenTileset + tileset + width + height + x + y
+// 1 + MAX_LENGTH_TILESET_NAME + 1 + 1 + 1 + 1
+#define MAX_BYTES_PER_CHUNK 37
 
 struct S_TileData {
 	char tileset[MAX_LENGTH_TILESET_NAME];
@@ -18,6 +21,7 @@ class TileParser : public FileParser {
 	protected:
 	bool _parseLine(const char *line);
 	bool _parseBinaryLine(const char *chunk);
+	static S_TileData _extractTile(char tileData[MAX_BYTES_PER_CHUNK]);
 	FILE * m_file = 0;
 
 	public:
