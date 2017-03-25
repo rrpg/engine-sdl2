@@ -7,7 +7,6 @@
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
-#include "SDL2_framework/Level.h"
 #include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
 
@@ -15,8 +14,9 @@ class Map {
 	private:
 	unsigned int m_iWidth = 0;
 	unsigned int m_iHeight = 0;
+	int m_iDisplayTileWidth = 0;
+	int m_iDisplayTileHeight = 0;
 	Vector2D m_sStartPoint = Vector2D();
-	std::vector<Tileset> m_vTilesets = {};
 	std::vector<E_TerrainType> m_vGrid = {};
 	std::unordered_map<E_TerrainType, Terrain*> m_mTerrains = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
@@ -32,6 +32,7 @@ class Map {
 	~Map();
 	void setTileFile(const char *tileFilePath);
 	void setDimensions(unsigned int x, unsigned int y);
+	void setDisplayTileDimensions(unsigned int w, unsigned int h);
 	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);
 	E_FileParsingResult setMap(const char* mapFile);
@@ -47,7 +48,6 @@ class Map {
 	void moveActor(Actor* actor, int newX, int newY);
 	void setStartPoint(float x, float y);
 
-	void addTileset(Tileset tileset);
 	void render(SDL_Rect camera, int centerX, int centerY);
 
 	void addEnemySpawnableCell(int cellIndex);
