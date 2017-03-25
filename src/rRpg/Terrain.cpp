@@ -1,5 +1,9 @@
 #include "Terrain.hpp"
 
+void Terrain::setTile(S_TileData tileData) {
+	m_sTileData = tileData;
+}
+
 void Terrain::setFlags(unsigned int flags) {
 	m_iFlags = flags;
 }

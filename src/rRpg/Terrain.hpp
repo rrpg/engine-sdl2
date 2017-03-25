@@ -1,6 +1,8 @@
 #ifndef __TERRAIN__
 #define __TERRAIN__
 
+#include "Parser/Tile.hpp"
+
 enum E_TerrainType {
 	// floors
 	TERRAIN_GRASS_NORMAL_TOPLEFT, TERRAIN_GRASS_CORNER_TOP,
@@ -16,11 +18,13 @@ enum E_TerrainType {
 class Terrain {
 	private:
 	unsigned int m_iFlags = 0;
+	S_TileData m_sTileData = {};
 
 	public:
 	static const int TERRAIN_FLAG_WALKABLE = 0x1;
 	static const int TERRAIN_FLAG_OBSTRUCTING_VIEW = 0x2;
 
+	void setTile(S_TileData tileData);
 	void setFlags(unsigned int flags);
 	bool hasFlag(unsigned int flag);
 };
