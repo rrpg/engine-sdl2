@@ -31,18 +31,20 @@ bool MapParser::_parseLine(const char *line) {
 			_parseMapContent(line);
 			break;
 		case 'g':
+			unsigned int tileWidth, tileHeight;
 			sscanfResult = sscanf(
 				line,
-				"%d %d\n",
-				&m_iTileWidth, &m_iTileHeight
+				"%u %u\n",
+				&tileWidth, &tileHeight
 			);
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
+			else {
+				m_map.setDisplayTileDimensions(tileWidth, tileHeight);
+			}
 			break;
-		case 't':
-			retValue = _parseTileset(line);
-			break;
+
 		case 's':
 			int x, y;
 			sscanfResult = sscanf(
@@ -75,35 +77,4 @@ void MapParser::_parseMapContent(const char *line) {
 		m_map.getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
-}
-
-bool MapParser::_parseTileset(const char *line) {
-	Tileset tileset;
-	char tilesetName[ResourceParser::MAX_CHAR_RESOURCE_NAME];
-	unsigned int tilesetWidth;
-	// format is:
-	// tilesetname filepath tilesize tilesetwidth
-	int res = sscanf(
-		line,
-		"%s %u",
-		tilesetName, &tilesetWidth
-	);
-
-	if (res != 2) {
-		return false;
-	}
-
-	// first add the tileset to texture manager
-	TextureManager::Instance()->load(
-		tilesetName,
-		Game::Instance()->getRenderer()
-	);
-
-	tileset.tileWidth = m_iTileWidth;
-	tileset.tileHeight = m_iTileHeight;
-	tileset.width = m_iTileWidth * tilesetWidth;
-	tileset.name = tilesetName;
-	tileset.numColumns = tilesetWidth;
-	m_map.addTileset(tileset);
-	return true;
 }
