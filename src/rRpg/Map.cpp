@@ -80,7 +80,7 @@ void Map::setTile(int x, int y, E_TerrainType type) {
 	m_vGrid[gridIndex] = type;
 }
 
-E_FileParsingResult Map::setMap(const char* mapFile) {
+E_FileParsingResult Map::loadMap(const char* mapFile) {
 	MapParser parser = MapParser(*this);
 	E_FileParsingResult result = parser.parseFile(mapFile);
 	return result;

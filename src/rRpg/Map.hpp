@@ -38,7 +38,7 @@ class Map {
 	void setTile(int x, int y, E_TerrainType type);
 	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);
-	E_FileParsingResult setMap(const char* mapFile);
+	E_FileParsingResult loadMap(const char* mapFile);
 	Vector2D getStartPoint();
 
 	bool isCellWalkable(int x, int y);

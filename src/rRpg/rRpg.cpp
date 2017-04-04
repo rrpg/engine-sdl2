@@ -39,7 +39,7 @@ Actor *rRpg::getHero() {
 
 bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
 	E_FileParsingResult res;
-	res = m_map.setMap(filePath.c_str());
+	res = m_map.loadMap(filePath.c_str());
 	bool ret = true;
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
