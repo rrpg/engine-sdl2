@@ -68,6 +68,11 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
+void Map::setTile(int x, int y, E_TerrainType type) {
+	int gridIndex = y * m_iWidth + x;
+	m_vGrid[gridIndex] = type;
+}
+
 E_FileParsingResult Map::setMap(const char* mapFile) {
 	MapParser parser = MapParser(*this);
 	E_FileParsingResult result = parser.parseFile(mapFile);

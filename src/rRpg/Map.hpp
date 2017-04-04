@@ -33,6 +33,7 @@ class Map {
 	void setTileFile(const char *tileFilePath);
 	void setDimensions(unsigned int x, unsigned int y);
 	void setDisplayTileDimensions(unsigned int w, unsigned int h);
+	void setTile(int x, int y, E_TerrainType type);
 	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);
 	E_FileParsingResult setMap(const char* mapFile);
