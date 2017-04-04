@@ -36,13 +36,16 @@ class Map {
 	void setDimensions(unsigned int x, unsigned int y);
 	void setDisplayTileDimensions(unsigned int w, unsigned int h);
 	void setTile(int x, int y, E_TerrainType type);
+	void setStartPoint(float x, float y);
+
 	void clearDeadActors();
 	static std::string getCoordsKey(int x, int y);
+
 	E_FileParsingResult loadMap(const char* mapFile);
-	Vector2D getStartPoint();
 
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
+	Vector2D getStartPoint();
 	std::vector<E_TerrainType>* getGrid();
 	void setGrid(std::vector<E_TerrainType> grid);
 
@@ -54,7 +57,6 @@ class Map {
 	std::unordered_map<std::string, Actor*> &getActors();
 	Actor *getActorAt(int x, int y);
 	void moveActor(Actor* actor, int newX, int newY);
-	void setStartPoint(float x, float y);
 
 	void render(SDL_Rect camera, int centerX, int centerY);
 
