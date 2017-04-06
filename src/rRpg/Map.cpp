@@ -55,7 +55,9 @@ void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
 Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
-		if (TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT) {
+		if ((TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT)
+			|| (TERRAIN_SOIL_NORMAL_TOPLEFT <= type && type <= TERRAIN_SOIL_NORMAL_HORIZ_RIGHT)
+		) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
 			S_TileData tileData;
 			TileParser::getTileInfo(tileData ,m_tilesFile, (int) type);
