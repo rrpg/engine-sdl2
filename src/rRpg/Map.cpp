@@ -68,6 +68,13 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
+void Map::initializeGrid(E_TerrainType type) {
+	unsigned int size = m_iWidth * m_iHeight;
+	for (unsigned int c = 0; c < size; ++c) {
+		m_vGrid.push_back(type);
+	}
+}
+
 void Map::setTile(int x, int y, E_TerrainType type) {
 	int gridIndex = y * m_iWidth + x;
 	m_vGrid[gridIndex] = type;

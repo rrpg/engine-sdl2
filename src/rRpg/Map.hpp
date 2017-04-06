@@ -30,6 +30,8 @@ class Map {
 
 	public:
 	~Map();
+
+	void initializeGrid(E_TerrainType type);
 	void setTileFile(const char *tileFilePath);
 	void setDimensions(unsigned int x, unsigned int y);
 	void setDisplayTileDimensions(unsigned int w, unsigned int h);
