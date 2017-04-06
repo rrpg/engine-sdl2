@@ -59,11 +59,11 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 			|| (TERRAIN_SOIL_NORMAL_TOPLEFT <= type && type <= TERRAIN_SOIL_NORMAL_HORIZ_RIGHT)
 		) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
-			S_TileData tileData;
-			TileParser::getTileInfo(tileData ,m_tilesFile, (int) type);
-			terrain->setTile(tileData);
 		}
 
+		S_TileData tileData;
+		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
+		terrain->setTile(tileData);
 		m_mTerrains[type] = terrain;
 	}
 
