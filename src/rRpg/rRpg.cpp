@@ -40,7 +40,21 @@ Actor *rRpg::getHero() {
 }
 
 bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
+	FILE *f = 0;
 	MapParser parser = MapParser();
+	// generate the map if it does not exist
+	f = fopen(filePath.c_str(), "r");
+	if (f) {
+		fclose(f);
+	}
+	else {
+		MapGenerator generator = MapGenerator();
+		Map map = generator.generate(CAVE, 50, 50);
+		parser.setMap(&map);
+		parser.saveMap(filePath.c_str());
+	}
+
+	// load it
 	E_FileParsingResult res;
 	parser.setMap(&m_map);
 	res = parser.parseFile(filePath.c_str());
