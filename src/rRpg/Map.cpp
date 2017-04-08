@@ -90,7 +90,8 @@ void Map::setTile(int x, int y, E_TerrainType type) {
 }
 
 E_FileParsingResult Map::loadMap(const char* mapFile) {
-	MapParser parser = MapParser(*this);
+	MapParser parser = MapParser();
+	parser.setMap(this);
 	E_FileParsingResult result = parser.parseFile(mapFile);
 	return result;
 }

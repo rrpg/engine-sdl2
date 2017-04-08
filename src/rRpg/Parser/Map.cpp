@@ -4,7 +4,26 @@
 #include "SDL2_framework/Game.h"
 #include <string.h>
 
-MapParser::MapParser(Map &map) : m_map(map) {
+MapParser::MapParser() : m_map(0) {
+}
+
+MapParser::MapParser(const MapParser &mP) :
+	m_map(mP.m_map)
+{
+}
+
+MapParser & MapParser::operator=(const MapParser &mP) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &mP) {
+		return *this;
+	}
+
+	m_map = mP.m_map;
+	return *this;
+}
+
+void MapParser::setMap(Map *map) {
+	m_map = map;
 }
 
 bool MapParser::_parseLine(const char *line) {
@@ -25,7 +44,7 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map.setDimensions(w, h);
+			m_map->setDimensions(w, h);
 			break;
 		case 'c':
 			_parseMapContent(line);
@@ -41,7 +60,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map.setDisplayTileDimensions(tileWidth, tileHeight);
+				m_map->setDisplayTileDimensions(tileWidth, tileHeight);
 			}
 			break;
 
@@ -55,7 +74,7 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map.setStartPoint((float) x, (float) y);
+			m_map->setStartPoint((float) x, (float) y);
 			break;
 		default:
 			break;
@@ -71,10 +90,10 @@ void MapParser::_parseMapContent(const char *line) {
 		uint8_t cellTile = (cellInfo >> 0x1) & 255;
 		// the an enemy can spawn on the cell
 		if (canSpawnEnemy) {
-			m_map.addEnemySpawnableCell((int) m_map.getGrid()->size());
+			m_map->addEnemySpawnableCell((int) m_map->getGrid()->size());
 		}
 
-		m_map.getGrid()->push_back((E_TerrainType) cellTile);
+		m_map->getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
 }
