@@ -20,37 +20,49 @@ class Map {
 	std::vector<E_TerrainType> m_vGrid = {};
 	std::unordered_map<E_TerrainType, Terrain*> m_mTerrains = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
-	std::vector<int> m_vEnemySpawnableCells = {};
+	std::vector<std::pair<char, char>> m_vEnemySpawnableCells = {};
 
 	FILE *m_tilesFile = 0;
 
 	Terrain *_getTerrain(E_TerrainType type);
+	Terrain *_getTerrainWithTileData(E_TerrainType type);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
+	static std::string _getCoordsKey(int x, int y);
 
 	public:
 	~Map();
+
+	void initializeGrid(E_TerrainType type);
 	void setTileFile(const char *tileFilePath);
 	void setDimensions(unsigned int x, unsigned int y);
 	void setDisplayTileDimensions(unsigned int w, unsigned int h);
+	void setTile(int x, int y, E_TerrainType type);
+	void setStartPoint(float x, float y);
+
 	void clearDeadActors();
-	static std::string getCoordsKey(int x, int y);
-	E_FileParsingResult setMap(const char* mapFile);
-	Vector2D getStartPoint();
 
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
+	Vector2D getStartPoint();
+	unsigned int getDisplayTileWidth();
+	unsigned int getDisplayTileHeight();
 	std::vector<E_TerrainType>* getGrid();
+	void setGrid(std::vector<E_TerrainType> grid);
 
+	unsigned int getWidth();
+	unsigned int getHeight();
+
+	E_TerrainType getTile(int x, int y);
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
 	Actor *getActorAt(int x, int y);
 	void moveActor(Actor* actor, int newX, int newY);
-	void setStartPoint(float x, float y);
 
 	void render(SDL_Rect camera, int centerX, int centerY);
 
-	void addEnemySpawnableCell(int cellIndex);
+	void addEnemySpawnableCell(char x, char y);
+	std::vector<std::pair<char, char>> getEnemySpawnableCells();
 	void initEnemies(ActorFactory &actorFactory);
 };
 

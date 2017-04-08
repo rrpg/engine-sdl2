@@ -1,7 +1,6 @@
 #include "Map.hpp"
 
 #include "SDL2_framework/Game.h"
-#include "Parser/Map.hpp"
 #include "Parser/Tile.hpp"
 
 Map::~Map() {
@@ -33,7 +32,7 @@ void Map::clearDeadActors() {
 	}
 }
 
-std::string Map::getCoordsKey(int x, int y) {
+std::string Map::_getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
 
@@ -55,11 +54,10 @@ void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
 Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
-		if (TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT) {
+		if ((TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT)
+			|| (TERRAIN_SOIL_NORMAL_TOPLEFT <= type && type <= TERRAIN_SOIL_NORMAL_HORIZ_RIGHT)
+		) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
-			S_TileData tileData;
-			TileParser::getTileInfo(tileData ,m_tilesFile, (int) type);
-			terrain->setTile(tileData);
 		}
 
 		m_mTerrains[type] = terrain;
@@ -68,25 +66,69 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-E_FileParsingResult Map::setMap(const char* mapFile) {
-	MapParser parser = MapParser(*this);
-	E_FileParsingResult result = parser.parseFile(mapFile);
-	return result;
+Terrain *Map::_getTerrainWithTileData(E_TerrainType type) {
+	_getTerrain(type);
+	if (m_tilesFile != 0 && !m_mTerrains[type]->hasTile()) {
+		S_TileData tileData;
+		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
+		m_mTerrains[type]->setTile(tileData);
+	}
+	return m_mTerrains[type];
+}
+
+void Map::initializeGrid(E_TerrainType type) {
+	unsigned int size = m_iWidth * m_iHeight;
+	for (unsigned int c = 0; c < size; ++c) {
+		m_vGrid.push_back(type);
+	}
+}
+
+void Map::setTile(int x, int y, E_TerrainType type) {
+	int gridIndex = y * m_iWidth + x;
+	m_vGrid[gridIndex] = type;
 }
 
 std::vector<E_TerrainType>* Map::getGrid() {
 	return &m_vGrid;
 }
 
-void Map::addEnemySpawnableCell(int cellIndex) {
-	m_vEnemySpawnableCells.push_back(cellIndex);
+void Map::setGrid(std::vector<E_TerrainType> grid) {
+	m_vGrid = grid;
+}
+
+E_TerrainType Map::getTile(int x, int y) {
+	return m_vGrid[y * m_iWidth + x];
+}
+
+unsigned int Map::getWidth() {
+	return m_iWidth;
+}
+
+unsigned int Map::getHeight() {
+	return m_iHeight;
+}
+
+unsigned int Map::getDisplayTileWidth() {
+	return m_iDisplayTileWidth;
+}
+
+unsigned int Map::getDisplayTileHeight() {
+	return m_iDisplayTileHeight;
+}
+
+void Map::addEnemySpawnableCell(char x, char y) {
+	m_vEnemySpawnableCells.push_back(std::make_pair(x, y));
+}
+
+std::vector<std::pair<char, char>> Map::getEnemySpawnableCells() {
+	return m_vEnemySpawnableCells;
 }
 
 void Map::initEnemies(ActorFactory &actorFactory) {
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
 		Actor* enemy = actorFactory.createRandomFoe();
-		enemy->setX(enemySpawnCell % m_iWidth);
-		enemy->setY(enemySpawnCell / m_iWidth);
+		enemy->setX(enemySpawnCell.first);
+		enemy->setY(enemySpawnCell.second);
 		addActor(enemy);
 	}
 }
@@ -96,7 +138,7 @@ Vector2D Map::getStartPoint() {
 }
 
 void Map::addActor(Actor *actor) {
-	std::string key = getCoordsKey(actor->getX(), actor->getY());
+	std::string key = _getCoordsKey(actor->getX(), actor->getY());
 	m_mActors[key] = actor;
 }
 
@@ -134,7 +176,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
-			Terrain *terrain = _getTerrain(m_vGrid[y * m_iWidth + x]);
+			Terrain *terrain = _getTerrainWithTileData(m_vGrid[y * m_iWidth + x]);
 			S_TileData tile = terrain->getTile();
 			int xScreen = x * tile.width - shiftX + camera.x,
 				yScreen = y * tile.height - shiftY + camera.y;
@@ -208,7 +250,7 @@ bool Map::isCellWalkable(int x, int y) {
 		Terrain::TERRAIN_FLAG_WALKABLE
 	);
 	bool hasActorOnCell;
-	auto got = m_mActors.find(getCoordsKey(x, y));
+	auto got = m_mActors.find(_getCoordsKey(x, y));
 	hasActorOnCell = got != m_mActors.end();
 	return hasWalkableFlag && !hasActorOnCell;
 }
@@ -225,7 +267,7 @@ std::unordered_map<std::string, Actor*> &Map::getActors() {
 }
 
 Actor *Map::getActorAt(int x, int y) {
-	std::string key = getCoordsKey(x, y);
+	std::string key = _getCoordsKey(x, y);
 	auto it = m_mActors.find(key);
 	if (it != m_mActors.end()) {
 		return it->second;
@@ -235,8 +277,8 @@ Actor *Map::getActorAt(int x, int y) {
 }
 
 void Map::moveActor(Actor *a, int newX, int newY) {
-	std::string key = getCoordsKey(a->getX(), a->getY());
-	std::string newKey = getCoordsKey(newX, newY);
+	std::string key = _getCoordsKey(a->getX(), a->getY());
+	std::string newKey = _getCoordsKey(newX, newY);
 	auto it = m_mActors.find(key);
 	if (it != m_mActors.end()) {
 		it->second->setX(newX);

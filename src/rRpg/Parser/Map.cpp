@@ -4,7 +4,26 @@
 #include "SDL2_framework/Game.h"
 #include <string.h>
 
-MapParser::MapParser(Map &map) : m_map(map) {
+MapParser::MapParser() : m_map(0) {
+}
+
+MapParser::MapParser(const MapParser &mP) :
+	m_map(mP.m_map)
+{
+}
+
+MapParser & MapParser::operator=(const MapParser &mP) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &mP) {
+		return *this;
+	}
+
+	m_map = mP.m_map;
+	return *this;
+}
+
+void MapParser::setMap(Map *map) {
+	m_map = map;
 }
 
 bool MapParser::_parseLine(const char *line) {
@@ -25,11 +44,16 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map.setDimensions(w, h);
+			m_map->setDimensions(w, h);
 			break;
 		case 'c':
 			_parseMapContent(line);
 			break;
+
+		case 'e':
+			m_map->addEnemySpawnableCell(*line, *(line + 2));
+			break;
+
 		case 'g':
 			unsigned int tileWidth, tileHeight;
 			sscanfResult = sscanf(
@@ -41,7 +65,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map.setDisplayTileDimensions(tileWidth, tileHeight);
+				m_map->setDisplayTileDimensions(tileWidth, tileHeight);
 			}
 			break;
 
@@ -55,7 +79,7 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map.setStartPoint((float) x, (float) y);
+			m_map->setStartPoint((float) x, (float) y);
 			break;
 		default:
 			break;
@@ -66,15 +90,47 @@ bool MapParser::_parseLine(const char *line) {
 
 void MapParser::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
-		uint32_t cellInfo = *line - '0';
-		bool canSpawnEnemy = cellInfo & 0x1;
-		uint8_t cellTile = (cellInfo >> 0x1) & 255;
-		// the an enemy can spawn on the cell
-		if (canSpawnEnemy) {
-			m_map.addEnemySpawnableCell((int) m_map.getGrid()->size());
-		}
-
-		m_map.getGrid()->push_back((E_TerrainType) cellTile);
+		short cellTile = *line;
+		m_map->getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
+}
+
+bool MapParser::saveMap(const char *filePath) {
+	FILE *mapFile = fopen(filePath, "w");
+	if (mapFile == NULL) {
+		return false;
+	}
+
+	fprintf(
+		mapFile,
+		"d %d %d\ng %d %d\ns %d %d\n",
+		m_map->getWidth(), m_map->getHeight(),
+		m_map->getDisplayTileWidth(), m_map->getDisplayTileHeight(),
+		(int) m_map->getStartPoint().getX(), (int) m_map->getStartPoint().getY()
+	);
+
+	for (auto enemyPlace : m_map->getEnemySpawnableCells()) {
+		fprintf(mapFile, "e %c %c\n", enemyPlace.first, enemyPlace.second);
+	}
+
+	bool newLine = true;
+	int cellCount = 0;
+	for (auto cell : *(m_map->getGrid())) {
+		if (newLine) {
+			fprintf(mapFile, "c ");
+			newLine = false;
+		}
+
+		fputc(cell, mapFile);
+
+		if (++cellCount == 100) {
+			newLine = true;
+			cellCount = 0;
+			fprintf(mapFile, "\n");
+		}
+	}
+
+	fclose(mapFile);
+	return true;
 }
