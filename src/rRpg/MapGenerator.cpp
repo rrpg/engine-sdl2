@@ -22,10 +22,7 @@ void MapGenerator::_generateCave(Map &map) {
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
 		_automatonStep(map);
 	}
-	map.setStartPoint(
-		(float) (rand() % map.getWidth()),
-		(float) (rand() % map.getHeight())
-	);
+	_setStartPoint(map);
 }
 
 void MapGenerator::_initialiseAutomaton(Map &map) {
@@ -95,4 +92,66 @@ unsigned int MapGenerator::_getCountAliveNeighbours(Map &map, unsigned int i, un
 	   + (map.getTile(i - 1, j + 1) == aliveType)
 	   + (map.getTile(i, j + 1) == aliveType)
 	   + (map.getTile(i + 1, j + 1) == aliveType);
+}
+
+void MapGenerator::_setStartPoint(Map &map) {
+	int x = (rand() % map.getWidth()),
+		y = (rand() % map.getHeight());
+	if (map.isCellWalkable(x, y)) {
+		map.setStartPoint((float) x, (float) y);
+	}
+	else {
+		std::vector<bool> visited;
+		for (int i = 0, size = map.getWidth() * map.getHeight(); i < size; ++i) {
+			visited.push_back(false);
+		}
+
+		int xOut = 0, yOut = 0;
+		_findClosestWalkableCell(map, x, y, visited, xOut, yOut);
+		map.setStartPoint((float) xOut, (float) yOut);
+	}
+}
+
+bool MapGenerator::_findClosestWalkableCell(
+	Map &map, const int x, const int y, std::vector<bool> &visited, int &xOut, int &yOut
+) {
+	int cellIndex = y * map.getWidth() + x;
+	if (y < 0 || x < 0 || (unsigned) y >= map.getHeight() || (unsigned) x >= map.getWidth()
+		|| visited[cellIndex]
+	) {
+		return false;
+	}
+
+	visited[cellIndex] = true;
+	int neighbours[][2] = {
+		{-1, 0},
+		{1, 0},
+		{0, -1},
+		{0, 1}
+	};
+
+	for (int n = 0; n < 4; ++n) {
+		if (map.isCellWalkable(x + neighbours[n][0], y + neighbours[n][1])) {
+			xOut = x + neighbours[n][0];
+			yOut = y + neighbours[n][1];
+			return true;
+		}
+	}
+
+	for (int n = 0; n < 4; ++n) {
+		bool found = _findClosestWalkableCell(
+			map,
+			x + neighbours[n][0],
+			y + neighbours[n][1],
+			visited,
+			xOut,
+			yOut
+		);
+
+		if (found) {
+			return true;
+		}
+	}
+
+	return false;
 }
