@@ -22,6 +22,8 @@ void MapGenerator::_generateCave(Map &map) {
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
 		_automatonStep(map);
 	}
+
+	_dispatchEnemies(map, 15);
 	_setStartPoint(map);
 }
 
@@ -154,4 +156,21 @@ bool MapGenerator::_findClosestWalkableCell(
 	}
 
 	return false;
+}
+
+void MapGenerator::_dispatchEnemies(Map &map, const unsigned int nbMaxEnemies) {
+	for (unsigned int i = 0; i < nbMaxEnemies; ++i) {
+		int x = (rand() % map.getWidth()),
+			y = (rand() % map.getHeight());
+
+		if (!map.isCellWalkable(x, y)) {
+			std::vector<bool> visited;
+			for (int v = 0, size = map.getWidth() * map.getHeight(); v < size; ++v) {
+				visited.push_back(false);
+			}
+
+			_findClosestWalkableCell(map, x, y, visited, x, y);
+		}
+		map.addEnemySpawnableCell((char) x, (char) y);
+	}
 }

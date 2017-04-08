@@ -16,6 +16,7 @@ class MapGenerator {
 	bool _findClosestWalkableCell(
 		Map &map, const int x, const int y, std::vector<bool> &visited, int &xOut, int &yOut
 	);
+	void _dispatchEnemies(Map &map, const unsigned int nbMaxEnemies);
 
 	public:
 	MapGenerator();
