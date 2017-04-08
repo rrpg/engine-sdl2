@@ -115,6 +115,14 @@ unsigned int Map::getHeight() {
 	return m_iHeight;
 }
 
+unsigned int Map::getDisplayTileWidth() {
+	return m_iDisplayTileWidth;
+}
+
+unsigned int Map::getDisplayTileHeight() {
+	return m_iDisplayTileHeight;
+}
+
 void Map::addEnemySpawnableCell(int cellIndex) {
 	m_vEnemySpawnableCells.push_back(cellIndex);
 }

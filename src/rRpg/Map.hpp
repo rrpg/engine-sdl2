@@ -47,6 +47,8 @@ class Map {
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
 	Vector2D getStartPoint();
+	unsigned int getDisplayTileWidth();
+	unsigned int getDisplayTileHeight();
 	std::vector<E_TerrainType>* getGrid();
 	void setGrid(std::vector<E_TerrainType> grid);
 
