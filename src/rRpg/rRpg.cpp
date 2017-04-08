@@ -1,6 +1,7 @@
 #include "rRpg.hpp"
 #include "MapGenerator.hpp"
 #include "Behaviour/Player.hpp"
+#include "Parser/Map.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>
@@ -38,10 +39,16 @@ Actor *rRpg::getHero() {
 	return m_hero;
 }
 
-bool rRpg::loadMap(std::string tilesFilePath) {
+bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
+	MapParser parser = MapParser();
+	E_FileParsingResult res;
+	parser.setMap(&m_map);
+	res = parser.parseFile(filePath.c_str());
 	bool ret = true;
-	MapGenerator generator = MapGenerator();
-	m_map = generator.generate(CAVE, 50, 50);
+	if (res != OK) {
+		std::cout << "error parsing map: " << res << std::endl;
+		ret = false;
+	}
 
 	m_map.initEnemies(m_actorFactory);
 	m_map.setTileFile(tilesFilePath.c_str());

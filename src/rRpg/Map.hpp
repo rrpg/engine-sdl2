@@ -42,8 +42,6 @@ class Map {
 
 	void clearDeadActors();
 
-	E_FileParsingResult loadMap(const char* mapFile);
-
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
 	Vector2D getStartPoint();

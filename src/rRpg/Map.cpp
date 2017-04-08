@@ -1,7 +1,6 @@
 #include "Map.hpp"
 
 #include "SDL2_framework/Game.h"
-#include "Parser/Map.hpp"
 #include "Parser/Tile.hpp"
 
 Map::~Map() {
@@ -87,13 +86,6 @@ void Map::initializeGrid(E_TerrainType type) {
 void Map::setTile(int x, int y, E_TerrainType type) {
 	int gridIndex = y * m_iWidth + x;
 	m_vGrid[gridIndex] = type;
-}
-
-E_FileParsingResult Map::loadMap(const char* mapFile) {
-	MapParser parser = MapParser();
-	parser.setMap(this);
-	E_FileParsingResult result = parser.parseFile(mapFile);
-	return result;
 }
 
 std::vector<E_TerrainType>* Map::getGrid() {
