@@ -46,6 +46,9 @@ class Map {
 	std::vector<E_TerrainType>* getGrid();
 	void setGrid(std::vector<E_TerrainType> grid);
 
+	unsigned int getWidth();
+	unsigned int getHeight();
+
 	E_TerrainType getTile(int x, int y);
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();

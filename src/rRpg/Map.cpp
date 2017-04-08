@@ -98,6 +98,14 @@ E_TerrainType Map::getTile(int x, int y) {
 	return m_vGrid[y * m_iWidth + x];
 }
 
+unsigned int Map::getWidth() {
+	return m_iWidth;
+}
+
+unsigned int Map::getHeight() {
+	return m_iHeight;
+}
+
 void Map::addEnemySpawnableCell(int cellIndex) {
 	m_vEnemySpawnableCells.push_back(cellIndex);
 }
