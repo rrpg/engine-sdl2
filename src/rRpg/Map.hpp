@@ -20,7 +20,7 @@ class Map {
 	std::vector<E_TerrainType> m_vGrid = {};
 	std::unordered_map<E_TerrainType, Terrain*> m_mTerrains = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
-	std::vector<int> m_vEnemySpawnableCells = {};
+	std::vector<std::pair<char, char>> m_vEnemySpawnableCells = {};
 
 	FILE *m_tilesFile = 0;
 
@@ -61,7 +61,8 @@ class Map {
 
 	void render(SDL_Rect camera, int centerX, int centerY);
 
-	void addEnemySpawnableCell(int cellIndex);
+	void addEnemySpawnableCell(char x, char y);
+	std::vector<std::pair<char, char>> getEnemySpawnableCells();
 	void initEnemies(ActorFactory &actorFactory);
 };
 

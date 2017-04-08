@@ -49,6 +49,11 @@ bool MapParser::_parseLine(const char *line) {
 		case 'c':
 			_parseMapContent(line);
 			break;
+
+		case 'e':
+			m_map->addEnemySpawnableCell(*line, *(line + 2));
+			break;
+
 		case 'g':
 			unsigned int tileWidth, tileHeight;
 			sscanfResult = sscanf(
@@ -86,13 +91,6 @@ bool MapParser::_parseLine(const char *line) {
 void MapParser::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
 		short cellTile = *line;
-		++line;
-		bool canSpawnEnemy = *line & 0x1;
-		// the an enemy can spawn on the cell
-		if (canSpawnEnemy) {
-			m_map->addEnemySpawnableCell((int) m_map->getGrid()->size());
-		}
-
 		m_map->getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
@@ -112,6 +110,10 @@ bool MapParser::saveMap(const char *filePath) {
 		(int) m_map->getStartPoint().getX(), (int) m_map->getStartPoint().getY()
 	);
 
+	for (auto enemyPlace : m_map->getEnemySpawnableCells()) {
+		fprintf(mapFile, "e %c %c\n", enemyPlace.first, enemyPlace.second);
+	}
+
 	bool newLine = true;
 	int cellCount = 0;
 	for (auto cell : *(m_map->getGrid())) {
@@ -119,13 +121,8 @@ bool MapParser::saveMap(const char *filePath) {
 			fprintf(mapFile, "\nc ");
 			newLine = false;
 		}
-		// each cell takes 2 bytes
-		fprintf(
-			mapFile,
-			"%c%c",
-			(char) cell,
-			2
-		);
+
+		fputc(cell, mapFile);
 
 		if (++cellCount == 100) {
 			newLine = true;

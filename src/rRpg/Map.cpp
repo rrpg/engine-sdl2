@@ -116,15 +116,19 @@ unsigned int Map::getDisplayTileHeight() {
 	return m_iDisplayTileHeight;
 }
 
-void Map::addEnemySpawnableCell(int cellIndex) {
-	m_vEnemySpawnableCells.push_back(cellIndex);
+void Map::addEnemySpawnableCell(char x, char y) {
+	m_vEnemySpawnableCells.push_back(std::make_pair(x, y));
+}
+
+std::vector<std::pair<char, char>> Map::getEnemySpawnableCells() {
+	return m_vEnemySpawnableCells;
 }
 
 void Map::initEnemies(ActorFactory &actorFactory) {
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
 		Actor* enemy = actorFactory.createRandomFoe();
-		enemy->setX(enemySpawnCell % m_iWidth);
-		enemy->setY(enemySpawnCell / m_iWidth);
+		enemy->setX(enemySpawnCell.first);
+		enemy->setY(enemySpawnCell.second);
 		addActor(enemy);
 	}
 }
