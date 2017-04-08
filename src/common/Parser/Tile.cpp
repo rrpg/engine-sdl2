@@ -1,7 +1,6 @@
 #include "Tile.hpp"
 #include "Parser/Resource.hpp"
 #include <string.h>
-#include <iostream>
 #include <libgen.h>
 #include <fstream>
 
@@ -96,8 +95,6 @@ int TileParser::getTileInfo(S_TileData &tileInfo, FILE *tileFile, int tileIndex)
 		ret = 0;
 		if (fread(tileData, 1, MAX_BYTES_PER_CHUNK, tileFile) == MAX_BYTES_PER_CHUNK) {
 			tileInfo = _extractTile(tileData);
-			std::cout << "Tileset: " << tileInfo.tileset << "\n";
-			std::cout << "Width: " << (int) tileInfo.width << "\n";
 			ret = 1;
 		}
 	}
