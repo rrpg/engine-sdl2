@@ -34,7 +34,6 @@ bool PlayState::onEnter() {
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
 	);
 	ret &= engine.loadMap(
-		Game::Instance()->getBinaryPath() + "/../resources/map1.map",
 		Game::Instance()->getBinaryPath() + "/../resources/terrains.dat"
 	);
 	ret &= engine.initialiseHero();

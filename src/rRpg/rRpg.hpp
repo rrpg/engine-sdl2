@@ -21,7 +21,7 @@ class rRpg {
 	~rRpg();
 	Map &getMap();
 	Actor *getHero();
-	bool loadMap(std::string filePath, std::string tilesFilePath);
+	bool loadMap(std::string tilesFilePath);
 	bool loadTaxonomy(std::string filePath);
 	bool initialiseHero();
 	void update();
