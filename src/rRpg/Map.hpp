@@ -27,6 +27,7 @@ class Map {
 	Terrain *_getTerrain(E_TerrainType type);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
+	static std::string _getCoordsKey(int x, int y);
 
 	public:
 	~Map();
@@ -39,7 +40,6 @@ class Map {
 	void setStartPoint(float x, float y);
 
 	void clearDeadActors();
-	static std::string getCoordsKey(int x, int y);
 
 	E_FileParsingResult loadMap(const char* mapFile);
 

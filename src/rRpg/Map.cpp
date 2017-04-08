@@ -33,7 +33,7 @@ void Map::clearDeadActors() {
 	}
 }
 
-std::string Map::getCoordsKey(int x, int y) {
+std::string Map::_getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
 
@@ -124,7 +124,7 @@ Vector2D Map::getStartPoint() {
 }
 
 void Map::addActor(Actor *actor) {
-	std::string key = getCoordsKey(actor->getX(), actor->getY());
+	std::string key = _getCoordsKey(actor->getX(), actor->getY());
 	m_mActors[key] = actor;
 }
 
@@ -236,7 +236,7 @@ bool Map::isCellWalkable(int x, int y) {
 		Terrain::TERRAIN_FLAG_WALKABLE
 	);
 	bool hasActorOnCell;
-	auto got = m_mActors.find(getCoordsKey(x, y));
+	auto got = m_mActors.find(_getCoordsKey(x, y));
 	hasActorOnCell = got != m_mActors.end();
 	return hasWalkableFlag && !hasActorOnCell;
 }
@@ -253,7 +253,7 @@ std::unordered_map<std::string, Actor*> &Map::getActors() {
 }
 
 Actor *Map::getActorAt(int x, int y) {
-	std::string key = getCoordsKey(x, y);
+	std::string key = _getCoordsKey(x, y);
 	auto it = m_mActors.find(key);
 	if (it != m_mActors.end()) {
 		return it->second;
@@ -263,8 +263,8 @@ Actor *Map::getActorAt(int x, int y) {
 }
 
 void Map::moveActor(Actor *a, int newX, int newY) {
-	std::string key = getCoordsKey(a->getX(), a->getY());
-	std::string newKey = getCoordsKey(newX, newY);
+	std::string key = _getCoordsKey(a->getX(), a->getY());
+	std::string newKey = _getCoordsKey(newX, newY);
 	auto it = m_mActors.find(key);
 	if (it != m_mActors.end()) {
 		it->second->setX(newX);
