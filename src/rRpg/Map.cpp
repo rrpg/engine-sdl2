@@ -61,12 +61,19 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
 		}
 
-		S_TileData tileData;
-		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
-		terrain->setTile(tileData);
 		m_mTerrains[type] = terrain;
 	}
 
+	return m_mTerrains[type];
+}
+
+Terrain *Map::_getTerrainWithTileData(E_TerrainType type) {
+	_getTerrain(type);
+	if (m_tilesFile != 0 && !m_mTerrains[type]->hasTile()) {
+		S_TileData tileData;
+		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
+		m_mTerrains[type]->setTile(tileData);
+	}
 	return m_mTerrains[type];
 }
 
@@ -164,7 +171,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
-			Terrain *terrain = _getTerrain(m_vGrid[y * m_iWidth + x]);
+			Terrain *terrain = _getTerrainWithTileData(m_vGrid[y * m_iWidth + x]);
 			S_TileData tile = terrain->getTile();
 			int xScreen = x * tile.width - shiftX + camera.x,
 				yScreen = y * tile.height - shiftY + camera.y;
