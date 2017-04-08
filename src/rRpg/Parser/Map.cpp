@@ -104,7 +104,7 @@ bool MapParser::saveMap(const char *filePath) {
 
 	fprintf(
 		mapFile,
-		"d %d %d\ng %d %d\ns %d %d",
+		"d %d %d\ng %d %d\ns %d %d\n",
 		m_map->getWidth(), m_map->getHeight(),
 		m_map->getDisplayTileWidth(), m_map->getDisplayTileHeight(),
 		(int) m_map->getStartPoint().getX(), (int) m_map->getStartPoint().getY()
@@ -118,7 +118,7 @@ bool MapParser::saveMap(const char *filePath) {
 	int cellCount = 0;
 	for (auto cell : *(m_map->getGrid())) {
 		if (newLine) {
-			fprintf(mapFile, "\nc ");
+			fprintf(mapFile, "c ");
 			newLine = false;
 		}
 
@@ -127,6 +127,7 @@ bool MapParser::saveMap(const char *filePath) {
 		if (++cellCount == 100) {
 			newLine = true;
 			cellCount = 0;
+			fprintf(mapFile, "\n");
 		}
 	}
 
