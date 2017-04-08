@@ -90,6 +90,10 @@ std::vector<E_TerrainType>* Map::getGrid() {
 	return &m_vGrid;
 }
 
+void Map::setGrid(std::vector<E_TerrainType> grid) {
+	m_vGrid = grid;
+}
+
 void Map::addEnemySpawnableCell(int cellIndex) {
 	m_vEnemySpawnableCells.push_back(cellIndex);
 }

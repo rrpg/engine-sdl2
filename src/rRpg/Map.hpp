@@ -44,6 +44,7 @@ class Map {
 	bool isCellWalkable(int x, int y);
 	bool isCellObstructingView(int x, int y);
 	std::vector<E_TerrainType>* getGrid();
+	void setGrid(std::vector<E_TerrainType> grid);
 
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
