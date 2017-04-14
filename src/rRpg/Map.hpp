@@ -30,6 +30,7 @@ class Map {
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
+	int _getSameNeighbours(unsigned int x, unsigned int y);
 
 	public:
 	~Map();

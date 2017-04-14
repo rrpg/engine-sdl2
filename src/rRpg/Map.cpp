@@ -166,6 +166,18 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	_renderActors(camera, visibleArea, shift);
 }
 
+int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
+	E_TerrainType type = getTile(x, y);
+	// north
+	return (y == 0 || getTile(x, y - 1) == type)
+		// west
+		+ 2 * (x == 0 || getTile(x - 1, y) == type)
+		// east
+		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type)
+		// south
+		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type);
+}
+
 void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
@@ -180,7 +192,12 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			}
 
 			E_TerrainType type = getTile(x, y);
-			E_TerrainTile tile = Terrain::getTerrainTile(type);
+			Terrain *terrain = _getTerrain(type);
+			E_TerrainTile tile = Terrain::getTerrainTile(
+				type,
+				terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
+					15 : _getSameNeighbours(x, y)
+			);
 			S_TileData tileData = _getTerrainTileData(tile);
 			int xScreen = x * tileData.width - shiftX + camera.x,
 				yScreen = y * tileData.height - shiftY + camera.y;
