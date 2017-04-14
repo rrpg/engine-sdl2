@@ -54,8 +54,13 @@ void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
 Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
-		if (TERRAIN_GRASS_NORMAL == type || TERRAIN_SOIL_NORMAL == type) {
+		if (TERRAIN_GRASS_NORMAL == type) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
+		}
+		else if (TERRAIN_SOIL_NORMAL == type) {
+			terrain->setFlags(
+				Terrain::TERRAIN_FLAG_WALKABLE | Terrain::TERRAIN_FLAG_BASE
+			);
 		}
 
 		m_mTerrains[type] = terrain;
