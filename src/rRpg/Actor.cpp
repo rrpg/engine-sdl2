@@ -1,5 +1,7 @@
 #include "Actor.hpp"
 #include "rRpg.hpp"
+#include "SDL2_framework/Game.h"
+#include "SDL2_framework/TextureManager.h"
 
 #define LIMIT_FIELD_OF_VIEW 6
 
@@ -56,6 +58,39 @@ void Actor::update(rRpg *engine) {
 	if (!engine->isBlocked() && m_behaviour != 0) {
 		m_behaviour->update(engine, this);
 	}
+}
+
+void Actor::render(
+	unsigned int worldTileWidth,
+	unsigned int worldTileHeight,
+	unsigned int displayShiftX,
+	unsigned int displayShiftY
+) {
+	TextureManager *manager = TextureManager::Instance();
+	Game *game = Game::Instance();
+	unsigned int xScreen = getX() * worldTileWidth + displayShiftX;
+	unsigned int yScreen = getY() * worldTileHeight + displayShiftY;
+	manager->drawTile(
+		getRace().getTilesetName(),
+		0, // margin
+		0, // spacing
+		xScreen,
+		yScreen,
+		worldTileWidth,
+		worldTileHeight,
+		(int) getRace().getSpriteY() + 1,
+		(int) getRace().getSpriteX(),
+		game->getRenderer()
+	);
+
+	// render HPs
+	SDL_Rect r;
+	r.x = xScreen;
+	r.y = yScreen;
+	r.w = worldTileWidth * getHealth() / getMaxHealth();
+	r.h = 2;
+	SDL_SetRenderDrawColor(game->getRenderer(), 0xff, 0, 0, 255);
+	SDL_RenderFillRect(game->getRenderer(), &r);
 }
 
 bool Actor::isNextTo(Actor *actor) {
