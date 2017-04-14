@@ -19,16 +19,18 @@ class Map {
 	Vector2D m_sStartPoint = Vector2D();
 	std::vector<E_TerrainType> m_vGrid = {};
 	std::unordered_map<E_TerrainType, Terrain*> m_mTerrains = {};
+	std::unordered_map<E_TerrainTile, S_TileData> m_mTerrainsTileData = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::vector<std::pair<char, char>> m_vEnemySpawnableCells = {};
 
 	FILE *m_tilesFile = 0;
 
 	Terrain *_getTerrain(E_TerrainType type);
-	Terrain *_getTerrainWithTileData(E_TerrainType type);
+	S_TileData _getTerrainTileData(const E_TerrainTile tile);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
+	int _getSameNeighbours(unsigned int x, unsigned int y);
 
 	public:
 	~Map();

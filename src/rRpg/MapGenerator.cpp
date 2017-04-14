@@ -17,7 +17,7 @@ Map MapGenerator::generate(E_MapType type, short width, short height) {
 }
 
 void MapGenerator::_generateCave(Map &map) {
-	map.initializeGrid(TERRAIN_ROCK_NORMAL_CENTER);
+	map.initializeGrid(TERRAIN_ROCK_NORMAL);
 	_initialiseAutomaton(map);
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
 		_automatonStep(map);
@@ -34,13 +34,13 @@ void MapGenerator::_initialiseAutomaton(Map &map) {
 		for (unsigned int i = 0; i < mapWidth; ++i) {
 			E_TerrainType type;
 			if (j == 0 || i == 0 || j == mapHeight - 1 || i == mapWidth - 1) {
-				type = TERRAIN_ROCK_NORMAL_CENTER;
+				type = TERRAIN_ROCK_NORMAL;
 			}
 			else if ((rand() % 100) > 70) {
-				type = TERRAIN_ROCK_NORMAL_CENTER;
+				type = TERRAIN_ROCK_NORMAL;
 			}
 			else {
-				type = TERRAIN_SOIL_NORMAL_CENTER;
+				type = TERRAIN_SOIL_NORMAL;
 			}
 			map.setTile(i, j, type);
 		}
@@ -53,13 +53,13 @@ void MapGenerator::_automatonStep(Map &map) {
 		deathLimit = 2,
 		birthLimit = 3;
 	std::vector<E_TerrainType> tmpGrid(mapWidth * mapHeight);
-	E_TerrainType aliveType = TERRAIN_ROCK_NORMAL_CENTER;
-	E_TerrainType deadType = TERRAIN_SOIL_NORMAL_CENTER;
+	E_TerrainType aliveType = TERRAIN_ROCK_NORMAL;
+	E_TerrainType deadType = TERRAIN_SOIL_NORMAL;
 	// the edges will always be of rock
 	for (unsigned int j = 0; j < mapHeight; ++j) {
 		for (unsigned int i = 0; i < mapWidth; ++i) {
 			if (j == 0 || i == 0 || j == mapHeight - 1 || i == mapWidth - 1) {
-				tmpGrid[j * mapWidth + i] = TERRAIN_ROCK_NORMAL_CENTER;
+				tmpGrid[j * mapWidth + i] = TERRAIN_ROCK_NORMAL;
 				continue;
 			}
 			unsigned int nbAlives = _getCountAliveNeighbours(map, i, j, aliveType);

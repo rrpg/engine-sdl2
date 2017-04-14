@@ -54,10 +54,13 @@ void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
 Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
-		if ((TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT)
-			|| (TERRAIN_SOIL_NORMAL_TOPLEFT <= type && type <= TERRAIN_SOIL_NORMAL_HORIZ_RIGHT)
-		) {
+		if (TERRAIN_GRASS_NORMAL == type) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
+		}
+		else if (TERRAIN_SOIL_NORMAL == type) {
+			terrain->setFlags(
+				Terrain::TERRAIN_FLAG_WALKABLE | Terrain::TERRAIN_FLAG_BASE
+			);
 		}
 
 		m_mTerrains[type] = terrain;
@@ -66,14 +69,13 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-Terrain *Map::_getTerrainWithTileData(E_TerrainType type) {
-	_getTerrain(type);
-	if (m_tilesFile != 0 && !m_mTerrains[type]->hasTile()) {
+S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
+	if (m_tilesFile != 0 && m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
-		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
-		m_mTerrains[type]->setTile(tileData);
+		TileParser::getTileInfo(tileData, m_tilesFile, (int) tile);
+		m_mTerrainsTileData[tile] = tileData;
 	}
-	return m_mTerrains[type];
+	return m_mTerrainsTileData[tile];
 }
 
 void Map::initializeGrid(E_TerrainType type) {
@@ -164,6 +166,18 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	_renderActors(camera, visibleArea, shift);
 }
 
+int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
+	E_TerrainType type = getTile(x, y);
+	// north
+	return (y == 0 || getTile(x, y - 1) == type)
+		// west
+		+ 2 * (x == 0 || getTile(x - 1, y) == type)
+		// east
+		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type)
+		// south
+		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type);
+}
+
 void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
@@ -176,24 +190,31 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
-			Terrain *terrain = _getTerrainWithTileData(m_vGrid[y * m_iWidth + x]);
-			S_TileData tile = terrain->getTile();
-			int xScreen = x * tile.width - shiftX + camera.x,
-				yScreen = y * tile.height - shiftY + camera.y;
 
-			manager->load(tile.tileset, game->getRenderer());
+			E_TerrainType type = getTile(x, y);
+			Terrain *terrain = _getTerrain(type);
+			E_TerrainTile tile = Terrain::getTerrainTile(
+				type,
+				terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
+					15 : _getSameNeighbours(x, y)
+			);
+			S_TileData tileData = _getTerrainTileData(tile);
+			int xScreen = x * tileData.width - shiftX + camera.x,
+				yScreen = y * tileData.height - shiftY + camera.y;
+
+			manager->load(tileData.tileset, game->getRenderer());
 			// the rows are 1 based, and the columns are 0 based, which is
 			// stupid
 			manager->drawTile(
-				tile.tileset,
+				tileData.tileset,
 				0, // margin
 				0, // spacing
 				xScreen,
 				yScreen,
-				tile.width,
-				tile.height,
-				tile.y + 1,
-				tile.x,
+				tileData.width,
+				tileData.height,
+				tileData.y + 1,
+				tileData.x,
 				game->getRenderer()
 			);
 		}
