@@ -51,12 +51,10 @@ void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
 	m_iDisplayTileHeight = h;
 }
 
-Terrain *Map::_getTerrain(E_TerrainTile type) {
+Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
-		if ((TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT)
-			|| (TERRAIN_SOIL_NORMAL_TOPLEFT <= type && type <= TERRAIN_SOIL_NORMAL_HORIZ_RIGHT)
-		) {
+		if (TERRAIN_GRASS_NORMAL == type || TERRAIN_SOIL_NORMAL == type) {
 			terrain->setFlags(Terrain::TERRAIN_FLAG_WALKABLE);
 		}
 
@@ -75,27 +73,27 @@ S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
 	return m_mTerrainsTileData[tile];
 }
 
-void Map::initializeGrid(E_TerrainTile type) {
+void Map::initializeGrid(E_TerrainType type) {
 	unsigned int size = m_iWidth * m_iHeight;
 	for (unsigned int c = 0; c < size; ++c) {
 		m_vGrid.push_back(type);
 	}
 }
 
-void Map::setTile(int x, int y, E_TerrainTile type) {
+void Map::setTile(int x, int y, E_TerrainType type) {
 	int gridIndex = y * m_iWidth + x;
 	m_vGrid[gridIndex] = type;
 }
 
-std::vector<E_TerrainTile>* Map::getGrid() {
+std::vector<E_TerrainType>* Map::getGrid() {
 	return &m_vGrid;
 }
 
-void Map::setGrid(std::vector<E_TerrainTile> grid) {
+void Map::setGrid(std::vector<E_TerrainType> grid) {
 	m_vGrid = grid;
 }
 
-E_TerrainTile Map::getTile(int x, int y) {
+E_TerrainType Map::getTile(int x, int y) {
 	return m_vGrid[y * m_iWidth + x];
 }
 
@@ -176,7 +174,9 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 				continue;
 			}
 
-			S_TileData tileData = _getTerrainTileData(m_vGrid[y * m_iWidth + x]);
+			E_TerrainType type = getTile(x, y);
+			E_TerrainTile tile = Terrain::getTerrainTile(type);
+			S_TileData tileData = _getTerrainTileData(tile);
 			int xScreen = x * tileData.width - shiftX + camera.x,
 				yScreen = y * tileData.height - shiftY + camera.y;
 

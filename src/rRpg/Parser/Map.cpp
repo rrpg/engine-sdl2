@@ -102,7 +102,7 @@ bool MapParser::_parseLine(const char *line) {
 void MapParser::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
 		short cellTile = *line;
-		m_map->getGrid()->push_back((E_TerrainTile) cellTile);
+		m_map->getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
 }
