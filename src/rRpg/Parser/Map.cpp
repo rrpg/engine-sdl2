@@ -51,7 +51,18 @@ bool MapParser::_parseLine(const char *line) {
 			break;
 
 		case 'e':
-			m_map->addEnemySpawnableCell(*line, *(line + 2));
+			int xEnemy, yEnemy;
+			sscanfResult = sscanf(
+				line,
+				"%d %d\n",
+				&xEnemy, &yEnemy
+			);
+			if (sscanfResult != 2) {
+				retValue = false;
+			}
+			else {
+				m_map->addEnemySpawnableCell((char) xEnemy, (char) yEnemy);
+			}
 			break;
 
 		case 'g':
@@ -111,7 +122,7 @@ bool MapParser::saveMap(const char *filePath) {
 	);
 
 	for (auto enemyPlace : m_map->getEnemySpawnableCells()) {
-		fprintf(mapFile, "e %c %c\n", enemyPlace.first, enemyPlace.second);
+		fprintf(mapFile, "e %d %d\n", enemyPlace.first, enemyPlace.second);
 	}
 
 	bool newLine = true;
