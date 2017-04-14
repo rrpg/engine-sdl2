@@ -144,6 +144,18 @@ void Map::addActor(Actor *actor) {
 	m_mActors[key] = actor;
 }
 
+int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
+	E_TerrainType type = getTile(x, y);
+	// north
+	return (y == 0 || getTile(x, y - 1) == type)
+		// west
+		+ 2 * (x == 0 || getTile(x - 1, y) == type)
+		// east
+		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type)
+		// south
+		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type);
+}
+
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
 	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
@@ -164,18 +176,6 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 
 	_renderTerrain(camera, visibleArea, shift);
 	_renderActors(camera, visibleArea, shift);
-}
-
-int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
-	E_TerrainType type = getTile(x, y);
-	// north
-	return (y == 0 || getTile(x, y - 1) == type)
-		// west
-		+ 2 * (x == 0 || getTile(x - 1, y) == type)
-		// east
-		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type)
-		// south
-		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type);
 }
 
 void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
