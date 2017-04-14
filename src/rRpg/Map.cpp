@@ -177,23 +177,23 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 				continue;
 			}
 			Terrain *terrain = _getTerrainWithTileData(m_vGrid[y * m_iWidth + x]);
-			S_TileData tile = terrain->getTile();
-			int xScreen = x * tile.width - shiftX + camera.x,
-				yScreen = y * tile.height - shiftY + camera.y;
+			S_TileData tileData = terrain->getTile();
+			int xScreen = x * tileData.width - shiftX + camera.x,
+				yScreen = y * tileData.height - shiftY + camera.y;
 
-			manager->load(tile.tileset, game->getRenderer());
+			manager->load(tileData.tileset, game->getRenderer());
 			// the rows are 1 based, and the columns are 0 based, which is
 			// stupid
 			manager->drawTile(
-				tile.tileset,
+				tileData.tileset,
 				0, // margin
 				0, // spacing
 				xScreen,
 				yScreen,
-				tile.width,
-				tile.height,
-				tile.y + 1,
-				tile.x,
+				tileData.width,
+				tileData.height,
+				tileData.y + 1,
+				tileData.x,
 				game->getRenderer()
 			);
 		}
