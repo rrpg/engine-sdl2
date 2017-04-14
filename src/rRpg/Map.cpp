@@ -66,14 +66,13 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-Terrain *Map::_getTerrainWithTileData(E_TerrainType type) {
-	_getTerrain(type);
-	if (m_tilesFile != 0 && !m_mTerrains[type]->hasTile()) {
+S_TileData Map::_getTerrainTileData(const E_TerrainType type) {
+	if (m_tilesFile != 0 && m_mTerrainsTileData.find(type) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
 		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
-		m_mTerrains[type]->setTile(tileData);
+		m_mTerrainsTileData[type] = tileData;
 	}
-	return m_mTerrains[type];
+	return m_mTerrainsTileData[type];
 }
 
 void Map::initializeGrid(E_TerrainType type) {
@@ -176,8 +175,8 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
 				continue;
 			}
-			Terrain *terrain = _getTerrainWithTileData(m_vGrid[y * m_iWidth + x]);
-			S_TileData tileData = terrain->getTile();
+
+			S_TileData tileData = _getTerrainTileData(m_vGrid[y * m_iWidth + x]);
 			int xScreen = x * tileData.width - shiftX + camera.x,
 				yScreen = y * tileData.height - shiftY + camera.y;
 

@@ -37,16 +37,11 @@ enum E_TerrainType {
 class Terrain {
 	private:
 	unsigned int m_iFlags = 0;
-	bool m_bHasTileData = false;
-	S_TileData m_sTileData = {};
 
 	public:
 	static const int TERRAIN_FLAG_WALKABLE = 0x1;
 	static const int TERRAIN_FLAG_OBSTRUCTING_VIEW = 0x2;
 
-	void setTile(S_TileData tileData);
-	S_TileData getTile();
-	bool hasTile();
 	void setFlags(unsigned int flags);
 	bool hasFlag(unsigned int flag);
 };
