@@ -3,7 +3,7 @@
 
 #include "Parser/Tile.hpp"
 
-enum E_TerrainType {
+enum E_TerrainTile {
 	// floors
 	// grass normal
 	TERRAIN_GRASS_NORMAL_TOPLEFT, TERRAIN_GRASS_NORMAL_TOP,

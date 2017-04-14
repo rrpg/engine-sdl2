@@ -51,7 +51,7 @@ void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
 	m_iDisplayTileHeight = h;
 }
 
-Terrain *Map::_getTerrain(E_TerrainType type) {
+Terrain *Map::_getTerrain(E_TerrainTile type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
 		if ((TERRAIN_GRASS_NORMAL_TOPLEFT <= type && type <= TERRAIN_GRASS_NORMAL_HORIZ_RIGHT)
@@ -66,36 +66,36 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-S_TileData Map::_getTerrainTileData(const E_TerrainType type) {
-	if (m_tilesFile != 0 && m_mTerrainsTileData.find(type) == m_mTerrainsTileData.end()) {
+S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
+	if (m_tilesFile != 0 && m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
-		TileParser::getTileInfo(tileData, m_tilesFile, (int) type);
-		m_mTerrainsTileData[type] = tileData;
+		TileParser::getTileInfo(tileData, m_tilesFile, (int) tile);
+		m_mTerrainsTileData[tile] = tileData;
 	}
-	return m_mTerrainsTileData[type];
+	return m_mTerrainsTileData[tile];
 }
 
-void Map::initializeGrid(E_TerrainType type) {
+void Map::initializeGrid(E_TerrainTile type) {
 	unsigned int size = m_iWidth * m_iHeight;
 	for (unsigned int c = 0; c < size; ++c) {
 		m_vGrid.push_back(type);
 	}
 }
 
-void Map::setTile(int x, int y, E_TerrainType type) {
+void Map::setTile(int x, int y, E_TerrainTile type) {
 	int gridIndex = y * m_iWidth + x;
 	m_vGrid[gridIndex] = type;
 }
 
-std::vector<E_TerrainType>* Map::getGrid() {
+std::vector<E_TerrainTile>* Map::getGrid() {
 	return &m_vGrid;
 }
 
-void Map::setGrid(std::vector<E_TerrainType> grid) {
+void Map::setGrid(std::vector<E_TerrainTile> grid) {
 	m_vGrid = grid;
 }
 
-E_TerrainType Map::getTile(int x, int y) {
+E_TerrainTile Map::getTile(int x, int y) {
 	return m_vGrid[y * m_iWidth + x];
 }
 

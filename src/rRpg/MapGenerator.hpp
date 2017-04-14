@@ -11,7 +11,7 @@ class MapGenerator {
 	void _generateCave(Map &map);
 	void _initialiseAutomaton(Map &map);
 	void _automatonStep(Map &map);
-	unsigned int _getCountAliveNeighbours(Map &map, unsigned int i, unsigned int j, E_TerrainType aliveType);
+	unsigned int _getCountAliveNeighbours(Map &map, unsigned int i, unsigned int j, E_TerrainTile aliveType);
 	void _setStartPoint(Map &map);
 	bool _findClosestWalkableCell(
 		Map &map, const int x, const int y, std::vector<bool> &visited, int &xOut, int &yOut
