@@ -22,7 +22,7 @@ class GraphicActor : public Graphic {
 	GraphicActor(const GraphicActor &L); // copy constructor
 	GraphicActor & operator=(const GraphicActor &L); // assignment
 	~GraphicActor();
-	void render(
+	virtual void render(
 		unsigned int displayShiftX,
 		unsigned int displayShiftY,
 		Actor *actor

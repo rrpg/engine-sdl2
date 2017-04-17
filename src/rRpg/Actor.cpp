@@ -72,6 +72,14 @@ void Actor::setGraphic(GraphicActor *g) {
 	m_graphic = g;
 }
 
+void Actor::setLastTimeHit() {
+	m_iLastTimeHit = SDL_GetTicks();
+}
+
+uint32_t Actor::getLastTimeHit() {
+	return m_iLastTimeHit;
+}
+
 void Actor::update(rRpg *engine) {
 	if (!engine->isBlocked() && m_behaviour != 0) {
 		m_behaviour->update(engine, this);
@@ -151,4 +159,5 @@ void Actor::attack(Actor *target) {
 	target->m_iHealth -= damages & -(0 < damages);
 	// if the health is < 0 cap it at 0
 	target->m_iHealth = target->m_iHealth & -(0 < target->m_iHealth);
+	target->setLastTimeHit();
 }

@@ -27,6 +27,9 @@ class Actor {
 	Behaviour* m_behaviour;
 	GraphicActor* m_graphic;
 
+	// to know when to display actor health
+	uint32_t m_iLastTimeHit = 0;
+
 	public:
 	Actor(ActorRace &race);
 	Actor(const Actor &L); // copy constructor
@@ -53,6 +56,9 @@ class Actor {
 	int getX();
 	int getY();
 	E_ActorOrientation getOrientation();
+
+	void setLastTimeHit();
+	uint32_t getLastTimeHit();
 
 	void update(rRpg *engine);
 	void render(unsigned int displayShiftX, unsigned int displayShiftY);

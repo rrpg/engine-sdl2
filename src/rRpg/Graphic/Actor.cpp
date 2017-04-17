@@ -2,6 +2,8 @@
 #include "../Actor.hpp"
 #include "../ActorRace.hpp"
 
+const int TIME_DISPLAY_HP = 5000;
+
 GraphicActor::GraphicActor() {
 	m_textureManager = TextureManager::Instance();
 	m_game = Game::Instance();
@@ -28,7 +30,10 @@ GraphicActor::~GraphicActor() {}
 
 void GraphicActor::render(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
 	_renderActor(displayShiftX, displayShiftY, actor);
-	_renderHP(displayShiftX, displayShiftY, actor);
+
+	if (actor->getLastTimeHit() && SDL_GetTicks() - actor->getLastTimeHit() < TIME_DISPLAY_HP) {
+		_renderHP(displayShiftX, displayShiftY, actor);
+	}
 }
 
 void GraphicActor::_renderActor(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
