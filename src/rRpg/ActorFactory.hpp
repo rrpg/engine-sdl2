@@ -3,10 +3,10 @@
 
 #include <vector>
 #include "BehaviourFactory.hpp"
+#include "GraphicFactory.hpp"
 #include "ActorRace.hpp"
 #include "Actor.hpp"
 #include "Parser/File.hpp"
-#include "Graphic/Factory.hpp"
 
 enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, NB_RACES};
 
