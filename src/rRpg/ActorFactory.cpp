@@ -7,7 +7,10 @@
 
 const int MAX_CHARS_PER_LINE = 1024;
 
-ActorFactory::ActorFactory() : m_behaviourFactory(BehaviourFactory()) {
+ActorFactory::ActorFactory() :
+	m_behaviourFactory(BehaviourFactory()),
+	m_graphicFactory(GraphicFactory())
+{
 }
 
 ActorFactory::~ActorFactory() {
@@ -38,13 +41,13 @@ Actor* ActorFactory::createRandomFoe() {
 	E_ActorRaces race = (E_ActorRaces) (rand() % NB_RACES);
 	Actor* actor = createActor(race);
 	actor->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_MONSTER));
-	actor->setGraphic(new GraphicActor());
+	actor->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_ACTOR));
 	return actor;
 }
 
 Actor* ActorFactory::createHero() {
 	Actor* hero = createActor(RACE_HUMAN);
 	hero->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_PLAYER));
-	hero->setGraphic(new GraphicActor());
+	hero->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_ACTOR));
 	return hero;
 }
