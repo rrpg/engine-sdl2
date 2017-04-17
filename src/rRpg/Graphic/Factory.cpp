@@ -1,9 +1,11 @@
 #include "Factory.hpp"
 #include "Actor.hpp"
+#include "Player.hpp"
 
 GraphicFactory::GraphicFactory() {
 	m_vGraphics = {
 		new GraphicActor(),
+		new GraphicPlayer(),
 	};
 }
 

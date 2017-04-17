@@ -4,7 +4,7 @@
 #include <vector>
 #include "Graphic.hpp"
 
-enum E_Graphics {GRAPHIC_ACTOR};
+enum E_Graphics {GRAPHIC_ACTOR, GRAPHIC_PLAYER};
 
 class GraphicFactory {
 	private:
