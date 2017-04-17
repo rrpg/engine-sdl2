@@ -60,7 +60,7 @@ void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;
 }
 
-void Actor::setGraphic(Graphic *g) {
+void Actor::setGraphic(GraphicActor *g) {
 	m_graphic = g;
 }
 
