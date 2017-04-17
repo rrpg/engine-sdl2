@@ -5,7 +5,7 @@
 
 class GraphicPlayer : public GraphicActor {
 	protected:
-	void _renderHP(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor);
+	void render(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor);
 };
 
 #endif
