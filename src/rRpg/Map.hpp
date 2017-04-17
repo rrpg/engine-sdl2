@@ -4,6 +4,7 @@
 #include "MapEvent.hpp"
 #include "Parser/File.hpp"
 #include "ActorFactory.hpp"
+#include "Object.hpp"
 #include "Terrain.hpp"
 #include <stdint.h>
 #include <vector>
@@ -44,6 +45,7 @@ class Map {
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, Actor*> m_mActors;
 	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents = {};
+	std::unordered_map<std::string, Object> m_mObjects = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	ResourceManager<S_TileData> m_tilesManager;
