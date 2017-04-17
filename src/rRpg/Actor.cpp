@@ -5,14 +5,19 @@
 
 #define LIMIT_FIELD_OF_VIEW 6
 
-Actor::Actor(ActorRace &race) : m_race(race), m_behaviour(0) {
+Actor::Actor(ActorRace &race) :
+	m_race(race),
+	m_behaviour(0),
+	m_graphic(0)
+{
 }
 
 Actor::Actor(const Actor &r) :
 	m_race(r.m_race),
 	m_iX(r.m_iX),
 	m_iY(r.m_iY),
-	m_behaviour(r.m_behaviour)
+	m_behaviour(r.m_behaviour),
+	m_graphic(r.m_graphic)
 {
 }
 
@@ -25,6 +30,7 @@ Actor & Actor::operator=(const Actor &r) {
 	m_iX = r.m_iX;
 	m_iY = r.m_iY;
 	m_behaviour = r.m_behaviour;
+	m_graphic = r.m_graphic;
 	return *this;
 }
 
@@ -52,6 +58,10 @@ ActorRace &Actor::getRace() { return m_race; }
 
 void Actor::setBehaviour(Behaviour *b) {
 	m_behaviour = b;
+}
+
+void Actor::setGraphic(Graphic *g) {
+	m_graphic = g;
 }
 
 void Actor::update(rRpg *engine) {
