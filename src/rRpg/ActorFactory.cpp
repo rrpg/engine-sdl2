@@ -45,5 +45,6 @@ Actor* ActorFactory::createRandomFoe() {
 Actor* ActorFactory::createHero() {
 	Actor* hero = createActor(RACE_HUMAN);
 	hero->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_PLAYER));
+	hero->setGraphic(new GraphicActor());
 	return hero;
 }
