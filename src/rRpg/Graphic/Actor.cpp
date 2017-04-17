@@ -2,9 +2,6 @@
 #include "../Actor.hpp"
 #include "../ActorRace.hpp"
 
-const int TILE_WIDTH = 16;
-const int TILE_HEIGHT = 16;
-
 GraphicActor::GraphicActor() {
 	m_textureManager = TextureManager::Instance();
 	m_game = Game::Instance();
@@ -45,7 +42,12 @@ void GraphicActor::render(unsigned int displayShiftX, unsigned int displayShiftY
 		m_game->getRenderer()
 	);
 
-	// render HPs
+	_renderHP(displayShiftX, displayShiftY, actor);
+}
+
+void GraphicActor::_renderHP(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
+	unsigned int xScreen = actor->getX() * TILE_WIDTH + displayShiftX;
+	unsigned int yScreen = actor->getY() * TILE_HEIGHT + displayShiftY;
 	SDL_Rect r;
 	r.x = xScreen;
 	r.y = yScreen;
