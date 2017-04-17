@@ -44,7 +44,8 @@ void GraphicActor::_renderActor(unsigned int displayShiftX, unsigned int display
 		TILE_HEIGHT,
 		(int) actor->getRace().getSpriteY() + 1,
 		(int) actor->getRace().getSpriteX(),
-		m_game->getRenderer()
+		m_game->getRenderer(),
+		actor->getOrientation() == RIGHT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
 	);
 }
 
