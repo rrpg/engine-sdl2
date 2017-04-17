@@ -1,6 +1,7 @@
 #include "ActorFactory.hpp"
 #include "Parser/Taxonomy.hpp"
 #include "Behaviour/Monster.hpp"
+#include "Graphic/Actor.hpp"
 #include <fstream>
 #include <libgen.h>
 
@@ -37,5 +38,6 @@ Actor* ActorFactory::createRandomFoe() {
 	E_ActorRaces race = (E_ActorRaces) (rand() % NB_RACES);
 	Actor* actor = createActor(race);
 	actor->setBehaviour(new BehaviourMonster());
+	actor->setGraphic(new GraphicActor());
 	return actor;
 }
