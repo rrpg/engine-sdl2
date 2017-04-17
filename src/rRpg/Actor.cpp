@@ -48,10 +48,20 @@ bool Actor::isDead() {
 	return m_iHealth == 0;
 }
 
-void Actor::setX(int x) { m_iX = x; }
+void Actor::setX(int x) {
+	if (x > m_iX) {
+		m_eOrientation = RIGHT;
+	}
+	else if (x < m_iX) {
+		m_eOrientation = LEFT;
+	}
+	m_iX = x;
+
+}
 void Actor::setY(int y) { m_iY = y; }
 int Actor::getX() { return m_iX; }
 int Actor::getY() { return m_iY; }
+E_ActorOrientation Actor::getOrientation() { return m_eOrientation; }
 ActorRace &Actor::getRace() { return m_race; }
 
 void Actor::setBehaviour(Behaviour *b) {

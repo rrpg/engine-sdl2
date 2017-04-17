@@ -9,6 +9,8 @@ class rRpg;
 class Map;
 class ActorRace;
 
+enum E_ActorOrientation {LEFT, RIGHT};
+
 class Actor {
 	private:
 	int m_iHealth = 0;
@@ -20,6 +22,7 @@ class Actor {
 
 	int m_iX = 0;
 	int m_iY = 0;
+	E_ActorOrientation m_eOrientation = LEFT;
 
 	Behaviour* m_behaviour;
 	GraphicActor* m_graphic;
@@ -49,6 +52,7 @@ class Actor {
 	void setY(int y);
 	int getX();
 	int getY();
+	E_ActorOrientation getOrientation();
 
 	void update(rRpg *engine);
 	void render(unsigned int displayShiftX, unsigned int displayShiftY);
