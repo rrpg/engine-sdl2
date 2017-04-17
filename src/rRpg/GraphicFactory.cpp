@@ -1,6 +1,6 @@
-#include "Factory.hpp"
-#include "Actor.hpp"
-#include "Player.hpp"
+#include "GraphicFactory.hpp"
+#include "Graphic/Actor.hpp"
+#include "Graphic/Player.hpp"
 
 GraphicFactory::GraphicFactory() {
 	m_vGraphics = {
