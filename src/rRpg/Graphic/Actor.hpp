@@ -14,6 +14,7 @@ class GraphicActor : public Graphic {
 	protected:
 	TextureManager *m_textureManager = 0;
 	Game *m_game = 0;
+	virtual void _renderActor(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor);
 	virtual void _renderHP(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor);
 
 	public:

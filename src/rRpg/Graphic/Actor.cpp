@@ -27,6 +27,11 @@ GraphicActor & GraphicActor::operator=(const GraphicActor &r) {
 GraphicActor::~GraphicActor() {}
 
 void GraphicActor::render(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
+	_renderActor(displayShiftX, displayShiftY, actor);
+	_renderHP(displayShiftX, displayShiftY, actor);
+}
+
+void GraphicActor::_renderActor(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
 	unsigned int xScreen = actor->getX() * TILE_WIDTH + displayShiftX;
 	unsigned int yScreen = actor->getY() * TILE_HEIGHT + displayShiftY;
 	m_textureManager->drawTile(
@@ -41,8 +46,6 @@ void GraphicActor::render(unsigned int displayShiftX, unsigned int displayShiftY
 		(int) actor->getRace().getSpriteX(),
 		m_game->getRenderer()
 	);
-
-	_renderHP(displayShiftX, displayShiftY, actor);
 }
 
 void GraphicActor::_renderHP(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {

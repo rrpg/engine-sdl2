@@ -1,4 +1,5 @@
 #include "rRpg.hpp"
+#include "HUD.hpp"
 #include "MapGenerator.hpp"
 #include "Behaviour/Player.hpp"
 #include "Parser/Map.hpp"
@@ -110,6 +111,8 @@ void rRpg::render() {
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
 	m_map.render(camera, m_hero->getX(), m_hero->getY());
+	// render HUD
+	HUD::render(Game::Instance(), m_hero);
 }
 
 bool rRpg::isBlocked() {
