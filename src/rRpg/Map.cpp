@@ -232,8 +232,6 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 		}
 
 		actor.second->render(
-			m_iDisplayTileWidth,
-			m_iDisplayTileHeight,
 			displayShiftX,
 			displayShiftY
 		);

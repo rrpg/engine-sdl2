@@ -51,7 +51,7 @@ class Actor {
 	int getY();
 
 	void update(rRpg *engine);
-	void render(unsigned int worldTileWidth, unsigned int worldTileHeight, unsigned int displayShiftX, unsigned int displayShiftY);
+	void render(unsigned int displayShiftX, unsigned int displayShiftY);
 
 	bool isNextTo(Actor *actor);
 	bool seesActor(Map &map, Actor *actor);
