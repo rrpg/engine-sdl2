@@ -1,12 +1,16 @@
 #include "ActorFactory.hpp"
 #include "Parser/Taxonomy.hpp"
 #include "Behaviour/Monster.hpp"
+#include "Graphic/Actor.hpp"
 #include <fstream>
 #include <libgen.h>
 
 const int MAX_CHARS_PER_LINE = 1024;
 
-ActorFactory::ActorFactory() {
+ActorFactory::ActorFactory() :
+	m_behaviourFactory(BehaviourFactory()),
+	m_graphicFactory(GraphicFactory())
+{
 }
 
 ActorFactory::~ActorFactory() {
@@ -36,6 +40,14 @@ Actor* ActorFactory::createActor(E_ActorRaces race) {
 Actor* ActorFactory::createRandomFoe() {
 	E_ActorRaces race = (E_ActorRaces) (rand() % NB_RACES);
 	Actor* actor = createActor(race);
-	actor->setBehaviour(new BehaviourMonster());
+	actor->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_MONSTER));
+	actor->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_ACTOR));
 	return actor;
+}
+
+Actor* ActorFactory::createHero() {
+	Actor* hero = createActor(RACE_HUMAN);
+	hero->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_PLAYER));
+	hero->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_PLAYER));
+	return hero;
 }

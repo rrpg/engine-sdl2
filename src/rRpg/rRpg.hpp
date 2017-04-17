@@ -2,7 +2,6 @@
 #define __RRPG__
 
 #include "ActorFactory.hpp"
-#include "BehaviourFactory.hpp"
 #include "Map.hpp"
 #include <string>
 
@@ -10,7 +9,6 @@ class rRpg {
 	private:
 	Actor* m_hero = 0;
 	ActorFactory m_actorFactory;
-	BehaviourFactory m_behaviourFactory;
 	Map m_map;
 	bool m_bIsBlocked = false;
 
@@ -23,7 +21,7 @@ class rRpg {
 	Actor *getHero();
 	bool loadMap(std::string filePath, std::string tilesFilePath);
 	bool loadTaxonomy(std::string filePath);
-	bool initialiseHero();
+	void initialiseHero();
 	void update();
 	void render();
 	bool isBlocked();

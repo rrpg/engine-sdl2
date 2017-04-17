@@ -144,6 +144,18 @@ void Map::addActor(Actor *actor) {
 	m_mActors[key] = actor;
 }
 
+int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
+	E_TerrainType type = getTile(x, y);
+	// north
+	return (y == 0 || getTile(x, y - 1) == type)
+		// west
+		+ 2 * (x == 0 || getTile(x - 1, y) == type)
+		// east
+		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type)
+		// south
+		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type);
+}
+
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
 	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
@@ -164,18 +176,6 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 
 	_renderTerrain(camera, visibleArea, shift);
 	_renderActors(camera, visibleArea, shift);
-}
-
-int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
-	E_TerrainType type = getTile(x, y);
-	// north
-	return (y == 0 || getTile(x, y - 1) == type)
-		// west
-		+ 2 * (x == 0 || getTile(x - 1, y) == type)
-		// east
-		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type)
-		// south
-		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type);
 }
 
 void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
@@ -222,11 +222,8 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 }
 
 void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-
-	int shiftX = (int) shift.getX();
-	int shiftY = (int) shift.getY();
+	unsigned int displayShiftX = camera.x - (int) shift.getX();
+	unsigned int displayShiftY = camera.y - (int) shift.getY();
 	for (auto actor : m_mActors) {
 		if (actor.second->getX() < visibleArea.x || actor.second->getX() > visibleArea.x + visibleArea.w
 			|| actor.second->getY() < visibleArea.y || actor.second->getY() > visibleArea.y + visibleArea.h
@@ -234,30 +231,10 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 			continue;
 		}
 
-		int xScreen, yScreen;
-		xScreen = actor.second->getX() * m_iDisplayTileWidth - shiftX + camera.x;
-		yScreen = actor.second->getY() * m_iDisplayTileHeight - shiftY + camera.y;
-		manager->drawTile(
-			actor.second->getRace().getTilesetName(),
-			0, // margin
-			0, // spacing
-			xScreen,
-			yScreen,
-			m_iDisplayTileWidth,
-			m_iDisplayTileHeight,
-			(int) actor.second->getRace().getSpriteY() + 1,
-			(int) actor.second->getRace().getSpriteX(),
-			game->getRenderer()
+		actor.second->render(
+			displayShiftX,
+			displayShiftY
 		);
-
-		// render HPs
-		SDL_Rect r;
-		r.x = xScreen;
-		r.y = yScreen;
-		r.w = m_iDisplayTileWidth * actor.second->getHealth() / actor.second->getMaxHealth();
-		r.h = 2;
-		SDL_SetRenderDrawColor(game->getRenderer(), 0xff, 0, 0, 255);
-		SDL_RenderFillRect(game->getRenderer(), &r);
 	}
 }
 

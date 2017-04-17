@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Behaviour.hpp"
+#include "Graphic/Actor.hpp"
 
 class rRpg;
 class Map;
@@ -21,6 +22,7 @@ class Actor {
 	int m_iY = 0;
 
 	Behaviour* m_behaviour;
+	GraphicActor* m_graphic;
 
 	public:
 	Actor(ActorRace &race);
@@ -28,6 +30,7 @@ class Actor {
 	Actor & operator=(const Actor &L); // assignment
 	~Actor();
 	void setBehaviour(Behaviour* b);
+	void setGraphic(GraphicActor* b);
 
 	ActorRace &getRace();
 
@@ -48,6 +51,7 @@ class Actor {
 	int getY();
 
 	void update(rRpg *engine);
+	void render(unsigned int displayShiftX, unsigned int displayShiftY);
 
 	bool isNextTo(Actor *actor);
 	bool seesActor(Map &map, Actor *actor);
