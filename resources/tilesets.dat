@@ -1,7 +1,9 @@
 # format:
 # tilesetName tilesetFile
 player0 DawnLike/Characters/Player0.png
+player1 DawnLike/Characters/Player1.png
 demon0 DawnLike/Characters/Demon0.png
+demon1 DawnLike/Characters/Demon1.png
 worldFloor DawnLike/Objects/Floor.png
 worldWall DawnLike/Objects/Wall.png
 tileset tileset.png
