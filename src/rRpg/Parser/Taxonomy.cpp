@@ -10,12 +10,12 @@ TaxonomyParser::TaxonomyParser(ActorFactory &actorFactory) : m_actorFactory(acto
 bool TaxonomyParser::_parseLine(const char *line) {
 	bool retValue = true;
 	char tileset[ResourceParser::MAX_CHAR_RESOURCE_NAME];
-	unsigned int isAnimated,raceLevel1HP, raceLevel1Defence, raceLevel1Attack,
+	unsigned int timePerFrame,raceLevel1HP, raceLevel1Defence, raceLevel1Attack,
 		spriteX, spriteY;
 	int result = sscanf(
 		line,
 		"%s %u %u %u %u %u %u\n",
-		tileset, &isAnimated, &spriteX, &spriteY,
+		tileset, &timePerFrame, &spriteX, &spriteY,
 		&raceLevel1HP, &raceLevel1Defence, &raceLevel1Attack
 	);
 	if (result != 7) {
@@ -27,10 +27,11 @@ bool TaxonomyParser::_parseLine(const char *line) {
 			raceLevel1Defence,
 			raceLevel1Attack
 		);
-		if (!isAnimated) {
+		if (!timePerFrame) {
 			_addTilesetToRace(race, tileset);
 		}
 		else {
+			race->setTimePerFrame(timePerFrame);
 			_addTilesetToRace(race, std::string(tileset) + "0");
 			_addTilesetToRace(race, std::string(tileset) + "1");
 		}

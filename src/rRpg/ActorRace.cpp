@@ -22,6 +22,10 @@ void ActorRace::addTilesetName(std::string name) {
 	m_vTilesetNames.push_back(name);
 }
 
+void ActorRace::setTimePerFrame(unsigned int timePerFrame) {
+	m_iTimePerFrame = timePerFrame;
+}
+
 void ActorRace::setSpriteX(unsigned int spriteX) {
 	m_iSpriteX = spriteX;
 }
@@ -31,10 +35,13 @@ void ActorRace::setSpriteY(unsigned int spriteY) {
 }
 
 std::string ActorRace::getTilesetName() {
-	uint32_t currTime = SDL_GetTicks();
-	int timeInCycle = currTime % DURATION_ANIMATION_CYCLE,
-		timePerFrame = DURATION_ANIMATION_CYCLE / (int) m_vTilesetNames.size();
-	int tilesetIndex = timeInCycle / timePerFrame;
+	int tilesetIndex = 0;
+	if (m_iTimePerFrame) {
+		uint32_t currTime = SDL_GetTicks();
+		int durationAnimationCycle = m_iTimePerFrame * (int) m_vTilesetNames.size();
+		int timeInCycle = currTime % durationAnimationCycle;
+		tilesetIndex = timeInCycle / m_iTimePerFrame;
+	}
 	return m_vTilesetNames[tilesetIndex];
 }
 
