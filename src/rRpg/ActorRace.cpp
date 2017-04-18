@@ -1,5 +1,7 @@
 #include "ActorRace.hpp"
 
+const int DURATION_ANIMATION_CYCLE = 1500;
+
 ActorRace::ActorRace(unsigned int level1HP, unsigned int level1Defence, unsigned int level1Attack) :
 	m_iLevel1HP(level1HP),
 	m_iLevel1Defence(level1Defence),
@@ -29,7 +31,11 @@ void ActorRace::setSpriteY(unsigned int spriteY) {
 }
 
 std::string ActorRace::getTilesetName() {
-	return m_vTilesetNames[0];
+	uint32_t currTime = SDL_GetTicks();
+	int timeInCycle = currTime % DURATION_ANIMATION_CYCLE,
+		timePerFrame = DURATION_ANIMATION_CYCLE / (int) m_vTilesetNames.size();
+	int tilesetIndex = timeInCycle / timePerFrame;
+	return m_vTilesetNames[tilesetIndex];
 }
 
 unsigned int ActorRace::getSpriteX() {
