@@ -33,7 +33,10 @@ SRC := $(shell find $(SRCDIR)/rRpg/ $(SRCDIR)/common/ -type f -name '*.cpp')
 OBJ := $(patsubst %.cpp,$(BUILDDIR)/%.o,$(SRC))
 DEP := $(patsubst %.o,%.deps,$(OBJ))
 
-all: $(PROG)
+all: tools game
+	./bin/tools/data-compiler tiles resources/src/floor-tiles.dat resources/floor-tiles.dat
+
+game: $(PROG)
 
 -include $(DEP)
 
