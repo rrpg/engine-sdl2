@@ -31,7 +31,7 @@ bool TaxonomyParser::_parseLine(const char *line) {
 			raceLevel1Defence,
 			raceLevel1Attack
 		);
-		race->setTilesetName(tileset);
+		race->addTilesetName(tileset);
 		race->setSpriteX(spriteX);
 		race->setSpriteY(spriteY);
 		m_actorFactory.addActorRaceTaxonomy(race);

@@ -16,8 +16,8 @@ Actor* ActorRace::createActor() {
 	return actor;
 }
 
-void ActorRace::setTilesetName(std::string name) {
-	m_sTilesetName = name;
+void ActorRace::addTilesetName(std::string name) {
+	m_vTilesetNames.push_back(name);
 }
 
 void ActorRace::setSpriteX(unsigned int spriteX) {
@@ -29,7 +29,7 @@ void ActorRace::setSpriteY(unsigned int spriteY) {
 }
 
 std::string ActorRace::getTilesetName() {
-	return m_sTilesetName;
+	return m_vTilesetNames[0];
 }
 
 unsigned int ActorRace::getSpriteX() {
