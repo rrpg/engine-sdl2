@@ -276,6 +276,10 @@ Actor *Map::getActorAt(unsigned int x, unsigned int y) {
 }
 
 void Map::moveActor(Actor *a, unsigned int newX, unsigned int newY) {
+	if (newX >= getWidth() || newY >= getHeight()) {
+		return;
+	}
+
 	std::string key = _getCoordsKey(a->getX(), a->getY());
 	std::string newKey = _getCoordsKey(newX, newY);
 	auto it = m_mActors.find(key);
