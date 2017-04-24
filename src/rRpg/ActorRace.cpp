@@ -1,7 +1,5 @@
 #include "ActorRace.hpp"
 
-const int DURATION_ANIMATION_CYCLE = 1500;
-
 ActorRace::ActorRace(unsigned int level1HP, unsigned int level1Defence, unsigned int level1Attack) :
 	m_iLevel1HP(level1HP),
 	m_iLevel1Defence(level1Defence),

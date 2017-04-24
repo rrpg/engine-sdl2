@@ -5,8 +5,6 @@
 #include <fstream>
 #include <libgen.h>
 
-const int MAX_CHARS_PER_LINE = 1024;
-
 ActorFactory::ActorFactory() :
 	m_behaviourFactory(BehaviourFactory()),
 	m_graphicFactory(GraphicFactory())
