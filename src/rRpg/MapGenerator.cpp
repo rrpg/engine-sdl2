@@ -103,11 +103,7 @@ void MapGenerator::_setStartPoint(Map &map) {
 		map.setStartPoint((float) x, (float) y);
 	}
 	else {
-		std::vector<bool> visited;
-		for (int i = 0, size = map.getWidth() * map.getHeight(); i < size; ++i) {
-			visited.push_back(false);
-		}
-
+		std::vector<bool> visited(map.getWidth() * map.getHeight(), false);
 		int xOut = 0, yOut = 0;
 		_findClosestWalkableCell(map, x, y, visited, xOut, yOut);
 		map.setStartPoint((float) xOut, (float) yOut);
@@ -164,11 +160,7 @@ void MapGenerator::_dispatchEnemies(Map &map, const unsigned int nbMaxEnemies) {
 			y = (rand() % map.getHeight());
 
 		if (!map.isCellWalkable(x, y)) {
-			std::vector<bool> visited;
-			for (int v = 0, size = map.getWidth() * map.getHeight(); v < size; ++v) {
-				visited.push_back(false);
-			}
-
+			std::vector<bool> visited(map.getWidth() * map.getHeight(), false);
 			_findClosestWalkableCell(map, x, y, visited, x, y);
 		}
 		map.addEnemySpawnableCell((char) x, (char) y);
