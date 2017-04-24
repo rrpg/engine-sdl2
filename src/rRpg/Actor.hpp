@@ -20,8 +20,8 @@ class Actor {
 
 	ActorRace &m_race;
 
-	int m_iX = 0;
-	int m_iY = 0;
+	unsigned int m_iX = 0;
+	unsigned int m_iY = 0;
 	E_ActorOrientation m_eOrientation = LEFT;
 
 	Behaviour* m_behaviour;
@@ -51,17 +51,17 @@ class Actor {
 
 	bool isDead();
 
-	void setX(int x);
-	void setY(int y);
-	int getX();
-	int getY();
+	void setX(unsigned int x);
+	void setY(unsigned int y);
+	unsigned int getX();
+	unsigned int getY();
 	E_ActorOrientation getOrientation();
 
 	void setLastTimeHit();
 	uint32_t getLastTimeHit();
 
 	void update(rRpg *engine);
-	void render(unsigned int displayShiftX, unsigned int displayShiftY);
+	void render(int displayShiftX, int displayShiftY);
 
 	bool isNextTo(Actor *actor);
 	bool seesActor(Map &map, Actor *actor);

@@ -11,7 +11,7 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	bool updated = false,
 		directionPressed = false;
 	uint32_t currentTimestamp = SDL_GetTicks();
-	int xDest = actor->getX(),
+	unsigned int xDest = actor->getX(),
 		yDest = actor->getY();
 	if (currentTimestamp - m_iLastTimeActed <= timeBetweenActions) {
 		engine->block();
@@ -39,7 +39,7 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	return updated;
 }
 
-bool BehaviourPlayer::_isDirectionPressed(int &x, int &y) {
+bool BehaviourPlayer::_isDirectionPressed(unsigned int &x, unsigned int &y) {
 	bool directionPressed = false;
 	UserActions* userActions = ServiceProvider::getUserActions();
 	if (userActions->getActionState("MOVE_PLAYER_UP")) {
@@ -62,12 +62,12 @@ bool BehaviourPlayer::_isDirectionPressed(int &x, int &y) {
 	return directionPressed;
 }
 
-bool BehaviourPlayer::_tryMove(Actor *actor, Map &map, int x, int y) {
+bool BehaviourPlayer::_tryMove(Actor *actor, Map &map, unsigned int x, unsigned int y) {
 	MoveCommand command = MoveCommand();
 	return command.execute(actor, map, x, y);
 }
 
-bool BehaviourPlayer::_tryAttack(Actor *actor, Map &map, int x, int y) {
+bool BehaviourPlayer::_tryAttack(Actor *actor, Map &map, unsigned int x, unsigned int y) {
 	Actor *target = map.getActorAt(x, y);
 	if (target == NULL) {
 		return false;

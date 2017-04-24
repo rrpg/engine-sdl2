@@ -7,7 +7,7 @@ CC     := g++ -std=c++11
 INCL   :=
 CFLAGS := -g -O2 -Wall -Wmissing-declarations -Weffc++ \
 		-pedantic -pedantic-errors -Wextra -Wcast-align \
-		-Wcast-qual -Wconversion \
+		-Wcast-qual -Wconversion -Wsign-conversion \
 		-Wdisabled-optimization \
 		-Werror -Wfloat-equal -Wformat=2 \
 		-Wformat-nonliteral -Wformat-security \

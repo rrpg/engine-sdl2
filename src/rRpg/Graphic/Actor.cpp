@@ -28,7 +28,7 @@ GraphicActor & GraphicActor::operator=(const GraphicActor &r) {
 
 GraphicActor::~GraphicActor() {}
 
-void GraphicActor::render(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
+void GraphicActor::render(int displayShiftX, int displayShiftY, Actor *actor) {
 	_renderActor(displayShiftX, displayShiftY, actor);
 
 	if (actor->getLastTimeHit() && SDL_GetTicks() - actor->getLastTimeHit() < TIME_DISPLAY_HP) {
@@ -36,9 +36,9 @@ void GraphicActor::render(unsigned int displayShiftX, unsigned int displayShiftY
 	}
 }
 
-void GraphicActor::_renderActor(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
-	unsigned int xScreen = actor->getX() * TILE_WIDTH + displayShiftX;
-	unsigned int yScreen = actor->getY() * TILE_HEIGHT + displayShiftY;
+void GraphicActor::_renderActor(int displayShiftX, int displayShiftY, Actor *actor) {
+	int xScreen = (signed) actor->getX() * TILE_WIDTH + displayShiftX;
+	int yScreen = (signed) actor->getY() * TILE_HEIGHT + displayShiftY;
 	m_textureManager->drawTile(
 		actor->getRace().getTilesetName(),
 		0, // margin
@@ -54,13 +54,17 @@ void GraphicActor::_renderActor(unsigned int displayShiftX, unsigned int display
 	);
 }
 
-void GraphicActor::_renderHP(unsigned int displayShiftX, unsigned int displayShiftY, Actor *actor) {
-	unsigned int xScreen = actor->getX() * TILE_WIDTH + displayShiftX;
-	unsigned int yScreen = actor->getY() * TILE_HEIGHT + displayShiftY;
+void GraphicActor::_renderHP(int displayShiftX, int displayShiftY, Actor *actor) {
+	int xScreen = (signed) actor->getX() * TILE_WIDTH + displayShiftX;
+	int yScreen = (signed) actor->getY() * TILE_HEIGHT + displayShiftY;
+	unsigned int health = 0;
+	if (actor->getHealth() > 0) {
+		health = (unsigned) actor->getHealth();
+	}
 	SDL_Rect r;
 	r.x = xScreen;
 	r.y = yScreen;
-	r.w = TILE_WIDTH * actor->getHealth() / actor->getMaxHealth();
+	r.w = (signed) (TILE_WIDTH * health / actor->getMaxHealth());
 	r.h = 2;
 	SDL_SetRenderDrawColor(m_game->getRenderer(), 0xff, 0, 0, 255);
 	SDL_RenderFillRect(m_game->getRenderer(), &r);

@@ -14,13 +14,18 @@ class MapGenerator {
 	unsigned int _getCountAliveNeighbours(Map &map, unsigned int i, unsigned int j, E_TerrainType aliveType);
 	void _setStartPoint(Map &map);
 	bool _findClosestWalkableCell(
-		Map &map, const int x, const int y, std::vector<bool> &visited, int &xOut, int &yOut
+		Map &map,
+		const unsigned int x,
+		const unsigned int y,
+		std::vector<bool> &visited,
+		unsigned int &xOut,
+		unsigned int &yOut
 	);
 	void _dispatchEnemies(Map &map, const unsigned int nbMaxEnemies);
 
 	public:
 	MapGenerator();
-	Map generate(E_MapType type, short width, short height);
+	Map generate(E_MapType type, unsigned short width, unsigned short height);
 };
 
 #endif

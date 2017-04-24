@@ -33,11 +33,11 @@ void ActorRace::setSpriteY(unsigned int spriteY) {
 }
 
 std::string ActorRace::getTilesetName() {
-	int tilesetIndex = 0;
+	unsigned int tilesetIndex = 0;
 	if (m_iTimePerFrame) {
 		uint32_t currTime = SDL_GetTicks();
-		int durationAnimationCycle = m_iTimePerFrame * (int) m_vTilesetNames.size();
-		int timeInCycle = currTime % durationAnimationCycle;
+		unsigned int durationAnimationCycle = m_iTimePerFrame * (unsigned int) m_vTilesetNames.size();
+		unsigned int timeInCycle = currTime % durationAnimationCycle;
 		tilesetIndex = timeInCycle / m_iTimePerFrame;
 	}
 	return m_vTilesetNames[tilesetIndex];

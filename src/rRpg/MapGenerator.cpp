@@ -1,10 +1,11 @@
 #include "MapGenerator.hpp"
 #include "Terrain.hpp"
+#include <limits.h>
 
 MapGenerator::MapGenerator() {
 }
 
-Map MapGenerator::generate(E_MapType type, short width, short height) {
+Map MapGenerator::generate(E_MapType type, unsigned short width, unsigned short height) {
 	Map map;
 	map.setDimensions(width, height);
 	map.setDisplayTileDimensions(16, 16);
@@ -86,7 +87,7 @@ void MapGenerator::_automatonStep(Map &map) {
 }
 
 unsigned int MapGenerator::_getCountAliveNeighbours(Map &map, unsigned int i, unsigned int j, E_TerrainType aliveType) {
-	return (map.getTile(i - 1, j - 1) == aliveType)
+	int nbAlive = (map.getTile(i - 1, j - 1) == aliveType)
 	   + (map.getTile(i, j - 1) == aliveType)
 	   + (map.getTile(i + 1, j - 1) == aliveType)
 	   + (map.getTile(i - 1, j) == aliveType)
@@ -94,37 +95,44 @@ unsigned int MapGenerator::_getCountAliveNeighbours(Map &map, unsigned int i, un
 	   + (map.getTile(i - 1, j + 1) == aliveType)
 	   + (map.getTile(i, j + 1) == aliveType)
 	   + (map.getTile(i + 1, j + 1) == aliveType);
+
+	return (unsigned) nbAlive;
 }
 
 void MapGenerator::_setStartPoint(Map &map) {
-	int x = (rand() % map.getWidth()),
-		y = (rand() % map.getHeight());
+	unsigned int x = ((unsigned) rand() % map.getWidth()),
+		y = ((unsigned) rand() % map.getHeight());
 	if (map.isCellWalkable(x, y)) {
 		map.setStartPoint((float) x, (float) y);
 	}
 	else {
 		std::vector<bool> visited(map.getWidth() * map.getHeight(), false);
-		int xOut = 0, yOut = 0;
+		unsigned int xOut = 0, yOut = 0;
 		_findClosestWalkableCell(map, x, y, visited, xOut, yOut);
 		map.setStartPoint((float) xOut, (float) yOut);
 	}
 }
 
 bool MapGenerator::_findClosestWalkableCell(
-	Map &map, const int x, const int y, std::vector<bool> &visited, int &xOut, int &yOut
+	Map &map,
+	const unsigned int x,
+	const unsigned int y,
+	std::vector<bool> &visited,
+	unsigned int &xOut,
+	unsigned int &yOut
 ) {
-	int cellIndex = y * map.getWidth() + x;
-	if (y < 0 || x < 0 || (unsigned) y >= map.getHeight() || (unsigned) x >= map.getWidth()
+	unsigned int cellIndex = y * map.getWidth() + x;
+	if (y < 1 || x < 1 || (unsigned) y > map.getHeight() - 1 || (unsigned) x > map.getWidth() - 1
 		|| visited[cellIndex]
 	) {
 		return false;
 	}
 
 	visited[cellIndex] = true;
-	int neighbours[][2] = {
-		{-1, 0},
+	unsigned int neighbours[][2] = {
+		{UINT_MAX, 0},
 		{1, 0},
-		{0, -1},
+		{0, UINT_MAX},
 		{0, 1}
 	};
 
@@ -156,8 +164,8 @@ bool MapGenerator::_findClosestWalkableCell(
 
 void MapGenerator::_dispatchEnemies(Map &map, const unsigned int nbMaxEnemies) {
 	for (unsigned int i = 0; i < nbMaxEnemies; ++i) {
-		int x = (rand() % map.getWidth()),
-			y = (rand() % map.getHeight());
+		unsigned int x = ((unsigned) rand() % map.getWidth()),
+			y = ((unsigned) rand() % map.getHeight());
 
 		if (!map.isCellWalkable(x, y)) {
 			std::vector<bool> visited(map.getWidth() * map.getHeight(), false);

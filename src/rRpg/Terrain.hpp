@@ -5,13 +5,13 @@
 #include <unordered_map>
 #include <vector>
 
-enum E_TerrainType {
+typedef enum {
 	TERRAIN_GRASS_NORMAL,
 	TERRAIN_SOIL_NORMAL,
 	TERRAIN_ROCK_NORMAL
-};
+} E_TerrainType;
 
-enum E_TerrainTile {
+typedef enum {
 	// floors
 	// grass normal
 	TERRAIN_GRASS_NORMAL_TOPLEFT, TERRAIN_GRASS_NORMAL_TOP,
@@ -40,7 +40,7 @@ enum E_TerrainTile {
 	TERRAIN_ROCK_NORMAL_VERT_TOP, TERRAIN_ROCK_NORMAL_VERT, TERRAIN_ROCK_NORMAL_VERT_BOTTOM,
 	TERRAIN_ROCK_NORMAL_SINGLE,
 	TERRAIN_ROCK_NORMAL_HORIZ_LEFT, TERRAIN_ROCK_NORMAL_HORIZ, TERRAIN_ROCK_NORMAL_HORIZ_RIGHT
-};
+} E_TerrainTile;
 
 std::unordered_map<E_TerrainType, std::vector<E_TerrainTile>> createTileMasksMap();
 
@@ -54,7 +54,7 @@ class Terrain {
 	static const int TERRAIN_FLAG_OBSTRUCTING_VIEW = 0x2;
 	static const int TERRAIN_FLAG_BASE = 0x4;
 
-	static E_TerrainTile getTerrainTile(E_TerrainType type, int index);
+	static E_TerrainTile getTerrainTile(E_TerrainType type, unsigned int index);
 	void setFlags(unsigned int flags);
 	bool hasFlag(unsigned int flag);
 };

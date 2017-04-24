@@ -1,5 +1,6 @@
 #include "Actor.hpp"
 #include "rRpg.hpp"
+#include <limits.h>
 
 #define LIMIT_FIELD_OF_VIEW 6
 
@@ -48,7 +49,7 @@ bool Actor::isDead() {
 	return m_iHealth == 0;
 }
 
-void Actor::setX(int x) {
+void Actor::setX(unsigned int x) {
 	if (x > m_iX) {
 		m_eOrientation = RIGHT;
 	}
@@ -58,9 +59,9 @@ void Actor::setX(int x) {
 	m_iX = x;
 
 }
-void Actor::setY(int y) { m_iY = y; }
-int Actor::getX() { return m_iX; }
-int Actor::getY() { return m_iY; }
+void Actor::setY(unsigned int y) { m_iY = y; }
+unsigned int Actor::getX() { return m_iX; }
+unsigned int Actor::getY() { return m_iY; }
 E_ActorOrientation Actor::getOrientation() { return m_eOrientation; }
 ActorRace &Actor::getRace() { return m_race; }
 
@@ -86,31 +87,31 @@ void Actor::update(rRpg *engine) {
 	}
 }
 
-void Actor::render(unsigned int displayShiftX, unsigned int displayShiftY) {
+void Actor::render(int displayShiftX, int displayShiftY) {
 	if (m_graphic != 0) {
 		m_graphic->render(displayShiftX, displayShiftY, this);
 	}
 }
 
 bool Actor::isNextTo(Actor *actor) {
-	unsigned int diffX = abs(getX() - actor->getX()),
-		diffY = abs(getY() - actor->getY());
+	unsigned int diffX = (unsigned) abs(getX() - actor->getX()),
+		diffY = (unsigned) abs(getY() - actor->getY());
 	return (diffX == 1 && !diffY) || (!diffX && diffY == 1);
 }
 
 bool Actor::seesActor(Map &map, Actor *actor) {
-	int x0 = getX(),
+	unsigned int x0 = getX(),
 		y0 = getY(),
 		x1 = actor->getX(),
 		y1 = actor->getY(),
 		x, y,
-		deltaX, deltaY, absDeltaX, absDeltaY,
 		directionX, directionY;
+	int deltaX, deltaY, absDeltaX, absDeltaY;
 	double slope,
 		positionOnY0;
 	bool actor1SeesActor2 = true;
-	deltaX = x1 - x0;
-	deltaY = y1 - y0;
+	deltaX = (signed) (x1 - x0);
+	deltaY = (signed) (y1 - y0);
 	absDeltaX = abs(deltaX);
 	absDeltaY = abs(deltaY);
 
@@ -118,11 +119,11 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		return false;
 	}
 
-	directionX = x0 > x1 ? -1 : 1;
-	directionY = y0 > y1 ? -1 : 1;
+	directionX = x0 > x1 ? UINT_MAX : 1;
+	directionY = y0 > y1 ? UINT_MAX : 1;
 
 	slope = 0;
-	if (deltaX != 0) {
+	if (x1 != x0) {
 		slope = (float) deltaY / (float) deltaX;
 	}
 
@@ -130,7 +131,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	// actors are vertical or on a steep slope
 	if (absDeltaX < absDeltaY) {
 		for (y = y0 + directionY; y != y1; y += directionY) {
-			x = deltaX == 0 ? x0 : (int) round((y - positionOnY0) / slope);
+			x = x1 == x0 ? x0 : (unsigned int) round((y - positionOnY0) / slope);
 			if (map.isCellObstructingView(x, y)) {
 				actor1SeesActor2 = false;
 				break;
@@ -140,7 +141,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	// actors are horizonal or on a gentle slope
 	else {
 		for (x = x0 + directionX; x != x1; x += directionX) {
-			y = (int) round(slope * x + positionOnY0);
+			y = (unsigned int) round(slope * x + positionOnY0);
 			if (map.isCellObstructingView(x, y)) {
 				actor1SeesActor2 = false;
 				break;
@@ -152,8 +153,8 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 }
 
 void Actor::attack(Actor *target) {
-	unsigned int attack = rand() % m_iAttack;
-	unsigned int defence = rand() % target->m_iDefence;
+	int attack = rand() % (signed) m_iAttack;
+	int defence = rand() % (signed) target->m_iDefence;
 	int damages = attack - defence;
 	// no branching max(0, damages) :p
 	target->m_iHealth -= damages & -(0 < damages);

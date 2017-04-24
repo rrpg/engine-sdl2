@@ -39,8 +39,8 @@ int main(int argc, char* args[]) {
 
 		// use a delay to cap the fps
 		frameTime = SDL_GetTicks() - frameStart;
-		if (frameTime< DELAY_TIME) {
-			SDL_Delay((int) (DELAY_TIME - frameTime));
+		if (frameTime < DELAY_TIME) {
+			SDL_Delay((unsigned int) (DELAY_TIME - frameTime));
 		}
 	}
 
