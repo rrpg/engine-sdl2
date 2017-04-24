@@ -10,6 +10,13 @@
 #include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
 
+struct EnumClassHash {
+	template <typename T>
+	std::size_t operator()(T t) const {
+		return static_cast<std::size_t>(t);
+	}
+};
+
 class Map {
 	private:
 	unsigned int m_iWidth = 0;
@@ -18,8 +25,8 @@ class Map {
 	int m_iDisplayTileHeight = 0;
 	Vector2D m_sStartPoint = Vector2D();
 	std::vector<E_TerrainType> m_vGrid = {};
-	std::unordered_map<E_TerrainType, Terrain*> m_mTerrains = {};
-	std::unordered_map<E_TerrainTile, S_TileData> m_mTerrainsTileData = {};
+	std::unordered_map<E_TerrainType, Terrain*, EnumClassHash> m_mTerrains = {};
+	std::unordered_map<E_TerrainTile, S_TileData, EnumClassHash> m_mTerrainsTileData = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::vector<std::pair<char, char>> m_vEnemySpawnableCells = {};
 
