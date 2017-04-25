@@ -127,7 +127,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 
 	// actors are vertical or on a steep slope
 	if (absDeltaX < absDeltaY) {
-		double positionOnY0 = y0 + slope * x0;
+		double positionOnY0 = y0 - slope * x0;
 		for (y = y0 + directionY; y != y1; y += directionY) {
 			x = deltaX == 0 ? x0 : (int) round((y - positionOnY0) / slope);
 			if (map.isCellObstructingView(x, y)) {
