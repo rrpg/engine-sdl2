@@ -105,8 +105,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		y1 = actor->getY(),
 		x, y,
 		deltaX, deltaY, absDeltaX, absDeltaY,
-		directionX, directionY,
-		distance;
+		directionX, directionY;
 	double slope;
 	bool actor1SeesActor2 = true;
 	deltaX = x1 - x0;
@@ -114,9 +113,12 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	absDeltaX = abs(deltaX);
 	absDeltaY = abs(deltaY);
 
+	if (absDeltaY > LIMIT_FIELD_OF_VIEW || absDeltaX > LIMIT_FIELD_OF_VIEW) {
+		return false;
+	}
+
 	directionX = x0 > x1 ? -1 : 1;
 	directionY = y0 > y1 ? -1 : 1;
-	distance = 0;
 
 	slope = 0;
 	if (deltaX != 0) {
@@ -128,11 +130,10 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		double positionOnY0 = y0 + slope * x0;
 		for (y = y0 + directionY; y != y1; y += directionY) {
 			x = deltaX == 0 ? x0 : (int) round((y - positionOnY0) / slope);
-			if (map.isCellObstructingView(x, y) || distance > LIMIT_FIELD_OF_VIEW) {
+			if (map.isCellObstructingView(x, y)) {
 				actor1SeesActor2 = false;
 				break;
 			}
-			++distance;
 		}
 	}
 	// actors are horizonal or on a gentle slope
@@ -140,11 +141,10 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		double positionOnY0 = y0 - slope * x0;
 		for (x = x0 + directionX; x != x1; x += directionX) {
 			y = (int) round(slope * x + positionOnY0);
-			if (map.isCellObstructingView(x, y) || distance > LIMIT_FIELD_OF_VIEW) {
+			if (map.isCellObstructingView(x, y)) {
 				actor1SeesActor2 = false;
 				break;
 			}
-			++distance;
 		}
 	}
 
