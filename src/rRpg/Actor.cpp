@@ -99,16 +99,16 @@ bool Actor::isNextTo(Actor *actor) {
 }
 
 bool Actor::seesActor(Map &map, Actor *actor) {
-	int x0, y0, x1, y1, x, y,
+	int x0 = getX(),
+		y0 = getY(),
+		x1 = actor->getX(),
+		y1 = actor->getY(),
+		x, y,
 		deltaX, deltaY, absDeltaX, absDeltaY,
 		directionX, directionY,
 		distance;
 	double slope;
 	bool actor1SeesActor2 = true;
-	x0 = getX();
-	y0 = getY();
-	x1 = actor->getX();
-	y1 = actor->getY();
 	deltaX = x1 - x0;
 	deltaY = y1 - y0;
 	absDeltaX = abs(deltaX);
