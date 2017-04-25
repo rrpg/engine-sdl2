@@ -94,9 +94,13 @@ void Actor::render(int displayShiftX, int displayShiftY) {
 }
 
 bool Actor::isNextTo(Actor *actor) {
-	unsigned int diffX = (unsigned) abs(getX() - actor->getX()),
-		diffY = (unsigned) abs(getY() - actor->getY());
-	return (diffX == 1 && !diffY) || (!diffX && diffY == 1);
+	unsigned int x0 = getX(),
+		x1 = actor->getX(),
+		y0 = getY(),
+		y1 = actor->getY();
+	bool isNext = (x0 + 1 == x1) || (x1 + 1 == x0);
+	bool isAbove = (y0 + 1 == y1) || (y1 + 1 == y0);
+	return (isNext && y0 == y1) || (x0 == x1 && isAbove);
 }
 
 bool Actor::seesActor(Map &map, Actor *actor) {
