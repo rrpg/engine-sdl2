@@ -106,7 +106,8 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		x, y,
 		deltaX, deltaY, absDeltaX, absDeltaY,
 		directionX, directionY;
-	double slope;
+	double slope,
+		positionOnY0;
 	bool actor1SeesActor2 = true;
 	deltaX = x1 - x0;
 	deltaY = y1 - y0;
@@ -125,9 +126,9 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		slope = (float) deltaY / (float) deltaX;
 	}
 
+	positionOnY0 = y0 - slope * x0;
 	// actors are vertical or on a steep slope
 	if (absDeltaX < absDeltaY) {
-		double positionOnY0 = y0 - slope * x0;
 		for (y = y0 + directionY; y != y1; y += directionY) {
 			x = deltaX == 0 ? x0 : (int) round((y - positionOnY0) / slope);
 			if (map.isCellObstructingView(x, y)) {
@@ -138,7 +139,6 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	}
 	// actors are horizonal or on a gentle slope
 	else {
-		double positionOnY0 = y0 - slope * x0;
 		for (x = x0 + directionX; x != x1; x += directionX) {
 			y = (int) round(slope * x + positionOnY0);
 			if (map.isCellObstructingView(x, y)) {
