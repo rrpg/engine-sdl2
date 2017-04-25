@@ -62,6 +62,9 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 				Terrain::TERRAIN_FLAG_WALKABLE | Terrain::TERRAIN_FLAG_BASE
 			);
 		}
+		else if (TERRAIN_ROCK_NORMAL == type) {
+			terrain->setFlags(Terrain::TERRAIN_FLAG_OBSTRUCTING_VIEW);
+		}
 
 		m_mTerrains[type] = terrain;
 	}
