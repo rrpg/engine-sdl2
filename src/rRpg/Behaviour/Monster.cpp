@@ -41,17 +41,29 @@ void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const unsigned i
 
 	// larger Y, move vertically to close the distance
 	if (std::abs(xActor - xTarget) < std::abs(yActor - yTarget)) {
-		// instead of doint -1 (which asks for a cast)
-		yDest += (yActor < yTarget) ? UINT_MAX : 1;
-	}
-	// larger X, move horizontally to close the distance
-	else {
-		// instead of doint -1 (which asks for a cast)
-		xDest += (xActor < xTarget) ? UINT_MAX : 1;
+		if (yActor < yTarget) {
+			++yDest;
+		}
+		else {
+			--yDest;
+		}
+		executed = command.execute(actor, engine->getMap(), xDest, yDest);
+		yDest = yActor;
 	}
 
-	executed = command.execute(actor, engine->getMap(), xDest, yDest);
+	// larger X or could not move vertically, move horizontally to close the
+	// distance
+	if (!executed) {
+		if (xActor < xTarget) {
+			++xDest;
+		}
+		else {
+			--xDest;
+		}
+		executed = command.execute(actor, engine->getMap(), xDest, yDest);
+	}
 
+	// If could not move towards the player, then move randomly
 	if (!executed) {
 		_executeRandomMove(engine, actor);
 	}
