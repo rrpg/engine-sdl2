@@ -6,7 +6,6 @@
 class GameOverState : public GameState {
 	private:
 	static const std::string s_stateID;
-	uint32_t m_iTimestampLastCommand = 0;
 
 	public:
 	virtual void update();
