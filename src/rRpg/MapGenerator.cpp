@@ -1,4 +1,5 @@
 #include "MapGenerator.hpp"
+#include "CaveRoom.hpp"
 #include "Terrain.hpp"
 #include <limits.h>
 
@@ -23,6 +24,8 @@ void MapGenerator::_generateCave(Map &map) {
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
 		_automatonStep(map);
 	}
+
+	_joinRooms(map);
 
 	_dispatchEnemies(map, 15);
 	_setStartPoint(map);
@@ -86,6 +89,10 @@ void MapGenerator::_automatonStep(Map &map) {
 	}
 
 	map.setGrid(tmpGrid);
+}
+
+void MapGenerator::_joinRooms(Map &map) {
+	std::vector<CaveRoom::S_Room> rooms = CaveRoom::findRooms(map);
 }
 
 int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {

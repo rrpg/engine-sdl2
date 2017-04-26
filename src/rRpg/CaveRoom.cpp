@@ -1,0 +1,47 @@
+#include "CaveRoom.hpp"
+
+void _floodFill(Map &map, std::vector<char> &dispatchedCells, CaveRoom::S_Room &currentRoom, int x, int y);
+
+std::vector<CaveRoom::S_Room> CaveRoom::findRooms(Map &map) {
+	std::vector<CaveRoom::S_Room> rooms;
+	const size_t nbCells = map.getGrid()->size();
+	int mapWidth = map.getWidth();
+	std::vector<char> dispatchedCells(nbCells, 0);
+	size_t nextCellToInspect = 0;
+
+	while (nextCellToInspect < nbCells) {
+		int x = (int) nextCellToInspect % mapWidth,
+			y = (int) nextCellToInspect / mapWidth;
+		if (dispatchedCells[nextCellToInspect] == 0 && map.isCellWalkable(x, y)) {
+			CaveRoom::S_Room nextRoom;
+			_floodFill(map, dispatchedCells, nextRoom, x, y);
+			rooms.push_back(nextRoom);
+		}
+
+		++nextCellToInspect;
+	}
+
+	return rooms;
+}
+
+void _floodFill(Map &map, std::vector<char> &dispatchedCells, CaveRoom::S_Room &currentRoom, int x, int y) {
+	size_t cellIndex = map.getTileIndex(x, y);
+	if (dispatchedCells[cellIndex] == 1 || !map.isCellWalkable(x, y)) {
+		return;
+	}
+
+	currentRoom.cells.push_back(cellIndex);
+	dispatchedCells[cellIndex] = 1;
+	if (x > 0) {
+		_floodFill(map, dispatchedCells, currentRoom, x - 1, y);
+	}
+	if (x < map.getWidth() - 1) {
+		_floodFill(map, dispatchedCells, currentRoom, x + 1, y);
+	}
+	if (y > 0) {
+		_floodFill(map, dispatchedCells, currentRoom, x, y - 1);
+	}
+	if (y < map.getHeight() - 1) {
+		_floodFill(map, dispatchedCells, currentRoom, x, y + 1);
+	}
+}
