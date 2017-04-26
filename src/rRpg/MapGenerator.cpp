@@ -122,9 +122,7 @@ bool MapGenerator::_findClosestWalkableCell(
 	unsigned int &yOut
 ) {
 	unsigned int cellIndex = y * map.getWidth() + x;
-	if (y < 1 || x < 1 || (unsigned) y > map.getHeight() - 1 || (unsigned) x > map.getWidth() - 1
-		|| visited[cellIndex]
-	) {
+	if (y > map.getHeight() - 1 || x > map.getWidth() - 1 || visited[cellIndex]) {
 		return false;
 	}
 
