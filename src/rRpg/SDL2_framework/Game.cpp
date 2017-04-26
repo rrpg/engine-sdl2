@@ -264,5 +264,5 @@ bool Game::_initServiceProvider() {
 
 void Game::addResource(std::string resourceName, std::string resourcePath) {
 	m_vResourceFiles.push_back(std::make_pair(resourceName, resourcePath));
-	m_iNbFiles = (int) m_vResourceFiles.size();
+	m_iNbFiles = m_vResourceFiles.size();
 }

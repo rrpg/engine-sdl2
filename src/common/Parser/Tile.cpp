@@ -45,10 +45,10 @@ bool TileParser::_parseLine(const char *line) {
 		for (int pad = sizeTilesetName; pad < MAX_LENGTH_TILESET_NAME; ++pad) {
 			fputc('0', m_file);
 		}
-		fputc(tileWidth, m_file);
-		fputc(tileHeight, m_file);
-		fputc(tilesetX, m_file);
-		fputc(tilesetY, m_file);
+		fputc((char) tileWidth, m_file);
+		fputc((char) tileHeight, m_file);
+		fputc((char) tilesetX, m_file);
+		fputc((char) tilesetY, m_file);
 	}
 
 	return retValue;

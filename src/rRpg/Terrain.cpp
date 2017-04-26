@@ -70,6 +70,6 @@ bool Terrain::hasFlag(unsigned int flag) {
 	return (m_iFlags & flag) == flag;
 }
 
-E_TerrainTile Terrain::getTerrainTile(E_TerrainType type, int index) {
+E_TerrainTile Terrain::getTerrainTile(E_TerrainType type, unsigned int index) {
 	return s_mTerrainMasks[type][index];
 }

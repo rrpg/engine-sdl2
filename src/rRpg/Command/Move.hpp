@@ -5,7 +5,7 @@
 
 class MoveCommand : public Command {
 	public:
-	bool execute(Actor* actor, Map &map, int xDest, int yDest);
+	bool execute(Actor* actor, Map &map, unsigned int xDest, unsigned int yDest);
 };
 
 #endif

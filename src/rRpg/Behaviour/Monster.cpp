@@ -1,3 +1,4 @@
+#include <limits.h>
 #include "Monster.hpp"
 #include "../Command/Move.hpp"
 #include "../Command/Attack.hpp"
@@ -30,27 +31,39 @@ bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	return updated;
 }
 
-void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const int xTarget, const int yTarget) {
+void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const unsigned int xTarget, const unsigned int yTarget) {
 	bool executed = false;
-	int xActor = actor->getX(),
+	unsigned int xActor = actor->getX(),
 		yActor = actor->getY(),
-		deltaX = xActor - xTarget,
-		deltaY = yActor - yTarget,
 		xDest = xActor,
 		yDest = yActor;
 	MoveCommand command = MoveCommand();
 
 	// larger Y, move vertically to close the distance
-	if (abs(deltaX) < abs(deltaY)) {
-		yDest -= (deltaY > 0) - (deltaY < 0);
-	}
-	// larger X, move horizontally to close the distance
-	else {
-		xDest -= (deltaX > 0) - (deltaX < 0);
+	if (std::abs(xActor - xTarget) < std::abs(yActor - yTarget)) {
+		if (yActor < yTarget) {
+			++yDest;
+		}
+		else {
+			--yDest;
+		}
+		executed = command.execute(actor, engine->getMap(), xDest, yDest);
+		yDest = yActor;
 	}
 
-	executed = command.execute(actor, engine->getMap(), xDest, yDest);
+	// larger X or could not move vertically, move horizontally to close the
+	// distance
+	if (!executed) {
+		if (xActor < xTarget) {
+			++xDest;
+		}
+		else {
+			--xDest;
+		}
+		executed = command.execute(actor, engine->getMap(), xDest, yDest);
+	}
 
+	// If could not move towards the player, then move randomly
 	if (!executed) {
 		_executeRandomMove(engine, actor);
 	}
@@ -59,7 +72,7 @@ void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const int xTarge
 void BehaviourMonster::_executeRandomMove(rRpg *engine, Actor *actor) {
 	MoveCommand command = MoveCommand();
 	bool commandExecuted = false;
-	int directions[4] = {0, 1, 2, 3},
+	unsigned int directions[4] = {0, 1, 2, 3},
 		xDest = actor->getX(),
 		yDest = actor->getY();
 	std::random_shuffle(directions, directions + 4);

@@ -84,8 +84,8 @@ bool rRpg::loadTaxonomy(std::string filePath) {
 
 void rRpg::initialiseHero() {
 	m_hero = m_actorFactory.createHero();
-	m_hero->setX((int) m_map.getStartPoint().getX());
-	m_hero->setY((int) m_map.getStartPoint().getY());
+	m_hero->setX((unsigned int) m_map.getStartPoint().getX());
+	m_hero->setY((unsigned int) m_map.getStartPoint().getY());
 	m_map.addActor(m_hero);
 }
 
@@ -110,7 +110,7 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_map.render(camera, m_hero->getX(), m_hero->getY());
+	m_map.render(camera, (signed) m_hero->getX(), (signed) m_hero->getY());
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }
