@@ -17,6 +17,8 @@ struct EnumClassHash {
 	}
 };
 
+const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
+
 class Map {
 	private:
 	int m_iWidth = 0;
@@ -51,7 +53,7 @@ class Map {
 
 	void clearDeadActors();
 
-	bool isCellWalkable(int x, int y);
+	bool isCellWalkable(int x, int y, unsigned int walkableConstraint = 0);
 	bool isCellObstructingView(int x, int y);
 	Vector2D getStartPoint();
 	int getDisplayTileWidth();
