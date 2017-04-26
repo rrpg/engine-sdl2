@@ -151,8 +151,8 @@ unsigned int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
 	E_TerrainType type = getTile(x, y);
 	int nbNeighbours = (y == 0 || getTile(x, y - 1) == type) // north
 		+ 2 * (x == 0 || getTile(x - 1, y) == type) // west
-		+ (1 << 2) * (x == m_iWidth || getTile(x + 1, y) == type) // east
-		+ (1 << 3) * (y == m_iHeight || getTile(x, y + 1) == type); // south
+		+ (1 << 2) * (x == m_iWidth - 1 || getTile(x + 1, y) == type) // east
+		+ (1 << 3) * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
 
 	return (unsigned) nbNeighbours;
 }
