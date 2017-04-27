@@ -111,6 +111,26 @@ void MapGenerator::_setStartPoint(Map &map) {
 	map.setStartPoint((float) x, (float) y);
 }
 
+std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(Map &map, const int x, const int y) {
+	int neighbourDirections[][2] = {
+		{-1, 0},
+		{1, 0},
+		{0, -1},
+		{0, 1}
+	};
+
+	std::vector<t_coordinates> neighbours = {};
+	for (int n = 0; n < 4; ++n) {
+		int xN = x + neighbourDirections[n][0],
+			yN = y + neighbourDirections[n][1];
+		if (map.isCellWalkable(xN, yN)) {
+			neighbours.push_back(std::make_pair(xN, yN));
+		}
+	}
+
+	return neighbours;
+}
+
 bool MapGenerator::_findClosestWalkableCell(
 	Map &map,
 	const int x,
@@ -125,37 +145,17 @@ bool MapGenerator::_findClosestWalkableCell(
 	}
 
 	visited[cellIndex] = true;
-	int neighbours[][2] = {
-		{-1, 0},
-		{1, 0},
-		{0, -1},
-		{0, 1}
-	};
-
-	for (int n = 0; n < 4; ++n) {
-		if (map.isCellWalkable(x + neighbours[n][0], y + neighbours[n][1])) {
-			xOut = x + neighbours[n][0];
-			yOut = y + neighbours[n][1];
-			return true;
-		}
+	std::vector<t_coordinates> neighbours = _findWalkableNeighbours(map, x, y);
+	if (neighbours.size()) {
+		xOut = neighbours[0].first;
+		yOut = neighbours[0].second;
+		return true;
 	}
 
-	for (int n = 0; n < 4; ++n) {
-		bool found = _findClosestWalkableCell(
-			map,
-			x + neighbours[n][0],
-			y + neighbours[n][1],
-			visited,
-			xOut,
-			yOut
-		);
-
-		if (found) {
-			return true;
-		}
-	}
-
-	return false;
+	return _findClosestWalkableCell(map, x + 1, y, visited, xOut, yOut)
+		|| _findClosestWalkableCell(map, x - 1, y, visited, xOut, yOut)
+		|| _findClosestWalkableCell(map, x, y + 1, visited, xOut, yOut)
+		|| _findClosestWalkableCell(map, x, y - 1, visited, xOut, yOut);
 }
 
 void MapGenerator::_dispatchEnemies(Map &map, const int nbMaxEnemies) {

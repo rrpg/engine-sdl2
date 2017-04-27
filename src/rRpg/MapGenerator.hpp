@@ -13,6 +13,7 @@ class MapGenerator {
 	void _automatonStep(Map &map);
 	int _getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType);
 	void _setStartPoint(Map &map);
+	std::vector<t_coordinates> _findWalkableNeighbours(Map &map, const int x, const int y);
 	bool _findClosestWalkableCell(
 		Map &map,
 		const int x,
