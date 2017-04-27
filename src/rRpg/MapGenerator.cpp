@@ -2,6 +2,7 @@
 #include "CaveRoom.hpp"
 #include "Terrain.hpp"
 #include <limits.h>
+#include <algorithm>
 
 MapGenerator::MapGenerator() {
 }
@@ -91,8 +92,32 @@ void MapGenerator::_automatonStep(Map &map) {
 	map.setGrid(tmpGrid);
 }
 
+std::vector<CaveRoom::S_Room>::iterator MapGenerator::_largestRoom(std::vector<CaveRoom::S_Room> &rooms) {
+	return std::max_element(
+		std::begin(rooms),
+		std::end(rooms),
+		[] (const CaveRoom::S_Room & p1, const CaveRoom::S_Room & p2) {
+			return p1.cells.size() < p2.cells.size();
+		}
+	);
+}
+
 void MapGenerator::_joinRooms(Map &map) {
-	CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
+	bool enoughRoom = false;
+	do {
+		CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
+		auto largest = _largestRoom(roomCollection.rooms);
+		CaveRoom::S_Room largestRoom = *largest;
+
+		if ((double) largestRoom.cells.size() / (map.getWidth() * map.getHeight()) >= 0.4200) {
+			enoughRoom = true;
+		}
+		else {
+			roomCollection.rooms.erase(largest);
+			CaveRoom::S_Room secondLargestRoom = *_largestRoom(roomCollection.rooms);
+			// @TODO merge largestRoom and secondLargestRoom
+		}
+	} while (false /*!enoughRoom*/);
 }
 
 int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {

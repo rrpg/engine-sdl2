@@ -2,6 +2,7 @@
 #define __MAP_GENERATOR__
 
 #include <string>
+#include <vector>
 #include "Map.hpp"
 
 enum E_MapType {CAVE};
@@ -12,6 +13,7 @@ class MapGenerator {
 	void _initialiseAutomaton(Map &map);
 	void _automatonStep(Map &map);
 	void _joinRooms(Map &map);
+	std::vector<CaveRoom::S_Room>::iterator _largestRoom(std::vector<CaveRoom::S_Room> &rooms);
 	int _getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType);
 	void _setStartPoint(Map &map);
 	std::vector<t_coordinates> _findWalkableNeighbours(Map &map, const int x, const int y);
