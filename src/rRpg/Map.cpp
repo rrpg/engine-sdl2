@@ -128,7 +128,7 @@ void Map::addEnemySpawnableCell(char x, char y) {
 	m_vEnemySpawnableCells.push_back(std::make_pair(x, y));
 }
 
-std::vector<std::pair<char, char>> Map::getEnemySpawnableCells() {
+std::vector<t_coordinates> Map::getEnemySpawnableCells() {
 	return m_vEnemySpawnableCells;
 }
 
