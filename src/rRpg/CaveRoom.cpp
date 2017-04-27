@@ -2,8 +2,8 @@
 
 void _floodFill(Map &map, std::vector<char> &dispatchedCells, CaveRoom::S_Room &currentRoom, int x, int y);
 
-std::vector<CaveRoom::S_Room> CaveRoom::findRooms(Map &map) {
-	std::vector<CaveRoom::S_Room> rooms;
+CaveRoom::S_RoomCollection CaveRoom::findRooms(Map &map) {
+	CaveRoom::S_RoomCollection roomCollection;
 	const size_t nbCells = map.getGrid()->size();
 	int mapWidth = map.getWidth();
 	std::vector<char> dispatchedCells(nbCells, 0);
@@ -15,13 +15,13 @@ std::vector<CaveRoom::S_Room> CaveRoom::findRooms(Map &map) {
 		if (dispatchedCells[nextCellToInspect] == 0 && map.isCellWalkable(x, y)) {
 			CaveRoom::S_Room nextRoom;
 			_floodFill(map, dispatchedCells, nextRoom, x, y);
-			rooms.push_back(nextRoom);
+			roomCollection.rooms.push_back(nextRoom);
 		}
 
 		++nextCellToInspect;
 	}
 
-	return rooms;
+	return roomCollection;
 }
 
 void _floodFill(Map &map, std::vector<char> &dispatchedCells, CaveRoom::S_Room &currentRoom, int x, int y) {

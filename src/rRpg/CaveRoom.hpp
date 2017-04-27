@@ -9,7 +9,11 @@ typedef struct {
 	std::vector<size_t> cells = {};
 } S_Room;
 
-std::vector<S_Room> findRooms(Map &map);
+typedef struct {
+	std::vector<S_Room> rooms = {};
+} S_RoomCollection;
+
+S_RoomCollection findRooms(Map &map);
 
 }
 

@@ -92,7 +92,7 @@ void MapGenerator::_automatonStep(Map &map) {
 }
 
 void MapGenerator::_joinRooms(Map &map) {
-	std::vector<CaveRoom::S_Room> rooms = CaveRoom::findRooms(map);
+	CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
 }
 
 int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {
