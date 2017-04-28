@@ -1,5 +1,4 @@
 #include "MapGenerator.hpp"
-#include "CaveRoom.hpp"
 #include "Terrain.hpp"
 #include <limits.h>
 #include <algorithm>
@@ -115,9 +114,60 @@ void MapGenerator::_joinRooms(Map &map) {
 		else {
 			roomCollection.rooms.erase(largest);
 			CaveRoom::S_Room secondLargestRoom = *_largestRoom(roomCollection.rooms);
-			// @TODO merge largestRoom and secondLargestRoom
+			// merge largestRoom and secondLargestRoom
+			_digBetweenRooms(
+				roomCollection,
+				map,
+				largestRoom.cells[(size_t) rand() % largestRoom.cells.size()],
+				secondLargestRoom.cells[(size_t) rand() % secondLargestRoom.cells.size()]
+			);
 		}
-	} while (false /*!enoughRoom*/);
+	} while (!enoughRoom);
+}
+
+size_t MapGenerator::_digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, Map &map, size_t cell1Index, size_t cell2Index) {
+	int xStart = (signed) cell1Index % map.getWidth(),
+		yStart = (signed) cell1Index / map.getWidth(),
+		xEnd = (signed) cell2Index % map.getWidth(),
+		yEnd = (signed) cell2Index / map.getWidth(),
+		xWay = (xStart < xEnd) - (xStart > xEnd),
+		yWay = (yStart < yEnd) - (yStart > yEnd),
+		xCurr = xStart,
+		yCurr = yStart;
+	size_t cellStart = map.getTileIndex(xStart, yStart),
+		cellIndex;
+
+	std::vector<t_coordinates> cellsToDig = {};
+	while (xCurr != xEnd || yCurr != yEnd) {
+		cellIndex = map.getTileIndex(xCurr, yCurr);
+		// wall found, add it to the list of cells to dig
+		if (!map.isCellWalkable(xCurr, yCurr)) {
+			cellsToDig.push_back({xCurr, yCurr});
+			// @TODO stop if one of the neighbour is a soil different than the
+			// start cell
+		}
+		// we are back in the first room
+		else if (roomCollection.cellRoomMapping[cellIndex] == roomCollection.cellRoomMapping[cellStart]) {
+			cellsToDig.clear();
+		}
+		else {
+			break;
+		}
+
+		if (xCurr != xEnd) {
+			xCurr += xWay;
+		}
+		else {
+			yCurr += yWay;
+		}
+	}
+
+	for (auto cell: cellsToDig) {
+		// add cell to room
+		map.setTile(cell.first, cell.second, TERRAIN_SOIL_NORMAL);
+	}
+
+	return cellIndex;
 }
 
 int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {
