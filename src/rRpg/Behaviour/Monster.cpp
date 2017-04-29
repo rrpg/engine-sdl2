@@ -31,9 +31,9 @@ bool BehaviourMonster::update(rRpg *engine, Actor *actor) {
 	return updated;
 }
 
-void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const unsigned int xTarget, const unsigned int yTarget) {
+void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const int xTarget, const int yTarget) {
 	bool executed = false;
-	unsigned int xActor = actor->getX(),
+	int xActor = actor->getX(),
 		yActor = actor->getY(),
 		xDest = xActor,
 		yDest = yActor;
@@ -72,7 +72,7 @@ void BehaviourMonster::_executeMove(rRpg *engine, Actor *actor, const unsigned i
 void BehaviourMonster::_executeRandomMove(rRpg *engine, Actor *actor) {
 	MoveCommand command = MoveCommand();
 	bool commandExecuted = false;
-	unsigned int directions[4] = {0, 1, 2, 3},
+	int directions[4] = {0, 1, 2, 3},
 		xDest = actor->getX(),
 		yDest = actor->getY();
 	std::random_shuffle(directions, directions + 4);

@@ -7,14 +7,14 @@ void HUD::render(Game *game, Actor *hero) {
 	int maxHealthWidth = game->getScreenWidth() / 4 - leftMargin;
 	int displayShiftX = leftMargin;
 	int displayShiftY = game->getScreenHeight() - 10 - HP_HEIGHT;
-	unsigned int health = 0;
+	int health = 0;
 	if (hero->getHealth() > 0) {
-		health = (unsigned) hero->getHealth();
+		health = hero->getHealth();
 	}
 	SDL_Rect r;
 	r.x = displayShiftX;
 	r.y = displayShiftY;
-	r.w = (signed) ((unsigned) maxHealthWidth * health / hero->getMaxHealth());
+	r.w = maxHealthWidth * health / hero->getMaxHealth();
 	r.h = HP_HEIGHT;
 	SDL_SetRenderDrawColor(game->getRenderer(), 255, 0, 0, 255);
 	SDL_RenderFillRect(game->getRenderer(), &r);

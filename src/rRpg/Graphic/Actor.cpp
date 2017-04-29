@@ -57,9 +57,9 @@ void GraphicActor::_renderActor(int displayShiftX, int displayShiftY, Actor *act
 void GraphicActor::_renderHP(int displayShiftX, int displayShiftY, Actor *actor) {
 	int xScreen = (signed) actor->getX() * TILE_WIDTH + displayShiftX;
 	int yScreen = (signed) actor->getY() * TILE_HEIGHT + displayShiftY;
-	unsigned int health = 0;
+	int health = 0;
 	if (actor->getHealth() > 0) {
-		health = (unsigned) actor->getHealth();
+		health = actor->getHealth();
 	}
 	SDL_Rect r;
 	r.x = xScreen;

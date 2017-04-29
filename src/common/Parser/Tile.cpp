@@ -30,10 +30,10 @@ TileParser::~TileParser() {
 bool TileParser::_parseLine(const char *line) {
 	bool retValue = true;
 	char tileset[ResourceParser::MAX_CHAR_RESOURCE_NAME];
-	unsigned int tileWidth, tileHeight, tilesetX, tilesetY;
+	int tileWidth, tileHeight, tilesetX, tilesetY;
 	int result = sscanf(
 		line,
-		"%s %u %u %u %u\n",
+		"%s %d %d %d %d\n",
 		tileset, &tileWidth, &tileHeight, &tilesetX, &tilesetY);
 	if (result != 5) {
 		retValue = false;

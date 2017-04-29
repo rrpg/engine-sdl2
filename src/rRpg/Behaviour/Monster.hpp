@@ -6,7 +6,7 @@
 
 class BehaviourMonster : public Behaviour {
 	private:
-	void _executeMove(rRpg *engine, Actor *actor, const unsigned int x, const unsigned int y);
+	void _executeMove(rRpg *engine, Actor *actor, const int x, const int y);
 	void _executeRandomMove(rRpg *engine, Actor *actor);
 
 	public:

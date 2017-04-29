@@ -1,6 +1,6 @@
 #include "ActorRace.hpp"
 
-ActorRace::ActorRace(unsigned int level1HP, unsigned int level1Defence, unsigned int level1Attack) :
+ActorRace::ActorRace(int level1HP, int level1Defence, int level1Attack) :
 	m_iLevel1HP(level1HP),
 	m_iLevel1Defence(level1Defence),
 	m_iLevel1Attack(level1Attack)
@@ -20,33 +20,33 @@ void ActorRace::addTilesetName(std::string name) {
 	m_vTilesetNames.push_back(name);
 }
 
-void ActorRace::setTimePerFrame(unsigned int timePerFrame) {
+void ActorRace::setTimePerFrame(int timePerFrame) {
 	m_iTimePerFrame = timePerFrame;
 }
 
-void ActorRace::setSpriteX(unsigned int spriteX) {
+void ActorRace::setSpriteX(int spriteX) {
 	m_iSpriteX = spriteX;
 }
 
-void ActorRace::setSpriteY(unsigned int spriteY) {
+void ActorRace::setSpriteY(int spriteY) {
 	m_iSpriteY = spriteY;
 }
 
 std::string ActorRace::getTilesetName() {
-	unsigned int tilesetIndex = 0;
+	int tilesetIndex = 0;
 	if (m_iTimePerFrame) {
 		uint32_t currTime = SDL_GetTicks();
-		unsigned int durationAnimationCycle = m_iTimePerFrame * (unsigned int) m_vTilesetNames.size();
-		unsigned int timeInCycle = currTime % durationAnimationCycle;
+		int durationAnimationCycle = m_iTimePerFrame * (int) m_vTilesetNames.size();
+		int timeInCycle = (int) currTime % durationAnimationCycle;
 		tilesetIndex = timeInCycle / m_iTimePerFrame;
 	}
-	return m_vTilesetNames[tilesetIndex];
+	return m_vTilesetNames[(size_t) tilesetIndex];
 }
 
-unsigned int ActorRace::getSpriteX() {
+int ActorRace::getSpriteX() {
 	return m_iSpriteX;
 }
 
-unsigned int ActorRace::getSpriteY() {
+int ActorRace::getSpriteY() {
 	return m_iSpriteY;
 }

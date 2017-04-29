@@ -7,24 +7,24 @@
 
 class ActorRace {
 	private:
-	unsigned int m_iLevel1HP;
-	unsigned int m_iLevel1Defence;
-	unsigned int m_iLevel1Attack;
+	int m_iLevel1HP;
+	int m_iLevel1Defence;
+	int m_iLevel1Attack;
 	std::vector<std::string> m_vTilesetNames = {};
-	unsigned int m_iTimePerFrame = 0;
-	unsigned int m_iSpriteX = 0;
-	unsigned int m_iSpriteY = 0;
+	int m_iTimePerFrame = 0;
+	int m_iSpriteX = 0;
+	int m_iSpriteY = 0;
 
 	public:
-	ActorRace(unsigned int level1HP, unsigned int level1Defence, unsigned int level1Attack);
+	ActorRace(int level1HP, int level1Defence, int level1Attack);
 	Actor* createActor();
 	void addTilesetName(std::string name);
-	void setTimePerFrame(unsigned int timePerFrame);
-	void setSpriteX(unsigned int spriteX);
-	void setSpriteY(unsigned int spriteY);
+	void setTimePerFrame(int timePerFrame);
+	void setSpriteX(int spriteX);
+	void setSpriteY(int spriteY);
 	std::string getTilesetName();
-	unsigned int getSpriteX();
-	unsigned int getSpriteY();
+	int getSpriteX();
+	int getSpriteY();
 };
 
 #endif

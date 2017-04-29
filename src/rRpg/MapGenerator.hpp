@@ -11,21 +11,21 @@ class MapGenerator {
 	void _generateCave(Map &map);
 	void _initialiseAutomaton(Map &map);
 	void _automatonStep(Map &map);
-	unsigned int _getCountAliveNeighbours(Map &map, unsigned int i, unsigned int j, E_TerrainType aliveType);
+	int _getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType);
 	void _setStartPoint(Map &map);
 	bool _findClosestWalkableCell(
 		Map &map,
-		const unsigned int x,
-		const unsigned int y,
+		const int x,
+		const int y,
 		std::vector<bool> &visited,
-		unsigned int &xOut,
-		unsigned int &yOut
+		int &xOut,
+		int &yOut
 	);
-	void _dispatchEnemies(Map &map, const unsigned int nbMaxEnemies);
+	void _dispatchEnemies(Map &map, const int nbMaxEnemies);
 
 	public:
 	MapGenerator();
-	Map generate(E_MapType type, unsigned short width, unsigned short height);
+	Map generate(E_MapType type, short width, short height);
 };
 
 #endif

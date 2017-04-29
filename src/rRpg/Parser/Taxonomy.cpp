@@ -10,11 +10,11 @@ TaxonomyParser::TaxonomyParser(ActorFactory &actorFactory) : m_actorFactory(acto
 bool TaxonomyParser::_parseLine(const char *line) {
 	bool retValue = true;
 	char tileset[ResourceParser::MAX_CHAR_RESOURCE_NAME];
-	unsigned int timePerFrame,raceLevel1HP, raceLevel1Defence, raceLevel1Attack,
+	int timePerFrame,raceLevel1HP, raceLevel1Defence, raceLevel1Attack,
 		spriteX, spriteY;
 	int result = sscanf(
 		line,
-		"%s %u %u %u %u %u %u\n",
+		"%s %d %d %d %d %d %d\n",
 		tileset, &timePerFrame, &spriteX, &spriteY,
 		&raceLevel1HP, &raceLevel1Defence, &raceLevel1Attack
 	);
