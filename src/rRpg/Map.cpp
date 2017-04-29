@@ -89,8 +89,7 @@ void Map::initializeGrid(E_TerrainType type) {
 }
 
 void Map::setTile(unsigned int x, unsigned int y, E_TerrainType type) {
-	unsigned int gridIndex = y * m_iWidth + x;
-	m_vGrid[gridIndex] = type;
+	m_vGrid[getTileIndex(x, y)] = type;
 }
 
 std::vector<E_TerrainType>* Map::getGrid() {
@@ -102,7 +101,11 @@ void Map::setGrid(std::vector<E_TerrainType> grid) {
 }
 
 E_TerrainType Map::getTile(unsigned int x, unsigned int y) {
-	return m_vGrid[y * m_iWidth + x];
+	return m_vGrid[getTileIndex(x, y)];
+}
+
+size_t Map::getTileIndex(unsigned int x, unsigned int y) {
+	return y * m_iWidth + x;
 }
 
 unsigned int Map::getWidth() {

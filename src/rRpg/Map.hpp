@@ -63,6 +63,7 @@ class Map {
 	unsigned int getHeight();
 
 	E_TerrainType getTile(unsigned int x, unsigned int y);
+	size_t getTileIndex(int x, int y);
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
 	Actor *getActorAt(unsigned int x, unsigned int y);

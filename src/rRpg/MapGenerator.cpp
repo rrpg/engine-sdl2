@@ -59,25 +59,26 @@ void MapGenerator::_automatonStep(Map &map) {
 	// the edges will always be of rock
 	for (unsigned int j = 0; j < mapHeight; ++j) {
 		for (unsigned int i = 0; i < mapWidth; ++i) {
+			size_t index = map.getTileIndex(i, j);
 			if (j == 0 || i == 0 || j == mapHeight - 1 || i == mapWidth - 1) {
-				tmpGrid[j * mapWidth + i] = TERRAIN_ROCK_NORMAL;
+				tmpGrid[index] = TERRAIN_ROCK_NORMAL;
 				continue;
 			}
 			unsigned int nbAlives = _getCountAliveNeighbours(map, i, j, aliveType);
 			if (map.getTile(i, j) == aliveType) {
 				if (nbAlives < deathLimit) {
-					tmpGrid[j * mapWidth + i] = deadType;
+					tmpGrid[index] = deadType;
 				}
 				else {
-					tmpGrid[j * mapWidth + i] = aliveType;
+					tmpGrid[index] = aliveType;
 				}
 			}
 			else {
 				if (nbAlives > birthLimit) {
-					tmpGrid[j * mapWidth + i] = aliveType;
+					tmpGrid[index] = aliveType;
 				}
 				else {
-					tmpGrid[j * mapWidth + i] = deadType;
+					tmpGrid[index] = deadType;
 				}
 			}
 		}
@@ -121,7 +122,7 @@ bool MapGenerator::_findClosestWalkableCell(
 	unsigned int &xOut,
 	unsigned int &yOut
 ) {
-	unsigned int cellIndex = y * map.getWidth() + x;
+	unsigned int cellIndex = map.getTileIndex(x, y);
 	if (y > map.getHeight() - 1 || x > map.getWidth() - 1 || visited[cellIndex]) {
 		return false;
 	}
