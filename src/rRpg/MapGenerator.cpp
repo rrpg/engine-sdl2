@@ -104,15 +104,11 @@ int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType
 void MapGenerator::_setStartPoint(Map &map) {
 	int x = (rand() % map.getWidth()),
 		y = (rand() % map.getHeight());
-	if (map.isCellWalkable(x, y)) {
-		map.setStartPoint((float) x, (float) y);
+	if (!map.isCellWalkable(x, y)) {
+		std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
+		_findClosestWalkableCell(map, x, y, visited, x, y);
 	}
-	else {
-		std::vector<bool> visited(map.getWidth() * map.getHeight(), false);
-		unsigned int xOut = 0, yOut = 0;
-		_findClosestWalkableCell(map, x, y, visited, xOut, yOut);
-		map.setStartPoint((float) xOut, (float) yOut);
-	}
+	map.setStartPoint((float) x, (float) y);
 }
 
 bool MapGenerator::_findClosestWalkableCell(
