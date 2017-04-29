@@ -84,8 +84,8 @@ bool rRpg::loadTaxonomy(std::string filePath) {
 
 void rRpg::initialiseHero() {
 	m_hero = m_actorFactory.createHero();
-	m_hero->setX((unsigned int) m_map.getStartPoint().getX());
-	m_hero->setY((unsigned int) m_map.getStartPoint().getY());
+	m_hero->setX((int) m_map.getStartPoint().getX());
+	m_hero->setY((int) m_map.getStartPoint().getY());
 	m_map.addActor(m_hero);
 }
 

@@ -37,19 +37,19 @@ Actor::~Actor() {
 }
 
 void Actor::setHealth(int health) { m_iHealth = health; }
-void Actor::setMaxHealth(unsigned int maxHealth) { m_iMaxHealth = maxHealth; }
-void Actor::setDefence(unsigned int defence) { m_iDefence = defence; }
-void Actor::setAttack(unsigned int attack) { m_iAttack = attack; }
+void Actor::setMaxHealth(int maxHealth) { m_iMaxHealth = maxHealth; }
+void Actor::setDefence(int defence) { m_iDefence = defence; }
+void Actor::setAttack(int attack) { m_iAttack = attack; }
 int Actor::getHealth() { return m_iHealth; }
-unsigned int Actor::getMaxHealth() { return m_iMaxHealth; }
-unsigned int Actor::getDefence() { return m_iDefence; }
-unsigned int Actor::getAttack() { return m_iAttack; }
+int Actor::getMaxHealth() { return m_iMaxHealth; }
+int Actor::getDefence() { return m_iDefence; }
+int Actor::getAttack() { return m_iAttack; }
 
 bool Actor::isDead() {
 	return m_iHealth == 0;
 }
 
-void Actor::setX(unsigned int x) {
+void Actor::setX(int x) {
 	if (x > m_iX) {
 		m_eOrientation = RIGHT;
 	}
@@ -59,9 +59,9 @@ void Actor::setX(unsigned int x) {
 	m_iX = x;
 
 }
-void Actor::setY(unsigned int y) { m_iY = y; }
-unsigned int Actor::getX() { return m_iX; }
-unsigned int Actor::getY() { return m_iY; }
+void Actor::setY(int y) { m_iY = y; }
+int Actor::getX() { return m_iX; }
+int Actor::getY() { return m_iY; }
 E_ActorOrientation Actor::getOrientation() { return m_eOrientation; }
 ActorRace &Actor::getRace() { return m_race; }
 
@@ -94,7 +94,7 @@ void Actor::render(int displayShiftX, int displayShiftY) {
 }
 
 bool Actor::isNextTo(Actor *actor) {
-	unsigned int x0 = getX(),
+	int x0 = getX(),
 		x1 = actor->getX(),
 		y0 = getY(),
 		y1 = actor->getY();
@@ -104,7 +104,7 @@ bool Actor::isNextTo(Actor *actor) {
 }
 
 bool Actor::seesActor(Map &map, Actor *actor) {
-	unsigned int x0 = getX(),
+	int x0 = getX(),
 		y0 = getY(),
 		x1 = actor->getX(),
 		y1 = actor->getY(),
@@ -123,8 +123,8 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 		return false;
 	}
 
-	directionX = x0 > x1 ? UINT_MAX : 1;
-	directionY = y0 > y1 ? UINT_MAX : 1;
+	directionX = (x0 < x1) - (x0 > x1);
+	directionY = (y0 < y1) - (y0 > y1);
 
 	slope = 0;
 	if (x1 != x0) {
@@ -135,7 +135,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	// actors are vertical or on a steep slope
 	if (absDeltaX < absDeltaY) {
 		for (y = y0 + directionY; y != y1; y += directionY) {
-			x = x1 == x0 ? x0 : (unsigned int) round((y - positionOnY0) / slope);
+			x = x1 == x0 ? x0 : (int) round((y - positionOnY0) / slope);
 			if (map.isCellObstructingView(x, y)) {
 				actor1SeesActor2 = false;
 				break;
@@ -145,7 +145,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	// actors are horizonal or on a gentle slope
 	else {
 		for (x = x0 + directionX; x != x1; x += directionX) {
-			y = (unsigned int) round(slope * x + positionOnY0);
+			y = (int) round(slope * x + positionOnY0);
 			if (map.isCellObstructingView(x, y)) {
 				actor1SeesActor2 = false;
 				break;

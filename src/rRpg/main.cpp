@@ -11,7 +11,7 @@ const int DELAY_TIME = 1000 / FPS;
 
 int main(int argc, char* args[]) {
 	time_t t;
-	srand((unsigned) time(&t));
+	srand((unsigned int) time(&t));
 	Game* g;
 	bool fullScreen = false;
 	char buffer[1024];
@@ -40,7 +40,7 @@ int main(int argc, char* args[]) {
 		// use a delay to cap the fps
 		frameTime = SDL_GetTicks() - frameStart;
 		if (frameTime < DELAY_TIME) {
-			SDL_Delay((unsigned int) (DELAY_TIME - frameTime));
+			SDL_Delay(DELAY_TIME - frameTime);
 		}
 	}
 

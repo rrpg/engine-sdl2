@@ -39,8 +39,8 @@ bool MapParser::_parseLine(const char *line) {
 	line += 2;
 	switch (type) {
 		case 'd':
-			unsigned int w, h;
-			sscanfResult = sscanf(line, "%u %u\n", &w, &h);
+			int w, h;
+			sscanfResult = sscanf(line, "%d %d\n", &w, &h);
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
@@ -66,10 +66,10 @@ bool MapParser::_parseLine(const char *line) {
 			break;
 
 		case 'g':
-			unsigned int tileWidth, tileHeight;
+			int tileWidth, tileHeight;
 			sscanfResult = sscanf(
 				line,
-				"%u %u\n",
+				"%d %d\n",
 				&tileWidth, &tileHeight
 			);
 			if (sscanfResult != 2) {

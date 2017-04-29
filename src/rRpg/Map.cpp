@@ -32,7 +32,7 @@ void Map::clearDeadActors() {
 	}
 }
 
-std::string Map::_getCoordsKey(unsigned int x, unsigned int y) {
+std::string Map::_getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
 
@@ -41,12 +41,12 @@ void Map::setStartPoint(float x, float y) {
 	m_sStartPoint.setY(y);
 }
 
-void Map::setDimensions(unsigned int w, unsigned int h) {
+void Map::setDimensions(int w, int h) {
 	m_iWidth = w;
 	m_iHeight = h;
 }
 
-void Map::setDisplayTileDimensions(unsigned int w, unsigned int h) {
+void Map::setDisplayTileDimensions(int w, int h) {
 	m_iDisplayTileWidth = w;
 	m_iDisplayTileHeight = h;
 }
@@ -82,15 +82,14 @@ S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
 }
 
 void Map::initializeGrid(E_TerrainType type) {
-	unsigned int size = m_iWidth * m_iHeight;
-	for (unsigned int c = 0; c < size; ++c) {
+	int size = m_iWidth * m_iHeight;
+	for (int c = 0; c < size; ++c) {
 		m_vGrid.push_back(type);
 	}
 }
 
-void Map::setTile(unsigned int x, unsigned int y, E_TerrainType type) {
-	unsigned int gridIndex = y * m_iWidth + x;
-	m_vGrid[gridIndex] = type;
+void Map::setTile(int x, int y, E_TerrainType type) {
+	m_vGrid[getTileIndex(x, y)] = type;
 }
 
 std::vector<E_TerrainType>* Map::getGrid() {
@@ -101,23 +100,27 @@ void Map::setGrid(std::vector<E_TerrainType> grid) {
 	m_vGrid = grid;
 }
 
-E_TerrainType Map::getTile(unsigned int x, unsigned int y) {
-	return m_vGrid[y * m_iWidth + x];
+E_TerrainType Map::getTile(int x, int y) {
+	return m_vGrid[getTileIndex(x, y)];
 }
 
-unsigned int Map::getWidth() {
+size_t Map::getTileIndex(int x, int y) {
+	return (size_t) (y * m_iWidth + x);
+}
+
+int Map::getWidth() {
 	return m_iWidth;
 }
 
-unsigned int Map::getHeight() {
+int Map::getHeight() {
 	return m_iHeight;
 }
 
-unsigned int Map::getDisplayTileWidth() {
+int Map::getDisplayTileWidth() {
 	return m_iDisplayTileWidth;
 }
 
-unsigned int Map::getDisplayTileHeight() {
+int Map::getDisplayTileHeight() {
 	return m_iDisplayTileHeight;
 }
 
@@ -132,8 +135,8 @@ std::vector<std::pair<char, char>> Map::getEnemySpawnableCells() {
 void Map::initEnemies(ActorFactory &actorFactory) {
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
 		Actor* enemy = actorFactory.createRandomFoe();
-		enemy->setX((unsigned) enemySpawnCell.first);
-		enemy->setY((unsigned) enemySpawnCell.second);
+		enemy->setX(enemySpawnCell.first);
+		enemy->setY(enemySpawnCell.second);
 		addActor(enemy);
 	}
 }
@@ -147,14 +150,14 @@ void Map::addActor(Actor *actor) {
 	m_mActors[key] = actor;
 }
 
-unsigned int Map::_getSameNeighbours(unsigned int x, unsigned int y) {
+int Map::_getSameNeighbours(int x, int y) {
 	E_TerrainType type = getTile(x, y);
 	int nbNeighbours = (y == 0 || getTile(x, y - 1) == type) // north
 		+ 2 * (x == 0 || getTile(x - 1, y) == type) // west
 		+ (1 << 2) * (x == m_iWidth - 1 || getTile(x + 1, y) == type) // east
 		+ (1 << 3) * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
 
-	return (unsigned) nbNeighbours;
+	return nbNeighbours;
 }
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
@@ -192,12 +195,12 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 				continue;
 			}
 
-			E_TerrainType type = getTile((unsigned) x, (unsigned) y);
+			E_TerrainType type = getTile(x, y);
 			Terrain *terrain = _getTerrain(type);
 			E_TerrainTile tile = Terrain::getTerrainTile(
 				type,
 				terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
-					15 : _getSameNeighbours((unsigned) x, (unsigned) y)
+					15 : _getSameNeighbours(x, y)
 			);
 			S_TileData tileData = _getTerrainTileData(tile);
 			int xScreen = x * tileData.width - shiftX + camera.x,
@@ -226,10 +229,10 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	int displayShiftX = camera.x - (int) shift.getX();
 	int displayShiftY = camera.y - (int) shift.getY();
 	for (auto actor : m_mActors) {
-		if ((visibleArea.x > 0 && actor.second->getX() < (unsigned) visibleArea.x)
-				|| actor.second->getX() > (unsigned) (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && actor.second->getY() < (unsigned) visibleArea.y)
-				|| actor.second->getY() > (unsigned) (visibleArea.y + visibleArea.h)
+		if ((visibleArea.x > 0 && actor.second->getX() < visibleArea.x)
+				|| actor.second->getX() > (visibleArea.x + visibleArea.w)
+			|| (visibleArea.y > 0 && actor.second->getY() < visibleArea.y)
+				|| actor.second->getY() > (visibleArea.y + visibleArea.h)
 		) {
 			continue;
 		}
@@ -241,7 +244,7 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	}
 }
 
-bool Map::isCellWalkable(unsigned int x, unsigned int y) {
+bool Map::isCellWalkable(int x, int y) {
 	if (x >= m_iWidth || y >= m_iHeight) {
 		return false;
 	}
@@ -255,7 +258,7 @@ bool Map::isCellWalkable(unsigned int x, unsigned int y) {
 	return hasWalkableFlag && !hasActorOnCell;
 }
 
-bool Map::isCellObstructingView(unsigned int x, unsigned int y) {
+bool Map::isCellObstructingView(int x, int y) {
 	return _getTerrain(getTile(x, y))->hasFlag(
 		Terrain::TERRAIN_FLAG_OBSTRUCTING_VIEW
 	);
@@ -265,7 +268,7 @@ std::unordered_map<std::string, Actor*> &Map::getActors() {
 	return m_mActors;
 }
 
-Actor *Map::getActorAt(unsigned int x, unsigned int y) {
+Actor *Map::getActorAt(int x, int y) {
 	std::string key = _getCoordsKey(x, y);
 	auto it = m_mActors.find(key);
 	if (it != m_mActors.end()) {
@@ -275,7 +278,7 @@ Actor *Map::getActorAt(unsigned int x, unsigned int y) {
 	return NULL;
 }
 
-void Map::moveActor(Actor *a, unsigned int newX, unsigned int newY) {
+void Map::moveActor(Actor *a, int newX, int newY) {
 	if (newX >= getWidth() || newY >= getHeight()) {
 		return;
 	}

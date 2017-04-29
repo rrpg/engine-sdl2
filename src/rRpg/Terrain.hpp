@@ -54,7 +54,7 @@ class Terrain {
 	static const int TERRAIN_FLAG_OBSTRUCTING_VIEW = 0x2;
 	static const int TERRAIN_FLAG_BASE = 0x4;
 
-	static E_TerrainTile getTerrainTile(E_TerrainType type, unsigned int index);
+	static E_TerrainTile getTerrainTile(E_TerrainType type, int index);
 	void setFlags(unsigned int flags);
 	bool hasFlag(unsigned int flag);
 };

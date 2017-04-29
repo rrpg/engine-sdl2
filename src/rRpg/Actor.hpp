@@ -14,14 +14,14 @@ enum E_ActorOrientation {LEFT, RIGHT};
 class Actor {
 	private:
 	int m_iHealth = 0;
-	unsigned int m_iMaxHealth = 0;
-	unsigned int m_iDefence = 0;
-	unsigned int m_iAttack = 0;
+	int m_iMaxHealth = 0;
+	int m_iDefence = 0;
+	int m_iAttack = 0;
 
 	ActorRace &m_race;
 
-	unsigned int m_iX = 0;
-	unsigned int m_iY = 0;
+	int m_iX = 0;
+	int m_iY = 0;
 	E_ActorOrientation m_eOrientation = LEFT;
 
 	Behaviour* m_behaviour;
@@ -41,20 +41,20 @@ class Actor {
 	ActorRace &getRace();
 
 	int getHealth();
-	unsigned int getMaxHealth();
-	unsigned int getDefence();
-	unsigned int getAttack();
+	int getMaxHealth();
+	int getDefence();
+	int getAttack();
 	void setHealth(int health);
-	void setMaxHealth(unsigned int maxHealth);
-	void setDefence(unsigned int defence);
-	void setAttack(unsigned int attack);
+	void setMaxHealth(int maxHealth);
+	void setDefence(int defence);
+	void setAttack(int attack);
 
 	bool isDead();
 
-	void setX(unsigned int x);
-	void setY(unsigned int y);
-	unsigned int getX();
-	unsigned int getY();
+	void setX(int x);
+	void setY(int y);
+	int getX();
+	int getY();
 	E_ActorOrientation getOrientation();
 
 	void setLastTimeHit();
