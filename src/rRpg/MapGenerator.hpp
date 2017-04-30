@@ -14,6 +14,7 @@ class MapGenerator {
 	void _initialiseAutomaton(Map &map);
 	void _automatonStep(Map &map);
 	void _joinRooms(Map &map);
+	void _cleanRooms(Map &map);
 	std::vector<CaveRoom::S_Room>::iterator _largestRoom(std::vector<CaveRoom::S_Room> &rooms);
 	size_t _digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, Map &map, size_t cell1Index, size_t cell2Index);
 	int _getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType);

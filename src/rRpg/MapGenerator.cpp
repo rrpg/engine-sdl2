@@ -26,6 +26,7 @@ void MapGenerator::_generateCave(Map &map) {
 	}
 
 	_joinRooms(map);
+	_cleanRooms(map);
 
 	_dispatchEnemies(map, 15);
 	_setStartPoint(map);
@@ -169,6 +170,29 @@ size_t MapGenerator::_digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection
 	}
 
 	return cellIndex;
+}
+
+void MapGenerator::_cleanRooms(Map &map) {
+	CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
+	auto largest = _largestRoom(roomCollection.rooms);
+	roomCollection.rooms.erase(largest);
+	for_each(
+		roomCollection.rooms.begin(),
+		roomCollection.rooms.end(),
+		[&](const CaveRoom::S_Room &room) {
+			for_each(
+				room.cells.begin(),
+				room.cells.end(),
+				[&](const unsigned int &cellIndex) {
+					map.setTile(
+						(signed) cellIndex % map.getWidth(),
+						(signed) cellIndex / map.getWidth(),
+						TERRAIN_ROCK_NORMAL
+					);
+				}
+			);
+		}
+	);
 }
 
 int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {
