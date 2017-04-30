@@ -3,6 +3,11 @@
 #include "SDL2_framework/Game.h"
 #include "Parser/Tile.hpp"
 
+std::unordered_map<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = {
+	{DEFAULT, {}},
+	{CAVE, {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}}}
+};
+
 Map::~Map() {
 	for (auto actor : m_mActors) {
 		delete actor.second;
@@ -34,6 +39,14 @@ void Map::clearDeadActors() {
 
 std::string Map::_getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
+}
+
+void Map::setType(E_MapType type) {
+	m_type = type;
+}
+
+E_MapType Map::getType() {
+	return m_type;
 }
 
 void Map::setStartPoint(float x, float y) {
@@ -134,7 +147,20 @@ std::vector<t_coordinates> Map::getEnemySpawnableCells() {
 
 void Map::initEnemies(ActorFactory &actorFactory) {
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
-		Actor* enemy = actorFactory.createRandomFoe();
+		int enemyProba = rand() % 1000;
+		auto enemyClass = std::find_if(
+			s_mEnemiesPerMapType[m_type].begin(),
+			s_mEnemiesPerMapType[m_type].end(),
+			[&] (const S_EnemyProbability & p) {
+				return p.probaRangeFrom <= enemyProba && enemyProba <= p.probaRangeTo;
+			}
+		);
+
+		if (enemyClass == s_mEnemiesPerMapType[m_type].end()) {
+			enemyClass = s_mEnemiesPerMapType[m_type].begin();
+		}
+
+		Actor* enemy = actorFactory.createEnemy(enemyClass->race);
 		enemy->setX(enemySpawnCell.first);
 		enemy->setY(enemySpawnCell.second);
 		addActor(enemy);

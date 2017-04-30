@@ -38,6 +38,14 @@ bool MapParser::_parseLine(const char *line) {
 	type = *line;
 	line += 2;
 	switch (type) {
+		case 't':
+			int mapType;
+			sscanfResult = sscanf(line, "%d\n", &mapType);
+			if (sscanfResult != 1) {
+				retValue = false;
+			}
+			m_map->setType((E_MapType) mapType);
+			break;
 		case 'd':
 			int w, h;
 			sscanfResult = sscanf(line, "%d %d\n", &w, &h);
@@ -112,6 +120,12 @@ bool MapParser::saveMap(const char *filePath) {
 	if (mapFile == NULL) {
 		return false;
 	}
+
+	fprintf(
+		mapFile,
+		"t %d\n",
+		m_map->getType()
+	);
 
 	fprintf(
 		mapFile,

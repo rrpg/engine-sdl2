@@ -35,8 +35,7 @@ Actor* ActorFactory::createActor(E_ActorRaces race) {
 	return m_mTaxonomy[race]->createActor();
 }
 
-Actor* ActorFactory::createRandomFoe() {
-	E_ActorRaces race = (E_ActorRaces) (rand() % NB_RACES);
+Actor* ActorFactory::createEnemy(E_ActorRaces race) {
 	Actor* actor = createActor(race);
 	actor->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_MONSTER));
 	actor->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_ACTOR));

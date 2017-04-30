@@ -6,8 +6,6 @@
 #include "Map.hpp"
 #include "CaveRoom.hpp"
 
-enum E_MapType {CAVE};
-
 class MapGenerator {
 	private:
 	void _generateCave(Map &map);

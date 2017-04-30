@@ -17,6 +17,15 @@ struct EnumClassHash {
 	}
 };
 
+enum E_MapType {DEFAULT, CAVE};
+
+// int is the perthousand of chance of encounter
+typedef struct {
+	E_ActorRaces race;
+	int probaRangeFrom;
+	int probaRangeTo;
+} S_EnemyProbability;
+
 typedef std::pair<int, int> t_coordinates;
 
 const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
@@ -24,6 +33,9 @@ const int WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION = 0x2;
 
 class Map {
 	private:
+	static std::unordered_map<E_MapType, std::vector<S_EnemyProbability>> s_mEnemiesPerMapType;
+
+	E_MapType m_type = DEFAULT;
 	int m_iWidth = 0;
 	int m_iHeight = 0;
 	int m_iDisplayTileWidth = 0;
@@ -48,6 +60,7 @@ class Map {
 	~Map();
 
 	void initializeGrid(E_TerrainType type);
+	void setType(E_MapType type);
 	void setTileFile(const char *tileFilePath);
 	void setDimensions(int x, int y);
 	void setDisplayTileDimensions(int w, int h);
@@ -59,6 +72,7 @@ class Map {
 	bool areCoordinatesValid(int x, int y);
 	bool isCellWalkable(int x, int y, unsigned int walkableConstraint = 0);
 	bool isCellObstructingView(int x, int y);
+	E_MapType getType();
 	Vector2D getStartPoint();
 	int getDisplayTileWidth();
 	int getDisplayTileHeight();

@@ -8,6 +8,7 @@ MapGenerator::MapGenerator() {
 
 Map MapGenerator::generate(E_MapType type, short width, short height) {
 	Map map;
+	map.setType(type);
 	map.setDimensions(width, height);
 	map.setDisplayTileDimensions(16, 16);
 
