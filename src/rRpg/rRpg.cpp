@@ -110,7 +110,7 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_map.render(camera, (signed) m_hero->getX(), (signed) m_hero->getY());
+	m_map.render(camera, m_hero->getX(), m_hero->getY());
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

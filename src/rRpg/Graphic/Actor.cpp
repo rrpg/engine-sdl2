@@ -37,8 +37,8 @@ void GraphicActor::render(int displayShiftX, int displayShiftY, Actor *actor) {
 }
 
 void GraphicActor::_renderActor(int displayShiftX, int displayShiftY, Actor *actor) {
-	int xScreen = (signed) actor->getX() * TILE_WIDTH + displayShiftX;
-	int yScreen = (signed) actor->getY() * TILE_HEIGHT + displayShiftY;
+	int xScreen = actor->getX() * TILE_WIDTH + displayShiftX;
+	int yScreen = actor->getY() * TILE_HEIGHT + displayShiftY;
 	m_textureManager->drawTile(
 		actor->getRace().getTilesetName(),
 		0, // margin
@@ -55,8 +55,8 @@ void GraphicActor::_renderActor(int displayShiftX, int displayShiftY, Actor *act
 }
 
 void GraphicActor::_renderHP(int displayShiftX, int displayShiftY, Actor *actor) {
-	int xScreen = (signed) actor->getX() * TILE_WIDTH + displayShiftX;
-	int yScreen = (signed) actor->getY() * TILE_HEIGHT + displayShiftY;
+	int xScreen = actor->getX() * TILE_WIDTH + displayShiftX;
+	int yScreen = actor->getY() * TILE_HEIGHT + displayShiftY;
 	int health = 0;
 	if (actor->getHealth() > 0) {
 		health = actor->getHealth();
@@ -64,7 +64,7 @@ void GraphicActor::_renderHP(int displayShiftX, int displayShiftY, Actor *actor)
 	SDL_Rect r;
 	r.x = xScreen;
 	r.y = yScreen;
-	r.w = (signed) (TILE_WIDTH * health / actor->getMaxHealth());
+	r.w = (TILE_WIDTH * health / actor->getMaxHealth());
 	r.h = 2;
 	SDL_SetRenderDrawColor(m_game->getRenderer(), 0xff, 0, 0, 255);
 	SDL_RenderFillRect(m_game->getRenderer(), &r);

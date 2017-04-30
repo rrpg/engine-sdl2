@@ -162,8 +162,8 @@ int Map::_getSameNeighbours(int x, int y) {
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / (signed) m_iDisplayTileWidth,
-		cameraHeightGrid = camera.h / (signed) m_iDisplayTileHeight;
+	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
+		cameraHeightGrid = camera.h / m_iDisplayTileHeight;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible
@@ -174,8 +174,8 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	Vector2D shift = {
-		(float) (visibleArea.x * (signed) m_iDisplayTileWidth),
-		(float) (visibleArea.y * (signed) m_iDisplayTileHeight)
+		(float) (visibleArea.x * m_iDisplayTileWidth),
+		(float) (visibleArea.y * m_iDisplayTileHeight)
 	};
 
 	_renderTerrain(camera, visibleArea, shift);

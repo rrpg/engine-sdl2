@@ -114,8 +114,8 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	double slope,
 		positionOnY0;
 	bool actor1SeesActor2 = true;
-	deltaX = (signed) (x1 - x0);
-	deltaY = (signed) (y1 - y0);
+	deltaX = x1 - x0;
+	deltaY = y1 - y0;
 	absDeltaX = abs(deltaX);
 	absDeltaY = abs(deltaY);
 
@@ -157,8 +157,8 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 }
 
 void Actor::attack(Actor *target) {
-	int attack = rand() % (signed) m_iAttack;
-	int defence = rand() % (signed) target->m_iDefence;
+	int attack = rand() % m_iAttack;
+	int defence = rand() % target->m_iDefence;
 	int damages = attack - defence;
 	// no branching max(0, damages) :p
 	target->m_iHealth -= damages & -(0 < damages);
