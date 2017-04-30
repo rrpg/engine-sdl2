@@ -1,5 +1,5 @@
 #include "Map.hpp"
-
+#include <algorithm>
 #include "SDL2_framework/Game.h"
 #include "Parser/Tile.hpp"
 
@@ -258,6 +258,15 @@ bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
 		auto got = m_mActors.find(_getCoordsKey(x, y));
 		hasActorOnCell = got != m_mActors.end();
 		isWalkable &= !hasActorOnCell;
+	}
+
+	if ((walkableConstraint & WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION) == WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION) {
+		auto spawnableCell = std::find(
+			m_vEnemySpawnableCells.begin(),
+			m_vEnemySpawnableCells.end(),
+			std::make_pair(x, y)
+		);
+		isWalkable &= spawnableCell == m_vEnemySpawnableCells.end();
 	}
 	return isWalkable;
 }
