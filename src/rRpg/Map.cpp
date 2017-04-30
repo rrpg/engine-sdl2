@@ -36,6 +36,14 @@ std::string Map::_getCoordsKey(int x, int y) {
 	return std::to_string(x) + "-" + std::to_string(y);
 }
 
+void Map::setType(E_MapType type) {
+	m_type = type;
+}
+
+E_MapType Map::getType() {
+	return m_type;
+}
+
 void Map::setStartPoint(float x, float y) {
 	m_sStartPoint.setX(x);
 	m_sStartPoint.setY(y);
