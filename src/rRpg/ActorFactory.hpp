@@ -8,7 +8,7 @@
 #include "Actor.hpp"
 #include "Parser/File.hpp"
 
-enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, NB_RACES};
+enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, RACE_RAT, NB_RACES};
 
 class ActorFactory {
 	private:

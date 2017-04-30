@@ -4,3 +4,5 @@
 player 750 2 3 15 4 4
 # demon
 demon 1000 1 1 20 6 6
+# rat
+rodent 500 1 1 10 3 3
