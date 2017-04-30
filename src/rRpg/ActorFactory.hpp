@@ -22,7 +22,7 @@ class ActorFactory {
 	E_FileParsingResult parseTaxonomy(const char* taxonomyFile);
 	void addActorRaceTaxonomy(ActorRace* race);
 	Actor* createActor(E_ActorRaces race);
-	Actor* createRandomFoe();
+	Actor* createEnemy(E_ActorRaces race);
 	Actor* createHero();
 };
 
