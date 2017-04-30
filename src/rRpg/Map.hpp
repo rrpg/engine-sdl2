@@ -56,6 +56,7 @@ class Map {
 
 	void clearDeadActors();
 
+	bool areCoordinatesValid(int x, int y);
 	bool isCellWalkable(int x, int y, unsigned int walkableConstraint = 0);
 	bool isCellObstructingView(int x, int y);
 	Vector2D getStartPoint();
@@ -72,7 +73,7 @@ class Map {
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
 	Actor *getActorAt(int x, int y);
-	void moveActor(Actor* actor, int newX, int newY);
+	bool moveActor(Actor* actor, int newX, int newY);
 
 	void render(SDL_Rect camera, int centerX, int centerY);
 

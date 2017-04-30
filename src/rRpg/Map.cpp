@@ -162,8 +162,8 @@ int Map::_getSameNeighbours(int x, int y) {
 
 void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / (signed) m_iDisplayTileWidth,
-		cameraHeightGrid = camera.h / (signed) m_iDisplayTileHeight;
+	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
+		cameraHeightGrid = camera.h / m_iDisplayTileHeight;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible
@@ -174,8 +174,8 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	Vector2D shift = {
-		(float) (visibleArea.x * (signed) m_iDisplayTileWidth),
-		(float) (visibleArea.y * (signed) m_iDisplayTileHeight)
+		(float) (visibleArea.x * m_iDisplayTileWidth),
+		(float) (visibleArea.y * m_iDisplayTileHeight)
 	};
 
 	_renderTerrain(camera, visibleArea, shift);
@@ -191,7 +191,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 	int shiftY = (int) shift.getY();
 	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
 		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
-			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
+			if (!areCoordinatesValid(x, y)) {
 				continue;
 			}
 
@@ -244,8 +244,12 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	}
 }
 
+bool Map::areCoordinatesValid(int x, int y) {
+	return x >= 0 && y >= 0 && x < m_iWidth && y < m_iHeight;
+}
+
 bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
-	if (x >= m_iWidth || y >= m_iHeight) {
+	if (!areCoordinatesValid(x, y)) {
 		return false;
 	}
 
@@ -291,9 +295,9 @@ Actor *Map::getActorAt(int x, int y) {
 	return NULL;
 }
 
-void Map::moveActor(Actor *a, int newX, int newY) {
-	if (newX >= getWidth() || newY >= getHeight()) {
-		return;
+bool Map::moveActor(Actor *a, int newX, int newY) {
+	if (!isCellWalkable(newX, newY, WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING)) {
+		return false;
 	}
 
 	std::string key = _getCoordsKey(a->getX(), a->getY());
@@ -309,4 +313,6 @@ void Map::moveActor(Actor *a, int newX, int newY) {
 		// Erase old key-value from map
 		m_mActors.erase(it);
 	}
+
+	return true;
 }
