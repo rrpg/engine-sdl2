@@ -245,7 +245,7 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 }
 
 bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
-	if (x >= m_iWidth || y >= m_iHeight) {
+	if (x < 0 || y < 0 || x >= m_iWidth || y >= m_iHeight) {
 		return false;
 	}
 

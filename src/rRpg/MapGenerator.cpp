@@ -221,7 +221,7 @@ bool MapGenerator::_findClosestWalkableCell(
 	int &yOut
 ) {
 	size_t cellIndex = map.getTileIndex(x, y);
-	if (y > map.getHeight() - 1 || x > map.getWidth() - 1 || visited[cellIndex]) {
+	if (x < 0 || y < 0 || y > map.getHeight() - 1 || x > map.getWidth() - 1 || visited[cellIndex]) {
 		return false;
 	}
 
