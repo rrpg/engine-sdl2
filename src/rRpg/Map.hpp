@@ -56,6 +56,7 @@ class Map {
 
 	void clearDeadActors();
 
+	bool areCoordinatesValid(int x, int y);
 	bool isCellWalkable(int x, int y, unsigned int walkableConstraint = 0);
 	bool isCellObstructingView(int x, int y);
 	Vector2D getStartPoint();

@@ -191,7 +191,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 	int shiftY = (int) shift.getY();
 	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
 		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
-			if (x < 0 || x >= (signed) m_iWidth || y < 0 || y >= (signed) m_iHeight) {
+			if (!areCoordinatesValid(x, y)) {
 				continue;
 			}
 
@@ -244,8 +244,12 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	}
 }
 
+bool Map::areCoordinatesValid(int x, int y) {
+	return x >= 0 && y >= 0 && x < m_iWidth && y < m_iHeight;
+}
+
 bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
-	if (x < 0 || y < 0 || x >= m_iWidth || y >= m_iHeight) {
+	if (!areCoordinatesValid(x, y)) {
 		return false;
 	}
 
