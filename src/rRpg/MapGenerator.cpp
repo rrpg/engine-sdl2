@@ -1,6 +1,7 @@
 #include "MapGenerator.hpp"
 #include "Terrain.hpp"
 #include <limits.h>
+#include <algorithm>
 
 MapGenerator::MapGenerator() {
 }
@@ -23,6 +24,8 @@ void MapGenerator::_generateCave(Map &map) {
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
 		_automatonStep(map);
 	}
+
+	_joinRooms(map);
 
 	_dispatchEnemies(map, 15);
 	_setStartPoint(map);
@@ -88,6 +91,86 @@ void MapGenerator::_automatonStep(Map &map) {
 	map.setGrid(tmpGrid);
 }
 
+std::vector<CaveRoom::S_Room>::iterator MapGenerator::_largestRoom(std::vector<CaveRoom::S_Room> &rooms) {
+	return std::max_element(
+		std::begin(rooms),
+		std::end(rooms),
+		[] (const CaveRoom::S_Room & p1, const CaveRoom::S_Room & p2) {
+			return p1.cells.size() < p2.cells.size();
+		}
+	);
+}
+
+void MapGenerator::_joinRooms(Map &map) {
+	bool enoughRoom = false;
+	do {
+		CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
+		auto largest = _largestRoom(roomCollection.rooms);
+		CaveRoom::S_Room largestRoom = *largest;
+
+		double sizeLargestRoom = (double) largestRoom.cells.size() / (map.getWidth() * map.getHeight());
+		if (sizeLargestRoom >= 0.4200 || roomCollection.rooms.size() == 1) {
+			enoughRoom = true;
+		}
+		else {
+			roomCollection.rooms.erase(largest);
+			CaveRoom::S_Room secondLargestRoom = *_largestRoom(roomCollection.rooms);
+			// merge largestRoom and secondLargestRoom
+			_digBetweenRooms(
+				roomCollection,
+				map,
+				largestRoom.cells[(size_t) rand() % largestRoom.cells.size()],
+				secondLargestRoom.cells[(size_t) rand() % secondLargestRoom.cells.size()]
+			);
+		}
+	} while (!enoughRoom);
+}
+
+size_t MapGenerator::_digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, Map &map, size_t cell1Index, size_t cell2Index) {
+	int xStart = (signed) cell1Index % map.getWidth(),
+		yStart = (signed) cell1Index / map.getWidth(),
+		xEnd = (signed) cell2Index % map.getWidth(),
+		yEnd = (signed) cell2Index / map.getWidth(),
+		xWay = (xStart < xEnd) - (xStart > xEnd),
+		yWay = (yStart < yEnd) - (yStart > yEnd),
+		xCurr = xStart,
+		yCurr = yStart;
+	size_t cellStart = map.getTileIndex(xStart, yStart),
+		cellIndex;
+
+	std::vector<t_coordinates> cellsToDig = {};
+	while (xCurr != xEnd || yCurr != yEnd) {
+		cellIndex = map.getTileIndex(xCurr, yCurr);
+		// wall found, add it to the list of cells to dig
+		if (!map.isCellWalkable(xCurr, yCurr)) {
+			cellsToDig.push_back({xCurr, yCurr});
+			// @TODO stop if one of the neighbour is a soil different than the
+			// start cell
+		}
+		// we are back in the first room
+		else if (roomCollection.cellRoomMapping[cellIndex] == roomCollection.cellRoomMapping[cellStart]) {
+			cellsToDig.clear();
+		}
+		else {
+			break;
+		}
+
+		if (xCurr != xEnd) {
+			xCurr += xWay;
+		}
+		else {
+			yCurr += yWay;
+		}
+	}
+
+	for (auto cell: cellsToDig) {
+		// add cell to room
+		map.setTile(cell.first, cell.second, TERRAIN_SOIL_NORMAL);
+	}
+
+	return cellIndex;
+}
+
 int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {
 	int nbAlive = (map.getTile(i - 1, j - 1) == aliveType)
 	   + (map.getTile(i, j - 1) == aliveType)
@@ -111,6 +194,26 @@ void MapGenerator::_setStartPoint(Map &map) {
 	map.setStartPoint((float) x, (float) y);
 }
 
+std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(Map &map, const int x, const int y) {
+	int neighbourDirections[][2] = {
+		{-1, 0},
+		{1, 0},
+		{0, -1},
+		{0, 1}
+	};
+
+	std::vector<t_coordinates> neighbours = {};
+	for (int n = 0; n < 4; ++n) {
+		int xN = x + neighbourDirections[n][0],
+			yN = y + neighbourDirections[n][1];
+		if (map.isCellWalkable(xN, yN)) {
+			neighbours.push_back(std::make_pair(xN, yN));
+		}
+	}
+
+	return neighbours;
+}
+
 bool MapGenerator::_findClosestWalkableCell(
 	Map &map,
 	const int x,
@@ -125,37 +228,17 @@ bool MapGenerator::_findClosestWalkableCell(
 	}
 
 	visited[cellIndex] = true;
-	int neighbours[][2] = {
-		{-1, 0},
-		{1, 0},
-		{0, -1},
-		{0, 1}
-	};
-
-	for (int n = 0; n < 4; ++n) {
-		if (map.isCellWalkable(x + neighbours[n][0], y + neighbours[n][1])) {
-			xOut = x + neighbours[n][0];
-			yOut = y + neighbours[n][1];
-			return true;
-		}
+	std::vector<t_coordinates> neighbours = _findWalkableNeighbours(map, x, y);
+	if (neighbours.size()) {
+		xOut = neighbours[0].first;
+		yOut = neighbours[0].second;
+		return true;
 	}
 
-	for (int n = 0; n < 4; ++n) {
-		bool found = _findClosestWalkableCell(
-			map,
-			x + neighbours[n][0],
-			y + neighbours[n][1],
-			visited,
-			xOut,
-			yOut
-		);
-
-		if (found) {
-			return true;
-		}
-	}
-
-	return false;
+	return _findClosestWalkableCell(map, x + 1, y, visited, xOut, yOut)
+		|| _findClosestWalkableCell(map, x - 1, y, visited, xOut, yOut)
+		|| _findClosestWalkableCell(map, x, y + 1, visited, xOut, yOut)
+		|| _findClosestWalkableCell(map, x, y - 1, visited, xOut, yOut);
 }
 
 void MapGenerator::_dispatchEnemies(Map &map, const int nbMaxEnemies) {

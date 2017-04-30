@@ -17,6 +17,10 @@ struct EnumClassHash {
 	}
 };
 
+typedef std::pair<int, int> t_coordinates;
+
+const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
+
 class Map {
 	private:
 	int m_iWidth = 0;
@@ -28,7 +32,7 @@ class Map {
 	std::unordered_map<E_TerrainType, Terrain*, EnumClassHash> m_mTerrains = {};
 	std::unordered_map<E_TerrainTile, S_TileData, EnumClassHash> m_mTerrainsTileData = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
-	std::vector<std::pair<char, char>> m_vEnemySpawnableCells = {};
+	std::vector<t_coordinates> m_vEnemySpawnableCells = {};
 
 	FILE *m_tilesFile = 0;
 
@@ -51,7 +55,7 @@ class Map {
 
 	void clearDeadActors();
 
-	bool isCellWalkable(int x, int y);
+	bool isCellWalkable(int x, int y, unsigned int walkableConstraint = 0);
 	bool isCellObstructingView(int x, int y);
 	Vector2D getStartPoint();
 	int getDisplayTileWidth();
@@ -72,7 +76,7 @@ class Map {
 	void render(SDL_Rect camera, int centerX, int centerY);
 
 	void addEnemySpawnableCell(char x, char y);
-	std::vector<std::pair<char, char>> getEnemySpawnableCells();
+	std::vector<t_coordinates> getEnemySpawnableCells();
 	void initEnemies(ActorFactory &actorFactory);
 };
 

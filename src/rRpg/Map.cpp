@@ -128,7 +128,7 @@ void Map::addEnemySpawnableCell(char x, char y) {
 	m_vEnemySpawnableCells.push_back(std::make_pair(x, y));
 }
 
-std::vector<std::pair<char, char>> Map::getEnemySpawnableCells() {
+std::vector<t_coordinates> Map::getEnemySpawnableCells() {
 	return m_vEnemySpawnableCells;
 }
 
@@ -244,18 +244,22 @@ void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	}
 }
 
-bool Map::isCellWalkable(int x, int y) {
+bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
 	if (x >= m_iWidth || y >= m_iHeight) {
 		return false;
 	}
 
-	bool hasWalkableFlag = _getTerrain(getTile(x, y))->hasFlag(
+	bool isWalkable = _getTerrain(getTile(x, y))->hasFlag(
 		Terrain::TERRAIN_FLAG_WALKABLE
 	);
-	bool hasActorOnCell;
-	auto got = m_mActors.find(_getCoordsKey(x, y));
-	hasActorOnCell = got != m_mActors.end();
-	return hasWalkableFlag && !hasActorOnCell;
+
+	if ((walkableConstraint & WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING) == WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING) {
+		bool hasActorOnCell;
+		auto got = m_mActors.find(_getCoordsKey(x, y));
+		hasActorOnCell = got != m_mActors.end();
+		isWalkable &= !hasActorOnCell;
+	}
+	return isWalkable;
 }
 
 bool Map::isCellObstructingView(int x, int y) {
