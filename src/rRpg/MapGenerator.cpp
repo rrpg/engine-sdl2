@@ -108,7 +108,8 @@ void MapGenerator::_joinRooms(Map &map) {
 		auto largest = _largestRoom(roomCollection.rooms);
 		CaveRoom::S_Room largestRoom = *largest;
 
-		if ((double) largestRoom.cells.size() / (map.getWidth() * map.getHeight()) >= 0.4200) {
+		double sizeLargestRoom = (double) largestRoom.cells.size() / (map.getWidth() * map.getHeight());
+		if (sizeLargestRoom >= 0.4200) {
 			enoughRoom = true;
 		}
 		else {
