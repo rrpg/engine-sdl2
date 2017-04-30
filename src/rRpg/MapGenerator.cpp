@@ -187,10 +187,8 @@ int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType
 void MapGenerator::_setStartPoint(Map &map) {
 	int x = (rand() % map.getWidth()),
 		y = (rand() % map.getHeight());
-	if (!map.isCellWalkable(x, y)) {
-		std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
-		_findClosestWalkableCell(map, x, y, visited, x, y);
-	}
+	std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
+	_findClosestWalkableCell(map, x, y, visited, x, y);
 	map.setStartPoint((float) x, (float) y);
 }
 
@@ -227,6 +225,10 @@ bool MapGenerator::_findClosestWalkableCell(
 		return false;
 	}
 
+	if (map.isCellWalkable(x, y)) {
+		return true;
+	}
+
 	visited[cellIndex] = true;
 	std::vector<t_coordinates> neighbours = _findWalkableNeighbours(map, x, y);
 	if (neighbours.size()) {
@@ -246,10 +248,8 @@ void MapGenerator::_dispatchEnemies(Map &map, const int nbMaxEnemies) {
 		int x = rand() % map.getWidth(),
 			y = rand() % map.getHeight();
 
-		if (!map.isCellWalkable(x, y)) {
-			std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
-			_findClosestWalkableCell(map, x, y, visited, x, y);
-		}
+		std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
+		_findClosestWalkableCell(map, x, y, visited, x, y);
 		map.addEnemySpawnableCell((char) x, (char) y);
 	}
 }
