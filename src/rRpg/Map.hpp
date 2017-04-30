@@ -72,7 +72,7 @@ class Map {
 	void addActor(Actor *actor);
 	std::unordered_map<std::string, Actor*> &getActors();
 	Actor *getActorAt(int x, int y);
-	void moveActor(Actor* actor, int newX, int newY);
+	bool moveActor(Actor* actor, int newX, int newY);
 
 	void render(SDL_Rect camera, int centerX, int centerY);
 

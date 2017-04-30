@@ -291,9 +291,9 @@ Actor *Map::getActorAt(int x, int y) {
 	return NULL;
 }
 
-void Map::moveActor(Actor *a, int newX, int newY) {
-	if (newX >= getWidth() || newY >= getHeight()) {
-		return;
+bool Map::moveActor(Actor *a, int newX, int newY) {
+	if (!isCellWalkable(newX, newY, WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING)) {
+		return false;
 	}
 
 	std::string key = _getCoordsKey(a->getX(), a->getY());
@@ -309,4 +309,6 @@ void Map::moveActor(Actor *a, int newX, int newY) {
 		// Erase old key-value from map
 		m_mActors.erase(it);
 	}
+
+	return true;
 }
