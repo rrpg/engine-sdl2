@@ -169,8 +169,8 @@ void Game::_initGameMachine() {
  * running.
  */
 void Game::handleEvents() {
-	bool keepRunning = InputHandler::Instance()->update();
-	if (!keepRunning) {
+	InputUpdateResult result = InputHandler::Instance()->update();
+	if (result == QUIT) {
 		m_bRunning = false;
 	}
 }
