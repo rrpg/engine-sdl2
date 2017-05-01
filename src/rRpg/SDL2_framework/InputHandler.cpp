@@ -26,13 +26,14 @@ InputHandler *InputHandler::Instance() {
 /**
  * Processes the SDL events and acts accordingly depending on the event type.
  */
-bool InputHandler::update() {
-	bool ret = true;
+InputUpdateResult InputHandler::update() {
+	InputUpdateResult ret = HAS_NO_EVENT;
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
+		ret = HAS_EVENT;
 		switch (event.type) {
 			case SDL_QUIT:
-				ret = false;
+				ret = QUIT;
 				break;
 			case SDL_JOYAXISMOTION:
 				_handleStickEvent(event);
@@ -56,6 +57,7 @@ bool InputHandler::update() {
 				_handleKeyEvent(event, false);
 				break;
 			default:
+				ret = HAS_NO_EVENT;
 				break;
 		}
 	}

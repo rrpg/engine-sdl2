@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <vector>
+#include "InputHandler.h"
 #include "GameStateMachine.h"
 #include "TextureManager.h"
 #include <string>
@@ -154,7 +155,7 @@ class Game {
 	 * Method called to handle the events captured by the game during each
 	 * loop.
 	 */
-	void handleEvents();
+	InputUpdateResult handleEvents();
 
 	/**
 	 * Method to update the game during each game loop.

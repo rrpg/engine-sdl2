@@ -11,6 +11,8 @@ enum JoystickControl {LEFT_STICK_X, LEFT_STICK_Y, RIGHT_STICK_X, RIGHT_STICK_Y, 
 
 enum InputType {KEYBOARD_KEY, CONTROLLER_BUTTON, CONTROLLER_STICK, NULL_TYPE};
 
+enum InputUpdateResult {QUIT, HAS_EVENT, HAS_NO_EVENT};
+
 class InputHandler {
 	private:
 	/**
@@ -116,7 +118,7 @@ class InputHandler {
 	/**
 	 * Method used to process the events poll.
 	 */
-	bool update();
+	InputUpdateResult update();
 
 	/**
 	 * Method to clean the input hander instance.

@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "InputHandler.h"
 #include "NoJoystickState.h"
 #include "ServiceProvider.h"
 #include <iostream>
@@ -168,11 +167,14 @@ void Game::_initGameMachine() {
  * Update the input handler, if the update returns false, the game stops
  * running.
  */
-void Game::handleEvents() {
-	bool keepRunning = InputHandler::Instance()->update();
-	if (!keepRunning) {
+InputUpdateResult Game::handleEvents() {
+
+	InputUpdateResult result = InputHandler::Instance()->update();
+	if (result == QUIT) {
 		m_bRunning = false;
 	}
+
+	return result;
 }
 
 /**
