@@ -1,7 +1,7 @@
 #ifndef __MOVE_COMMAND__
 #define __MOVE_COMMAND__
 
-#include "../Command.hpp"
+#include "Command/Command.hpp"
 
 class MoveCommand : public Command {
 	public:
