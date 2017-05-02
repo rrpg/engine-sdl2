@@ -2,7 +2,7 @@
 #define __ACTOR_FACTORY__
 
 #include <vector>
-#include "BehaviourFactory.hpp"
+#include "Behaviour/Factory.hpp"
 #include "GraphicFactory.hpp"
 #include "ActorRace.hpp"
 #include "Actor.hpp"
