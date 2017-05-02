@@ -29,8 +29,8 @@ void MapGenerator::_generateCave(Map &map) {
 	_joinRooms(map);
 	_cleanRooms(map);
 
-	_dispatchEnemies(map, 15);
 	_setStartPoint(map);
+	_dispatchEnemies(map, 15);
 }
 
 void MapGenerator::_initialiseAutomaton(Map &map) {
