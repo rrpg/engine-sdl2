@@ -2,7 +2,7 @@
 #define __ACTOR__
 
 #include <string>
-#include "Behaviour.hpp"
+#include "Behaviour/Behaviour.hpp"
 #include "Graphic/Actor.hpp"
 
 class rRpg;

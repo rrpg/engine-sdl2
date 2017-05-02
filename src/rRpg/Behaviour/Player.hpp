@@ -1,7 +1,7 @@
 #ifndef __BEHAVIOUR_PLAYER__
 #define __BEHAVIOUR_PLAYER__
 
-#include "../Behaviour.hpp"
+#include "Behaviour/Behaviour.hpp"
 #include "../Map.hpp"
 #include <cstdint>
 
