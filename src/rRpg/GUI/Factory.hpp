@@ -2,7 +2,7 @@
 #define __GRAPHIC__FACTORY__
 
 #include <vector>
-#include "Graphic/Graphic.hpp"
+#include "GUI.hpp"
 
 enum E_Graphics {GRAPHIC_ACTOR, GRAPHIC_PLAYER};
 

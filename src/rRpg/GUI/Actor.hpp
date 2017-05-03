@@ -1,7 +1,7 @@
 #ifndef __GRAPHIC_ACTOR__
 #define __GRAPHIC_ACTOR__
 
-#include "Graphic.hpp"
+#include "GUI.hpp"
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/TextureManager.h"
 

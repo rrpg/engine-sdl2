@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Behaviour/Factory.hpp"
-#include "GraphicFactory.hpp"
+#include "GUI/Factory.hpp"
 #include "ActorRace.hpp"
 #include "Actor.hpp"
 #include "Parser/File.hpp"

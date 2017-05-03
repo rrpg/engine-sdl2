@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Behaviour/Behaviour.hpp"
-#include "Graphic/Actor.hpp"
+#include "GUI/Actor.hpp"
 
 class rRpg;
 class Map;
