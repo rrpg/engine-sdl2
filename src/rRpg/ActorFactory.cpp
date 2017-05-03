@@ -1,7 +1,7 @@
 #include "ActorFactory.hpp"
 #include "Parser/Taxonomy.hpp"
 #include "Behaviour/Monster.hpp"
-#include "Graphic/Actor.hpp"
+#include "GUI/Actor.hpp"
 #include <fstream>
 #include <libgen.h>
 

@@ -1,7 +1,7 @@
 #ifndef __BEHAVIOUR_MONSTER__
 #define __BEHAVIOUR_MONSTER__
 
-#include "../Behaviour.hpp"
+#include "Behaviour/Behaviour.hpp"
 #include "../Map.hpp"
 
 class BehaviourMonster : public Behaviour {

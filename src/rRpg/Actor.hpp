@@ -2,8 +2,8 @@
 #define __ACTOR__
 
 #include <string>
-#include "Behaviour.hpp"
-#include "Graphic/Actor.hpp"
+#include "Behaviour/Behaviour.hpp"
+#include "GUI/Actor.hpp"
 
 class rRpg;
 class Map;

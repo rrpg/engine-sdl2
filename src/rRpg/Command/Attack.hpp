@@ -1,7 +1,7 @@
 #ifndef __ATTACK_COMMAND__
 #define __ATTACK_COMMAND__
 
-#include "../Command.hpp"
+#include "Command/Command.hpp"
 
 class AttackCommand : public Command {
 	public:

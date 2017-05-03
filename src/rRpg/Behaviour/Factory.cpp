@@ -1,4 +1,4 @@
-#include "BehaviourFactory.hpp"
+#include "Behaviour/Factory.hpp"
 #include "Behaviour/Player.hpp"
 #include "Behaviour/Monster.hpp"
 
