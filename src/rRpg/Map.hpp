@@ -1,6 +1,7 @@
 #ifndef __MAP__
 #define __MAP__
 
+#include "MapEvent.hpp"
 #include "Parser/File.hpp"
 #include "ActorFactory.hpp"
 #include "Terrain.hpp"
@@ -39,6 +40,7 @@ class Map {
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, Actor*> m_mActors;
+	std::unordered_map<std::string, MapEvent*> m_mEvents = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	FILE *m_tilesFile = 0;
