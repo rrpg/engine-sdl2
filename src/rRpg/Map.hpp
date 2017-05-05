@@ -94,6 +94,8 @@ class Map {
 	void addEnemySpawnableCell(char x, char y);
 	std::vector<t_coordinates> getEnemySpawnableCells();
 	void initEnemies(ActorFactory &actorFactory);
+
+	MapEvent* getEvent(const int x, const int y) const;
 };
 
 #endif

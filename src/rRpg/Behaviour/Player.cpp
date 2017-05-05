@@ -65,7 +65,15 @@ bool BehaviourPlayer::_isDirectionPressed(int &x, int &y) {
 bool BehaviourPlayer::_tryMove(Actor *actor, rRpg *engine, int x, int y) {
 	MoveCommand command = MoveCommand();
 	Map &map = engine->getMap();
-	return command.execute(actor, map, x, y);
+	bool moved = command.execute(actor, map, x, y);
+	if (moved) {
+		MapEvent *event = map.getEvent(x, y);
+		if (event != 0) {
+			event->execute(engine);
+		}
+	}
+
+	return moved;
 }
 
 bool BehaviourPlayer::_tryAttack(Actor *actor, Map &map, int x, int y) {

@@ -393,3 +393,13 @@ bool Map::moveActor(Actor *a, int newX, int newY) {
 
 	return true;
 }
+
+MapEvent* Map::getEvent(const int x, const int y) const {
+	std::string key = _getCoordsKey(x, y);
+	auto it = m_mEvents.find(key);
+	if (it != m_mEvents.end()) {
+		return it->second;
+	}
+
+	return NULL;
+}
