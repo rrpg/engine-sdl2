@@ -9,7 +9,7 @@ class BehaviourPlayer : public Behaviour {
 	private:
 	uint32_t m_iLastTimeActed = 0;
 	bool _isDirectionPressed(int &x, int &y);
-	bool _tryMove(Actor *actor, Map &map, int x, int y);
+	bool _tryMove(Actor *actor, rRpg *engine, int x, int y);
 	bool _tryAttack(Actor *actor, Map &map, int x, int y);
 
 	public:
