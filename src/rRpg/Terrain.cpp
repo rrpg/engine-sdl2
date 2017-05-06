@@ -1,10 +1,10 @@
 #include "Terrain.hpp"
 #include <math.h>
 
-std::unordered_map<E_TerrainType, std::vector<E_TerrainTile>> Terrain::s_mTerrainMasks = createTileMasksMap();
+MyUnorderedMap<E_TerrainType, std::vector<E_TerrainTile>> Terrain::s_mTerrainMasks = createTileMasksMap();
 
-std::unordered_map<E_TerrainType, std::vector<E_TerrainTile>> createTileMasksMap() {
-	std::unordered_map<E_TerrainType, std::vector<E_TerrainTile>> map;
+MyUnorderedMap<E_TerrainType, std::vector<E_TerrainTile>> createTileMasksMap() {
+	MyUnorderedMap<E_TerrainType, std::vector<E_TerrainTile>> map;
 	map[TERRAIN_GRASS_NORMAL] = {
 		TERRAIN_GRASS_NORMAL_SINGLE,
 		TERRAIN_GRASS_NORMAL_VERT_BOTTOM,

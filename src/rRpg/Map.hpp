@@ -9,13 +9,7 @@
 #include <unordered_map>
 #include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
-
-struct EnumClassHash {
-	template <typename T>
-	std::size_t operator()(T t) const {
-		return static_cast<std::size_t>(t);
-	}
-};
+#include "types.hpp"
 
 enum E_MapType {DEFAULT, CAVE};
 
@@ -33,7 +27,7 @@ const int WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION = 0x2;
 
 class Map {
 	private:
-	static std::unordered_map<E_MapType, std::vector<S_EnemyProbability>> s_mEnemiesPerMapType;
+	static MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> s_mEnemiesPerMapType;
 
 	E_MapType m_type = DEFAULT;
 	int m_iWidth = 0;
@@ -42,8 +36,8 @@ class Map {
 	int m_iDisplayTileHeight = 0;
 	Vector2D m_sStartPoint = Vector2D();
 	std::vector<E_TerrainType> m_vGrid = {};
-	std::unordered_map<E_TerrainType, Terrain*, EnumClassHash> m_mTerrains = {};
-	std::unordered_map<E_TerrainTile, S_TileData, EnumClassHash> m_mTerrainsTileData = {};
+	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains = {};
+	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData = {};
 	std::unordered_map<std::string, Actor*> m_mActors = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells = {};
 

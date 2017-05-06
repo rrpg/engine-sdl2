@@ -1,6 +1,7 @@
 #ifndef __TERRAIN__
 #define __TERRAIN__
 
+#include "types.hpp"
 #include "Parser/Tile.hpp"
 #include <unordered_map>
 #include <vector>
@@ -42,12 +43,12 @@ typedef enum {
 	TERRAIN_ROCK_NORMAL_HORIZ_LEFT, TERRAIN_ROCK_NORMAL_HORIZ, TERRAIN_ROCK_NORMAL_HORIZ_RIGHT
 } E_TerrainTile;
 
-std::unordered_map<E_TerrainType, std::vector<E_TerrainTile>> createTileMasksMap();
+MyUnorderedMap<E_TerrainType, std::vector<E_TerrainTile>> createTileMasksMap();
 
 class Terrain {
 	private:
 	unsigned int m_iFlags = 0;
-	static std::unordered_map<E_TerrainType, std::vector<E_TerrainTile>> s_mTerrainMasks;
+	static MyUnorderedMap<E_TerrainType, std::vector<E_TerrainTile>> s_mTerrainMasks;
 
 	public:
 	static const int TERRAIN_FLAG_WALKABLE = 0x1;

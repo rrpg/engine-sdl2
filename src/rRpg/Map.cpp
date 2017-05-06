@@ -3,7 +3,7 @@
 #include "SDL2_framework/Game.h"
 #include "Parser/Tile.hpp"
 
-std::unordered_map<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = {
+MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = {
 	{DEFAULT, {}},
 	{CAVE, {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}}}
 };
