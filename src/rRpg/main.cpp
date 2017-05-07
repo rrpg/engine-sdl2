@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <iostream>
 #include "globals.hpp"
 #include "SDL2_framework/Game.h"
 #include "State/Play.hpp"
@@ -10,6 +12,8 @@
 const int FPS = 60;
 const int DELAY_TIME = 1000 / FPS;
 
+void _prepareDataFolder();
+
 int main(int argc, char* args[]) {
 	time_t t;
 	srand((unsigned int) time(&t));
@@ -17,6 +21,8 @@ int main(int argc, char* args[]) {
 	char buffer[1024];
 	std::string binaryPath;
 	Uint32 frameStart, frameTime;
+
+	_prepareDataFolder();
 
 	realpath(dirname(args[argc - argc]), buffer);
 	binaryPath = buffer;
@@ -49,4 +55,24 @@ int main(int argc, char* args[]) {
 	Game::freeGame();
 
 	return 0;
+}
+
+void _prepareDataFolder() {
+	char filePath[255];
+
+	sprintf(
+		filePath,
+		"%s/%s",
+		getenv("HOME"),
+		GAME_DATA_FOLDER
+	);
+	printf("Save file in %s\n", filePath);
+
+	struct stat st;
+	if (stat(filePath, &st) == -1) {
+		std::cout << "Create folder " << filePath << "\n";
+		if (mkdir(filePath, S_IRWXU | S_IRWXG | S_IRWXO)) {
+			std::cout << "Error while creating folder " << filePath << "\n";
+		}
+	}
 }
