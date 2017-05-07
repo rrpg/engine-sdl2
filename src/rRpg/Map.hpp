@@ -35,11 +35,11 @@ class Map {
 	int m_iDisplayTileWidth = 0;
 	int m_iDisplayTileHeight = 0;
 	Vector2D m_sStartPoint = Vector2D();
-	std::vector<E_TerrainType> m_vGrid = {};
-	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains = {};
-	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData = {};
-	std::unordered_map<std::string, Actor*> m_mActors = {};
-	std::vector<t_coordinates> m_vEnemySpawnableCells = {};
+	std::vector<E_TerrainType> m_vGrid;
+	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
+	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
+	std::unordered_map<std::string, Actor*> m_mActors;
+	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	FILE *m_tilesFile = 0;
 

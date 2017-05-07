@@ -17,7 +17,7 @@ class TextureManager {
 	/**
 	 * All the textures are stored in this map.
 	 */
-	std::unordered_map<std::string, S_Texture> m_textureMap = {};
+	std::unordered_map<std::string, S_Texture> m_textureMap;
 
 	/**
 	 * Private constructor for singleton

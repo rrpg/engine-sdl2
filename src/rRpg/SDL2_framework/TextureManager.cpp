@@ -2,7 +2,7 @@
 
 static TextureManager* s_pInstance;
 
-TextureManager::TextureManager() {}
+TextureManager::TextureManager() : m_textureMap({}) {}
 
 TextureManager::~TextureManager() {
 	for (auto it : m_textureMap) {
