@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
 #include "globals.hpp"
+#include "Utils.hpp"
 #include "SDL2_framework/Game.h"
 #include "State/Play.hpp"
 #include "Parser/Resource.hpp"
@@ -22,7 +22,7 @@ int main(int argc, char* args[]) {
 	std::string binaryPath;
 	Uint32 frameStart, frameTime;
 
-	_prepareDataFolder();
+	Utils::createFolder(Utils::getDataPath().c_str());
 
 	realpath(dirname(args[argc - argc]), buffer);
 	binaryPath = buffer;
@@ -55,24 +55,4 @@ int main(int argc, char* args[]) {
 	Game::freeGame();
 
 	return 0;
-}
-
-void _prepareDataFolder() {
-	char filePath[255];
-
-	sprintf(
-		filePath,
-		"%s/%s",
-		getenv("HOME"),
-		GAME_DATA_FOLDER
-	);
-	printf("Save file in %s\n", filePath);
-
-	struct stat st;
-	if (stat(filePath, &st) == -1) {
-		std::cout << "Create folder " << filePath << "\n";
-		if (mkdir(filePath, S_IRWXU | S_IRWXG | S_IRWXO)) {
-			std::cout << "Error while creating folder " << filePath << "\n";
-		}
-	}
 }
