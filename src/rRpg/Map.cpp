@@ -10,6 +10,49 @@ void Map::_initEnemiesPerMapType() {
 	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
 }
 
+Map::Map() :
+	m_vGrid({}),
+	m_mTerrains({}),
+	m_mTerrainsTileData({}),
+	m_mActors({}),
+	m_vEnemySpawnableCells({}) {
+}
+
+Map::Map(const Map &r) :
+	m_type(r.m_type),
+	m_iWidth(r.m_iWidth),
+	m_iHeight(r.m_iHeight),
+	m_iDisplayTileWidth(r.m_iDisplayTileWidth),
+	m_iDisplayTileHeight(r.m_iDisplayTileHeight),
+	m_sStartPoint(r.m_sStartPoint),
+	m_vGrid(r.m_vGrid),
+	m_mTerrains(r.m_mTerrains),
+	m_mTerrainsTileData(r.m_mTerrainsTileData),
+	m_mActors(r.m_mActors),
+	m_vEnemySpawnableCells(r.m_vEnemySpawnableCells)
+{
+}
+
+Map & Map::operator=(const Map &r) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &r) {
+		return *this;
+	}
+
+	m_type = r.m_type;
+	m_iWidth = r.m_iWidth;
+	m_iHeight = r.m_iHeight;
+	m_iDisplayTileWidth = r.m_iDisplayTileWidth;
+	m_iDisplayTileHeight = r.m_iDisplayTileHeight;
+	m_sStartPoint = r.m_sStartPoint;
+	m_vGrid = r.m_vGrid;
+	m_mTerrains = r.m_mTerrains;
+	m_mTerrainsTileData = r.m_mTerrainsTileData;
+	m_mActors = r.m_mActors;
+	m_vEnemySpawnableCells = r.m_vEnemySpawnableCells;
+	return *this;
+}
+
 Map::~Map() {
 	for (auto actor : m_mActors) {
 		delete actor.second;

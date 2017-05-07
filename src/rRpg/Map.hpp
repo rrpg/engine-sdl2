@@ -52,6 +52,9 @@ class Map {
 	int _getSameNeighbours(int x, int y);
 
 	public:
+	Map();
+	Map(const Map &L); // copy constructor
+	Map & operator=(const Map &L); // assignment
 	~Map();
 
 	void initializeGrid(E_TerrainType type);
