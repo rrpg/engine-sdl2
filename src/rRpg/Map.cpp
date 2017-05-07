@@ -3,10 +3,12 @@
 #include "SDL2_framework/Game.h"
 #include "Parser/Tile.hpp"
 
-MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = {
-	{DEFAULT, {}},
-	{CAVE, {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}}}
-};
+MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>>({});
+
+void Map::_initEnemiesPerMapType() {
+	s_mEnemiesPerMapType[DEFAULT] = {};
+	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
+}
 
 Map::~Map() {
 	for (auto actor : m_mActors) {
@@ -149,6 +151,9 @@ std::vector<t_coordinates> Map::getEnemySpawnableCells() {
 }
 
 void Map::initEnemies(ActorFactory &actorFactory) {
+	if (s_mEnemiesPerMapType.empty()) {
+		Map::_initEnemiesPerMapType();
+	}
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
 		int enemyProba = rand() % 1000;
 		auto enemyClass = std::find_if(

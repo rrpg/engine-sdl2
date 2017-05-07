@@ -43,6 +43,7 @@ class Map {
 
 	FILE *m_tilesFile = 0;
 
+	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
 	S_TileData _getTerrainTileData(const E_TerrainTile tile);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
