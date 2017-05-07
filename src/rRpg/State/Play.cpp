@@ -1,4 +1,5 @@
 #include "Play.hpp"
+#include "Utils.hpp"
 #include "GameOver.hpp"
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/ServiceProvider.h"
@@ -34,7 +35,7 @@ bool PlayState::onEnter() {
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
 	);
 	ret &= engine.loadMap(
-		Game::Instance()->getBinaryPath() + "/../resources/cave-lvl1.map",
+		Utils::getDataPath() + "/levels/cave-lvl1.map",
 		Game::Instance()->getBinaryPath() + "/../resources/floor-tiles.dat"
 	);
 	engine.initialiseHero();

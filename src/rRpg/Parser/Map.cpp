@@ -1,8 +1,10 @@
 #include "Map.hpp"
+#include "Utils.hpp"
 #include "Resource.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include <string.h>
+#include <libgen.h>
 
 MapParser::MapParser() : m_map(0) {
 }
@@ -116,6 +118,7 @@ void MapParser::_parseMapContent(const char *line) {
 }
 
 bool MapParser::saveMap(const char *filePath) {
+	Utils::createFolder(dirname(strdup(filePath)));
 	FILE *mapFile = fopen(filePath, "w");
 	if (mapFile == NULL) {
 		return false;

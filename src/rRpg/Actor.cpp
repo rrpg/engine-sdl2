@@ -39,7 +39,7 @@ Actor::~Actor() {
 void Actor::setHealth(int health) { m_iHealth = health; }
 void Actor::setMaxHealth(int maxHealth) { m_iMaxHealth = maxHealth; }
 void Actor::setDefence(int defence) { m_iDefence = defence; }
-void Actor::setAttack(int attack) { m_iAttack = attack; }
+void Actor::setAttack(int attackValue) { m_iAttack = attackValue; }
 int Actor::getHealth() { return m_iHealth; }
 int Actor::getMaxHealth() { return m_iMaxHealth; }
 int Actor::getDefence() { return m_iDefence; }
@@ -157,9 +157,9 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 }
 
 void Actor::attack(Actor *target) {
-	int attack = rand() % m_iAttack;
+	int attackValue = rand() % m_iAttack;
 	int defence = rand() % target->m_iDefence;
-	int damages = attack - defence;
+	int damages = attackValue - defence;
 	// no branching max(0, damages) :p
 	target->m_iHealth -= damages & -(0 < damages);
 	// if the health is < 0 cap it at 0

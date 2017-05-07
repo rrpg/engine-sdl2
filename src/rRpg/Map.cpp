@@ -3,10 +3,55 @@
 #include "SDL2_framework/Game.h"
 #include "Parser/Tile.hpp"
 
-std::unordered_map<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = {
-	{DEFAULT, {}},
-	{CAVE, {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}}}
-};
+MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>>({});
+
+void Map::_initEnemiesPerMapType() {
+	s_mEnemiesPerMapType[DEFAULT] = {};
+	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
+}
+
+Map::Map() :
+	m_vGrid({}),
+	m_mTerrains({}),
+	m_mTerrainsTileData({}),
+	m_mActors({}),
+	m_vEnemySpawnableCells({}) {
+}
+
+Map::Map(const Map &r) :
+	m_type(r.m_type),
+	m_iWidth(r.m_iWidth),
+	m_iHeight(r.m_iHeight),
+	m_iDisplayTileWidth(r.m_iDisplayTileWidth),
+	m_iDisplayTileHeight(r.m_iDisplayTileHeight),
+	m_sStartPoint(r.m_sStartPoint),
+	m_vGrid(r.m_vGrid),
+	m_mTerrains(r.m_mTerrains),
+	m_mTerrainsTileData(r.m_mTerrainsTileData),
+	m_mActors(r.m_mActors),
+	m_vEnemySpawnableCells(r.m_vEnemySpawnableCells)
+{
+}
+
+Map & Map::operator=(const Map &r) {
+	// check for "self assignment" and do nothing in that case
+	if (this == &r) {
+		return *this;
+	}
+
+	m_type = r.m_type;
+	m_iWidth = r.m_iWidth;
+	m_iHeight = r.m_iHeight;
+	m_iDisplayTileWidth = r.m_iDisplayTileWidth;
+	m_iDisplayTileHeight = r.m_iDisplayTileHeight;
+	m_sStartPoint = r.m_sStartPoint;
+	m_vGrid = r.m_vGrid;
+	m_mTerrains = r.m_mTerrains;
+	m_mTerrainsTileData = r.m_mTerrainsTileData;
+	m_mActors = r.m_mActors;
+	m_vEnemySpawnableCells = r.m_vEnemySpawnableCells;
+	return *this;
+}
 
 Map::~Map() {
 	for (auto actor : m_mActors) {
@@ -38,7 +83,10 @@ void Map::clearDeadActors() {
 }
 
 std::string Map::_getCoordsKey(int x, int y) {
-	return std::to_string(x) + "-" + std::to_string(y);
+	char xStr[100], yStr[100];
+	sprintf(xStr, "%d", x);
+	sprintf(yStr, "%d", y);
+	return std::string(xStr) + "-" + std::string(yStr);
 }
 
 void Map::setType(E_MapType type) {
@@ -146,6 +194,9 @@ std::vector<t_coordinates> Map::getEnemySpawnableCells() {
 }
 
 void Map::initEnemies(ActorFactory &actorFactory) {
+	if (s_mEnemiesPerMapType.empty()) {
+		Map::_initEnemiesPerMapType();
+	}
 	for (auto enemySpawnCell : m_vEnemySpawnableCells) {
 		int enemyProba = rand() % 1000;
 		auto enemyClass = std::find_if(

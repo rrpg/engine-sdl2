@@ -1,9 +1,12 @@
 SRCDIR := src
 BUILDDIR := build
+BUILDDIRGCW := build-gcw
 BINDIR := bin
 
 PROG   := rrpg
-CC     := g++ -std=c++11
+TARGET := $(PROG)
+TARGETDIST := $(PROG).opk
+CC     := $(CROSS_COMPILE)g++ -std=c++11
 INCL   :=
 CFLAGS := -g -O2 -Wall -Wmissing-declarations -Weffc++ \
 		-pedantic -pedantic-errors -Wextra -Wcast-align \
@@ -31,6 +34,7 @@ CCDYNAMICFLAGS := ${CFLAGS} ${LDFLAGS} -lSDL2 -lSDL2_image
 
 SRC := $(shell find $(SRCDIR)/rRpg/ $(SRCDIR)/common/ -type f -name '*.cpp')
 OBJ := $(patsubst %.cpp,$(BUILDDIR)/%.o,$(SRC))
+OBJGCW := $(patsubst %.cpp,$(BUILDDIRGCW)/%.o,$(SRC))
 DEP := $(patsubst %.o,%.deps,$(OBJ))
 
 all: game
@@ -45,17 +49,34 @@ game: $(PROG)
 %.deps: %.cpp
 	$(CC) -MM $< >$@
 
-build/%.o: %.cpp
-	@mkdir -p $(dir $@)
+$(BUILDDIR)/%.o: %.cpp
+	mkdir -p $(dir $@)
 	$(CC) $(CCDYNAMICFLAGS) -c -MMD $(patsubst $(BUILDDIR)/%.o,%.cpp,$@) -o $@
+
+$(BUILDDIRGCW)/%.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CC) $(CCDYNAMICFLAGS) -DGCW -c -MMD $(patsubst $(BUILDDIRGCW)/%.o,%.cpp,$@) -o $@
 
 clean:
 	rm -rf $(BUILDDIR) $(LIBDIR)
 
 $(PROG): $(OBJ)
 	mkdir -p $(BINDIR)
-	$(CC) $(CCDYNAMICFLAGS)  -o $(BINDIR)/$@ $^
+	$(CC) $(CCDYNAMICFLAGS) -o $(BINDIR)/$@ $^
 
+gcw: $(OBJGCW)
+	mkdir -p $(BINDIR)
+	$(CC) $(CCDYNAMICFLAGS) -o $(BINDIR)/$(PROG) $^
+
+opk:
+	mkdir -p dist/bin dist/resources/DawnLike/Objects/ dist/resources/DawnLike/Characters/
+	cp -r configs dist/
+	cp resources/tilesets.dat resources/floor-tiles.dat resources/taxonomy.dat dist/resources/
+	cp resources/DawnLike/Characters/Demon1.png resources/DawnLike/Characters/Player1.png resources/DawnLike/Characters/Demon0.png resources/DawnLike/Characters/Player0.png resources/DawnLike/Characters/Rodent1.png resources/DawnLike/Characters/Rodent0.png dist/resources/DawnLike/Characters/
+	cp resources/DawnLike/Objects/Floor.png dist/resources/DawnLike/Objects/
+	mkdir -p dist/bin
+	cp $(BINDIR)/$(PROG) dist/bin/
+	mksquashfs dist $(TARGETDIST) -all-root -noappend -no-exports -no-xattrs
 
 tools:
 	@mkdir -p $(BINDIR)/tools

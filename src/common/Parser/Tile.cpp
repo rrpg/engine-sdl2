@@ -73,13 +73,13 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 		// export data
 		fputs(tile.tileset, m_file);
 		fputc(' ', m_file);
-		fputs(std::to_string(tile.width).c_str(), m_file);
+		fprintf(m_file, "%d", tile.width);
 		fputc(' ', m_file);
-		fputs(std::to_string(tile.height).c_str(), m_file);
+		fprintf(m_file, "%d", tile.height);
 		fputc(' ', m_file);
-		fputs(std::to_string(tile.x).c_str(), m_file);
+		fprintf(m_file, "%d", tile.x);
 		fputc(' ', m_file);
-		fputs(std::to_string(tile.y).c_str(), m_file);
+		fprintf(m_file, "%d", tile.y);
 		fputc('\n', m_file);
 	}
 
