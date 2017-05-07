@@ -57,6 +57,7 @@ bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
 	// load it
 	E_FileParsingResult res;
 	parser.setMap(&m_map);
+	std::cout << "Loaded map: " << filePath << "\n";
 	res = parser.parseFile(filePath.c_str());
 	bool ret = true;
 	if (res != OK) {
