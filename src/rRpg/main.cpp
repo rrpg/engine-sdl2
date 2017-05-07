@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "globals.hpp"
 #include "SDL2_framework/Game.h"
 #include "State/Play.hpp"
 #include "Parser/Resource.hpp"
@@ -13,7 +14,6 @@ int main(int argc, char* args[]) {
 	time_t t;
 	srand((unsigned int) time(&t));
 	Game* g;
-	bool fullScreen = false;
 	char buffer[1024];
 	std::string binaryPath;
 	Uint32 frameStart, frameTime;
@@ -22,7 +22,7 @@ int main(int argc, char* args[]) {
 	binaryPath = buffer;
 	g = Game::Instance();
 	g->setBinaryPath(binaryPath);
-	if (!g->init("rRpg", 100, 100, 640, 480, fullScreen)) {
+	if (!g->init("rRpg", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, FULL_SCREEN)) {
 		Game::freeGame();
 		return 1;
 	}
