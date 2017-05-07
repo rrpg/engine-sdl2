@@ -4,6 +4,6 @@
 const bool FULL_SCREEN = false;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-const char *GAME_DATA_FOLDER = ".rrpg/";
+const char * const GAME_DATA_FOLDER = ".rrpg/";
 
 #endif
