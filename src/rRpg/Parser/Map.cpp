@@ -1,6 +1,7 @@
 #include "Map.hpp"
 #include "Utils.hpp"
 #include "Resource.hpp"
+#include "MapEvent.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
 #include <string.h>
@@ -58,6 +59,21 @@ bool MapParser::_parseLine(const char *line) {
 			break;
 		case 'c':
 			_parseMapContent(line);
+			break;
+
+		case 'E':
+			int xEvent, yEvent;
+			sscanfResult = sscanf(
+				line,
+				"%d %d \n",
+				&xEvent, &yEvent
+			);
+			if (sscanfResult != 2) {
+				retValue = false;
+			}
+			else {
+				m_map->addEvent((char) xEvent, (char) yEvent, new MapEvent());
+			}
 			break;
 
 		case 'e':

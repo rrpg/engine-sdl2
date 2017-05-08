@@ -96,6 +96,7 @@ class Map {
 	void initEnemies(ActorFactory &actorFactory);
 
 	MapEvent* getEvent(const int x, const int y) const;
+	void addEvent(const int x, const int y, MapEvent *event);
 };
 
 #endif
