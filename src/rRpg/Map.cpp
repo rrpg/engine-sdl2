@@ -60,6 +60,9 @@ Map::~Map() {
 	for (auto terrain : m_mTerrains) {
 		delete terrain.second;
 	}
+	for (auto event : m_mEvents) {
+		delete event.second;
+	}
 
 	if (m_tilesFile != 0) {
 		fclose(m_tilesFile);
@@ -392,4 +395,18 @@ bool Map::moveActor(Actor *a, int newX, int newY) {
 	}
 
 	return true;
+}
+
+MapEvent* Map::getEvent(const int x, const int y) const {
+	std::string key = _getCoordsKey(x, y);
+	auto it = m_mEvents.find(key);
+	if (it != m_mEvents.end()) {
+		return it->second;
+	}
+
+	return NULL;
+}
+
+void Map::addEvent(int x, int y, MapEvent *event) {
+	m_mEvents[_getCoordsKey(x, y)] = event;
 }

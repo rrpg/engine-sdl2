@@ -26,7 +26,7 @@ bool BehaviourPlayer::update(rRpg *engine, Actor *actor) {
 	}
 	else {
 		m_iLastTimeActed = currentTimestamp;
-		updated = _tryMove(actor, map, xDest, yDest);
+		updated = _tryMove(actor, engine, xDest, yDest);
 		if (!updated) {
 			updated = _tryAttack(actor, map, xDest, yDest);
 		}
@@ -62,9 +62,18 @@ bool BehaviourPlayer::_isDirectionPressed(int &x, int &y) {
 	return directionPressed;
 }
 
-bool BehaviourPlayer::_tryMove(Actor *actor, Map &map, int x, int y) {
+bool BehaviourPlayer::_tryMove(Actor *actor, rRpg *engine, int x, int y) {
 	MoveCommand command = MoveCommand();
-	return command.execute(actor, map, x, y);
+	Map &map = engine->getMap();
+	bool moved = command.execute(actor, map, x, y);
+	if (moved) {
+		MapEvent *event = map.getEvent(x, y);
+		if (event != 0) {
+			event->execute(engine);
+		}
+	}
+
+	return moved;
 }
 
 bool BehaviourPlayer::_tryAttack(Actor *actor, Map &map, int x, int y) {
