@@ -31,6 +31,8 @@ class Map {
 	static MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> s_mEnemiesPerMapType;
 
 	E_MapType m_type = DEFAULT;
+	std::string m_sName = "";
+	int m_iLevel = 0;
 	int m_iWidth = 0;
 	int m_iHeight = 0;
 	int m_iDisplayTileWidth = 0;
@@ -58,6 +60,11 @@ class Map {
 	Map(const Map &L); // copy constructor
 	Map & operator=(const Map &L); // assignment
 	~Map();
+
+	void setName(std::string name);
+	void setLevel(int level);
+	std::string getName();
+	int getLevel();
 
 	void initializeGrid(E_TerrainType type);
 	void setType(E_MapType type);

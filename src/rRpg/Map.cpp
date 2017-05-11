@@ -69,6 +69,22 @@ Map::~Map() {
 	}
 }
 
+void Map::setName(std::string name) {
+	m_sName = name;
+}
+
+void Map::setLevel(int level) {
+	m_iLevel = level;
+}
+
+std::string Map::getName() {
+	return m_sName;
+}
+
+int Map::getLevel() {
+	return m_iLevel;
+}
+
 void Map::setTileFile(const char *tilesFilePath) {
 	m_tilesFile = fopen(tilesFilePath, "r");
 }
