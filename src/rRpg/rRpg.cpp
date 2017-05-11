@@ -41,7 +41,11 @@ Actor *rRpg::getHero() {
 	return m_hero;
 }
 
-bool rRpg::loadMap(std::string mapName, int level, std::string tilesFilePath) {
+void rRpg::setTilesFile(std::string tilesFilePath) {
+	m_sTilesFile = tilesFilePath;
+}
+
+bool rRpg::loadMap(std::string mapName, int level) {
 	FILE *f = 0;
 	MapParser parser = MapParser();
 	char filePath[512];
@@ -79,7 +83,7 @@ bool rRpg::loadMap(std::string mapName, int level, std::string tilesFilePath) {
 	m_map.setName(mapName);
 	m_map.setLevel(level);
 	m_map.initEnemies(m_actorFactory);
-	m_map.setTileFile(tilesFilePath.c_str());
+	m_map.setTileFile(m_sTilesFile.c_str());
 	return ret;
 }
 
