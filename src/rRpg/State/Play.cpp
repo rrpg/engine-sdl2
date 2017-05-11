@@ -35,7 +35,8 @@ bool PlayState::onEnter() {
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
 	);
 	ret &= engine.loadMap(
-		Utils::getDataPath() + "/levels/cave-lvl1.map",
+		"cave1",
+		0,
 		Game::Instance()->getBinaryPath() + "/../resources/floor-tiles.dat"
 	);
 	engine.initialiseHero();

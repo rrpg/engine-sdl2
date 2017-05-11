@@ -1,8 +1,10 @@
 #include "rRpg.hpp"
+#include "Utils.hpp"
 #include "HUD.hpp"
 #include "MapGenerator.hpp"
 #include "Behaviour/Player.hpp"
 #include "Parser/Map.hpp"
+#include <libgen.h>
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>
@@ -39,11 +41,20 @@ Actor *rRpg::getHero() {
 	return m_hero;
 }
 
-bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
+bool rRpg::loadMap(std::string mapName, int level, std::string tilesFilePath) {
 	FILE *f = 0;
 	MapParser parser = MapParser();
+	char filePath[512];
+	sprintf(
+		filePath,
+		"%s/maps/%s-%d.dat",
+		Utils::getDataPath().c_str(),
+		mapName.c_str(),
+		level
+	);
+	Utils::createFolder(dirname(strdup(filePath)));
 	// generate the map if it does not exist
-	f = fopen(filePath.c_str(), "r");
+	f = fopen(filePath, "r");
 	if (f) {
 		fclose(f);
 	}
@@ -51,20 +62,22 @@ bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
 		MapGenerator generator = MapGenerator();
 		Map map = generator.generate(CAVE, 50, 50);
 		parser.setMap(&map);
-		parser.saveMap(filePath.c_str());
+		parser.saveMap(filePath);
 	}
 
 	// load it
 	E_FileParsingResult res;
 	parser.setMap(&m_map);
 	std::cout << "Loaded map: " << filePath << "\n";
-	res = parser.parseFile(filePath.c_str());
+	res = parser.parseFile(filePath);
 	bool ret = true;
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
 		ret = false;
 	}
 
+	m_map.setName(mapName);
+	m_map.setLevel(level);
 	m_map.initEnemies(m_actorFactory);
 	m_map.setTileFile(tilesFilePath.c_str());
 	return ret;
