@@ -84,6 +84,9 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	m_map.setLevel(level);
 	m_map.initEnemies(m_actorFactory);
 	m_map.setTileFile(m_sTilesFile.c_str());
+	m_hero->setX((int) m_map.getStartPoint().getX());
+	m_hero->setY((int) m_map.getStartPoint().getY());
+	m_map.addActor(m_hero);
 	return ret;
 }
 
@@ -102,9 +105,6 @@ bool rRpg::loadTaxonomy(std::string filePath) {
 
 void rRpg::initialiseHero() {
 	m_hero = m_actorFactory.createHero();
-	m_hero->setX((int) m_map.getStartPoint().getX());
-	m_hero->setY((int) m_map.getStartPoint().getY());
-	m_map.addActor(m_hero);
 }
 
 void rRpg::update() {
