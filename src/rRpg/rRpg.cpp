@@ -56,24 +56,25 @@ bool rRpg::loadMap(std::string mapName, int level) {
 		mapName.c_str(),
 		level
 	);
+
+	parser.setMap(&m_map);
 	// generate the map if it does not exist
 	struct stat buffer;
 	if (stat(filePath, &buffer) != 0) {
 		Utils::createFolder(dirname(strdup(filePath)));
 		MapGenerator generator = MapGenerator();
-		Map map = generator.generate(CAVE, 50, 50);
-		parser.setMap(&map);
+		m_map = generator.generate(CAVE, 50, 50);
 		parser.saveMap(filePath);
 	}
-
-	// load it
-	E_FileParsingResult res;
-	parser.setMap(&m_map);
-	std::cout << "Loading map: " << filePath << "\n";
-	res = parser.parseFile(filePath);
-	if (res != OK) {
-		std::cout << "error parsing map: " << res << std::endl;
-		return false;
+	else {
+		// load it
+		E_FileParsingResult res;
+		std::cout << "Loading map: " << filePath << "\n";
+		res = parser.parseFile(filePath);
+		if (res != OK) {
+			std::cout << "error parsing map: " << res << std::endl;
+			return false;
+		}
 	}
 
 	m_map.setName(mapName);
