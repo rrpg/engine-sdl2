@@ -5,6 +5,7 @@
 #include "Behaviour/Player.hpp"
 #include "Parser/Map.hpp"
 #include <libgen.h>
+#include <sys/stat.h>
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>
@@ -46,7 +47,6 @@ void rRpg::setTilesFile(std::string tilesFilePath) {
 }
 
 bool rRpg::loadMap(std::string mapName, int level) {
-	FILE *f = 0;
 	MapParser parser = MapParser();
 	char filePath[512];
 	sprintf(
@@ -58,11 +58,8 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	);
 	Utils::createFolder(dirname(strdup(filePath)));
 	// generate the map if it does not exist
-	f = fopen(filePath, "r");
-	if (f) {
-		fclose(f);
-	}
-	else {
+	struct stat buffer;
+	if (stat(filePath, &buffer) != 0) {
 		MapGenerator generator = MapGenerator();
 		Map map = generator.generate(CAVE, 50, 50);
 		parser.setMap(&map);
