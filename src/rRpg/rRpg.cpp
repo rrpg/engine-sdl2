@@ -71,10 +71,9 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	parser.setMap(&m_map);
 	std::cout << "Loading map: " << filePath << "\n";
 	res = parser.parseFile(filePath);
-	bool ret = true;
 	if (res != OK) {
 		std::cout << "error parsing map: " << res << std::endl;
-		ret = false;
+		return false;
 	}
 
 	m_map.setName(mapName);
@@ -84,7 +83,8 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	m_hero->setX((int) m_map.getStartPoint().getX());
 	m_hero->setY((int) m_map.getStartPoint().getY());
 	m_map.addActor(m_hero);
-	return ret;
+
+	return true;
 }
 
 bool rRpg::loadTaxonomy(std::string filePath) {
