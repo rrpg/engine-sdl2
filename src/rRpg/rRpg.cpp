@@ -69,7 +69,7 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	// load it
 	E_FileParsingResult res;
 	parser.setMap(&m_map);
-	std::cout << "Loaded map: " << filePath << "\n";
+	std::cout << "Loading map: " << filePath << "\n";
 	res = parser.parseFile(filePath);
 	bool ret = true;
 	if (res != OK) {
