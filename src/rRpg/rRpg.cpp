@@ -56,10 +56,10 @@ bool rRpg::loadMap(std::string mapName, int level) {
 		mapName.c_str(),
 		level
 	);
-	Utils::createFolder(dirname(strdup(filePath)));
 	// generate the map if it does not exist
 	struct stat buffer;
 	if (stat(filePath, &buffer) != 0) {
+		Utils::createFolder(dirname(strdup(filePath)));
 		MapGenerator generator = MapGenerator();
 		Map map = generator.generate(CAVE, 50, 50);
 		parser.setMap(&map);
