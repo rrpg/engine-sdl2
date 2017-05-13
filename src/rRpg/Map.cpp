@@ -54,6 +54,9 @@ Map & Map::operator=(const Map &r) {
 }
 
 Map::~Map() {
+	m_vGrid.clear();
+	m_mTerrainsTileData.clear();
+	m_vEnemySpawnableCells.clear();
 	for (auto actor : m_mActors) {
 		delete actor.second;
 	}
@@ -63,6 +66,9 @@ Map::~Map() {
 	for (auto event : m_mEvents) {
 		delete event.second;
 	}
+	m_mActors.clear();
+	m_mTerrains.clear();
+	m_mEvents.clear();
 
 	if (m_tilesFile != 0) {
 		fclose(m_tilesFile);
