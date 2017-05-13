@@ -26,7 +26,7 @@ Map::Map(const Map &r) :
 	m_iDisplayTileHeight(r.m_iDisplayTileHeight),
 	m_sStartPoint(r.m_sStartPoint),
 	m_vGrid(r.m_vGrid),
-	m_mTerrains(r.m_mTerrains),
+	m_mTerrains({}),
 	m_mTerrainsTileData(r.m_mTerrainsTileData),
 	m_mActors(r.m_mActors),
 	m_vEnemySpawnableCells(r.m_vEnemySpawnableCells)
@@ -46,7 +46,7 @@ Map & Map::operator=(const Map &r) {
 	m_iDisplayTileHeight = r.m_iDisplayTileHeight;
 	m_sStartPoint = r.m_sStartPoint;
 	m_vGrid = r.m_vGrid;
-	m_mTerrains = r.m_mTerrains;
+	m_mTerrains = {};
 	m_mTerrainsTileData = r.m_mTerrainsTileData;
 	m_mActors = r.m_mActors;
 	m_vEnemySpawnableCells = r.m_vEnemySpawnableCells;
