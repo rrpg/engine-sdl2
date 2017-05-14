@@ -2,6 +2,7 @@
 #include "Terrain.hpp"
 #include <limits.h>
 #include <algorithm>
+#include <MapEvent.hpp>
 
 MapGenerator::MapGenerator() {
 }
@@ -31,6 +32,7 @@ void MapGenerator::_generateCave(Map &map) {
 
 	_setStartPoint(map);
 	_dispatchEnemies(map, 15);
+	_addStairToNextLevel(map);
 }
 
 void MapGenerator::_initialiseAutomaton(Map &map) {
@@ -277,4 +279,13 @@ void MapGenerator::_dispatchEnemies(Map &map, const int nbMaxEnemies) {
 		_findClosestWalkableCell(map, x, y, visited, x, y);
 		map.addEnemySpawnableCell((char) x, (char) y);
 	}
+}
+
+void MapGenerator::_addStairToNextLevel(Map &map) {
+	int x = rand() % map.getWidth(),
+		y = rand() % map.getHeight();
+
+	std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
+	_findClosestWalkableCell(map, x, y, visited, x, y);
+	map.addEvent(x, y, new MapEvent());
 }

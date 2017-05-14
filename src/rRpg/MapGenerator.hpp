@@ -27,6 +27,7 @@ class MapGenerator {
 		int &yOut
 	);
 	void _dispatchEnemies(Map &map, const int nbMaxEnemies);
+	void _addStairToNextLevel(Map &map);
 
 	public:
 	MapGenerator();
