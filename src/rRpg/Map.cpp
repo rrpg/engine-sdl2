@@ -433,3 +433,7 @@ void Map::addEvent(int x, int y, MapEvent *event) {
 	t_coordinates coords = {x, y};
 	m_mEvents[_getCoordsKey(x, y)] = std::make_pair(coords, event);
 }
+
+std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> Map::getEvents() {
+	return m_mEvents;
+}
