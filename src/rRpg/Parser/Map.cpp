@@ -158,6 +158,11 @@ bool MapParser::saveMap(const char *filePath) {
 		fprintf(mapFile, "e %d %d\n", enemyPlace.first, enemyPlace.second);
 	}
 
+	for (auto event : m_map->getEvents()) {
+		t_coordinates coords = event.second.first;
+		fprintf(mapFile, "E %d %d\n", coords.first, coords.second);
+	}
+
 	bool newLine = true;
 	int cellCount = 0;
 	for (auto cell : *(m_map->getGrid())) {
