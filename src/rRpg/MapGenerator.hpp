@@ -8,30 +8,31 @@
 
 class MapGenerator {
 	private:
-	void _generateCave(Map &map);
-	void _initialiseAutomaton(Map &map);
-	void _automatonStep(Map &map);
-	void _joinRooms(Map &map);
-	void _cleanRooms(Map &map);
+	Map &m_map;
+
+	void _generateCave();
+	void _initialiseAutomaton();
+	void _automatonStep();
+	void _joinRooms();
+	void _cleanRooms();
 	std::vector<CaveRoom::S_Room>::iterator _largestRoom(std::vector<CaveRoom::S_Room> &rooms);
-	size_t _digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, Map &map, size_t cell1Index, size_t cell2Index);
-	int _getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType);
-	void _setStartPoint(Map &map);
-	std::vector<t_coordinates> _findWalkableNeighbours(Map &map, const int x, const int y);
+	size_t _digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, size_t cell1Index, size_t cell2Index);
+	int _getCountAliveNeighbours(int i, int j, E_TerrainType aliveType);
+	void _setStartPoint();
+	std::vector<t_coordinates> _findWalkableNeighbours(const int x, const int y);
 	bool _findClosestWalkableCell(
-		Map &map,
 		const int x,
 		const int y,
 		std::vector<bool> &visited,
 		int &xOut,
 		int &yOut
 	);
-	void _dispatchEnemies(Map &map, const int nbMaxEnemies);
-	void _addStairToNextLevel(Map &map);
+	void _dispatchEnemies(const int nbMaxEnemies);
+	void _addStairToNextLevel();
 
 	public:
-	MapGenerator();
-	Map generate(E_MapType type, short width, short height);
+	MapGenerator(Map &map);
+	void generate(E_MapType type, short width, short height);
 };
 
 #endif
