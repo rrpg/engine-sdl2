@@ -14,10 +14,11 @@
 rRpg::rRpg() : m_hero(0), m_actorFactory(ActorFactory()), m_map(Map()) {
 }
 
-rRpg::rRpg(const rRpg &r) : m_actorFactory(ActorFactory()), m_map(Map()) {
-	m_hero = r.m_hero;
-	m_map = r.m_map;
-	m_actorFactory = r.m_actorFactory;
+rRpg::rRpg(const rRpg &r) :
+	m_hero(r.m_hero),
+	m_actorFactory(r.m_actorFactory),
+	m_map(Map())
+{
 }
 
 rRpg & rRpg::operator=(const rRpg &r) {
