@@ -29,6 +29,7 @@ Map::Map(const Map &r) :
 	m_mTerrains({}),
 	m_mTerrainsTileData(r.m_mTerrainsTileData),
 	m_mActors(r.m_mActors),
+	m_mEvents(r.m_mEvents),
 	m_vEnemySpawnableCells(r.m_vEnemySpawnableCells)
 {
 }
@@ -49,6 +50,7 @@ Map & Map::operator=(const Map &r) {
 	m_mTerrains = {};
 	m_mTerrainsTileData = r.m_mTerrainsTileData;
 	m_mActors = r.m_mActors;
+	m_mEvents = r.m_mEvents;
 	m_vEnemySpawnableCells = r.m_vEnemySpawnableCells;
 	return *this;
 }
