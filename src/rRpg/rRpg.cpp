@@ -1,23 +1,23 @@
 #include "rRpg.hpp"
-#include "Utils.hpp"
 #include "HUD.hpp"
-#include "MapGenerator.hpp"
+#include "MapManager.hpp"
 #include "Behaviour/Player.hpp"
-#include "Parser/Map.hpp"
-#include <libgen.h>
-#include <sys/stat.h>
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>
 #include "SDL2_framework/Game.h"
 
-rRpg::rRpg() : m_hero(0), m_actorFactory(ActorFactory()), m_map(Map()) {
+rRpg::rRpg() :
+	m_hero(0),
+	m_actorFactory(ActorFactory()),
+	m_mapManager(MapManager())
+{
 }
 
 rRpg::rRpg(const rRpg &r) :
 	m_hero(r.m_hero),
 	m_actorFactory(r.m_actorFactory),
-	m_map(Map())
+	m_mapManager(MapManager())
 {
 }
 
@@ -28,7 +28,6 @@ rRpg & rRpg::operator=(const rRpg &r) {
 	}
 
 	m_hero = r.m_hero;
-	m_map = r.m_map;
 	return *this;
 }
 
@@ -36,7 +35,7 @@ rRpg::~rRpg() {
 }
 
 Map &rRpg::getMap() {
-	return m_map;
+	return m_mapManager.getMap();
 }
 
 Actor *rRpg::getHero() {
@@ -48,45 +47,15 @@ void rRpg::setTilesFile(std::string tilesFilePath) {
 }
 
 bool rRpg::loadMap(std::string mapName, int level) {
-	MapParser parser = MapParser();
-	char filePath[512];
-	sprintf(
-		filePath,
-		"%s/maps/%s-%d.dat",
-		Utils::getDataPath().c_str(),
-		mapName.c_str(),
-		level
-	);
-
-	m_map = Map();
-	parser.setMap(&m_map);
-	// generate the map if it does not exist
-	struct stat buffer;
-	if (stat(filePath, &buffer) != 0) {
-		Utils::createFolder(dirname(strdup(filePath)));
-		MapGenerator generator = MapGenerator(m_map);
-		generator.generate(CAVE, 50, 50);
-		parser.saveMap(filePath);
-	}
-	else {
-		// load it
-		E_FileParsingResult res;
-		std::cout << "Loading map: " << filePath << "\n";
-		res = parser.parseFile(filePath);
-		if (res != OK) {
-			std::cout << "error parsing map: " << res << std::endl;
-			return false;
-		}
+	if (!m_mapManager.loadMap(mapName, level)) {
+		return false;
 	}
 
-	m_map.setName(mapName);
-	m_map.setLevel(level);
-	m_map.initEnemies(m_actorFactory);
-	m_map.setTileFile(m_sTilesFile.c_str());
-	m_hero->setX((int) m_map.getStartPoint().getX());
-	m_hero->setY((int) m_map.getStartPoint().getY());
-	m_map.addActor(m_hero);
-
+	m_mapManager.getMap().initEnemies(m_actorFactory);
+	m_mapManager.getMap().setTileFile(m_sTilesFile.c_str());
+	m_hero->setX((int) m_mapManager.getMap().getStartPoint().getX());
+	m_hero->setY((int) m_mapManager.getMap().getStartPoint().getY());
+	m_mapManager.getMap().addActor(m_hero);
 	return true;
 }
 
@@ -108,7 +77,7 @@ void rRpg::initialiseHero() {
 }
 
 void rRpg::update() {
-	std::unordered_map<std::string, Actor*> actors = m_map.getActors();
+	std::unordered_map<std::string, Actor*> actors = m_mapManager.getMap().getActors();
 	unblock();
 
 	m_hero->update(this);
@@ -119,7 +88,7 @@ void rRpg::update() {
 	}
 
 	if (!m_hero->isDead()) {
-		m_map.clearDeadActors();
+		m_mapManager.getMap().clearDeadActors();
 	}
 }
 
@@ -128,7 +97,7 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_map.render(camera, m_hero->getX(), m_hero->getY());
+	m_mapManager.getMap().render(camera, m_hero->getX(), m_hero->getY());
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

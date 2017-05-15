@@ -2,14 +2,14 @@
 #define __RRPG__
 
 #include "ActorFactory.hpp"
-#include "Map.hpp"
+#include "MapManager.hpp"
 #include <string>
 
 class rRpg {
 	private:
 	Actor* m_hero = 0;
 	ActorFactory m_actorFactory;
-	Map m_map;
+	MapManager m_mapManager;
 	bool m_bIsBlocked = false;
 	std::string m_sTilesFile = "";
 
