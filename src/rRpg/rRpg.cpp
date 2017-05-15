@@ -57,6 +57,7 @@ bool rRpg::loadMap(std::string mapName, int level) {
 		level
 	);
 
+	m_map = Map();
 	parser.setMap(&m_map);
 	// generate the map if it does not exist
 	struct stat buffer;
