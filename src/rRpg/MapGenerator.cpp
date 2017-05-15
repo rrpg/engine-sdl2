@@ -2,40 +2,39 @@
 #include "Terrain.hpp"
 #include <limits.h>
 #include <algorithm>
+#include <MapEvent.hpp>
 
-MapGenerator::MapGenerator() {
+MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
-Map MapGenerator::generate(E_MapType type, short width, short height) {
-	Map map;
-	map.setType(type);
-	map.setDimensions(width, height);
-	map.setDisplayTileDimensions(16, 16);
+void MapGenerator::generate(E_MapType type, short width, short height) {
+	m_map.setType(type);
+	m_map.setDimensions(width, height);
+	m_map.setDisplayTileDimensions(16, 16);
 
 	if (type == CAVE) {
-		_generateCave(map);
+		_generateCave();
 	}
-
-	return map;
 }
 
-void MapGenerator::_generateCave(Map &map) {
-	map.initializeGrid(TERRAIN_ROCK_NORMAL);
-	_initialiseAutomaton(map);
+void MapGenerator::_generateCave() {
+	m_map.initializeGrid(TERRAIN_ROCK_NORMAL);
+	_initialiseAutomaton();
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
-		_automatonStep(map);
+		_automatonStep();
 	}
 
-	_joinRooms(map);
-	_cleanRooms(map);
+	_joinRooms();
+	_cleanRooms();
 
-	_setStartPoint(map);
-	_dispatchEnemies(map, 15);
+	_setStartPoint();
+	_dispatchEnemies(15);
+	_addStairToNextLevel();
 }
 
-void MapGenerator::_initialiseAutomaton(Map &map) {
-	int mapWidth = map.getWidth(),
-		mapHeight = map.getHeight();
+void MapGenerator::_initialiseAutomaton() {
+	int mapWidth = m_map.getWidth(),
+		mapHeight = m_map.getHeight();
 	for (int j = 0; j < mapHeight; ++j) {
 		for (int i = 0; i < mapWidth; ++i) {
 			E_TerrainType type;
@@ -48,14 +47,14 @@ void MapGenerator::_initialiseAutomaton(Map &map) {
 			else {
 				type = TERRAIN_SOIL_NORMAL;
 			}
-			map.setTile(i, j, type);
+			m_map.setTile(i, j, type);
 		}
 	}
 }
 
-void MapGenerator::_automatonStep(Map &map) {
-	int mapWidth = map.getWidth(),
-		mapHeight = map.getHeight(),
+void MapGenerator::_automatonStep() {
+	int mapWidth = m_map.getWidth(),
+		mapHeight = m_map.getHeight(),
 		deathLimit = 2,
 		birthLimit = 3;
 	size_t mapSize = (size_t) (mapWidth * mapHeight);
@@ -65,13 +64,13 @@ void MapGenerator::_automatonStep(Map &map) {
 	// the edges will always be of rock
 	for (int j = 0; j < mapHeight; ++j) {
 		for (int i = 0; i < mapWidth; ++i) {
-			size_t index = map.getTileIndex(i, j);
+			size_t index = m_map.getTileIndex(i, j);
 			if (j == 0 || i == 0 || j == mapHeight - 1 || i == mapWidth - 1) {
 				tmpGrid[index] = TERRAIN_ROCK_NORMAL;
 				continue;
 			}
-			int nbAlives = _getCountAliveNeighbours(map, i, j, aliveType);
-			if (map.getTile(i, j) == aliveType) {
+			int nbAlives = _getCountAliveNeighbours(i, j, aliveType);
+			if (m_map.getTile(i, j) == aliveType) {
 				if (nbAlives < deathLimit) {
 					tmpGrid[index] = deadType;
 				}
@@ -90,7 +89,7 @@ void MapGenerator::_automatonStep(Map &map) {
 		}
 	}
 
-	map.setGrid(tmpGrid);
+	m_map.setGrid(tmpGrid);
 }
 
 std::vector<CaveRoom::S_Room>::iterator MapGenerator::_largestRoom(std::vector<CaveRoom::S_Room> &rooms) {
@@ -103,14 +102,14 @@ std::vector<CaveRoom::S_Room>::iterator MapGenerator::_largestRoom(std::vector<C
 	);
 }
 
-void MapGenerator::_joinRooms(Map &map) {
+void MapGenerator::_joinRooms() {
 	bool enoughRoom = false;
 	do {
-		CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
+		CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(m_map);
 		auto largest = _largestRoom(roomCollection.rooms);
 		CaveRoom::S_Room largestRoom = *largest;
 
-		double sizeLargestRoom = (double) largestRoom.cells.size() / (map.getWidth() * map.getHeight());
+		double sizeLargestRoom = (double) largestRoom.cells.size() / (m_map.getWidth() * m_map.getHeight());
 		if (sizeLargestRoom >= 0.4200 || roomCollection.rooms.size() == 1) {
 			enoughRoom = true;
 		}
@@ -120,7 +119,6 @@ void MapGenerator::_joinRooms(Map &map) {
 			// merge largestRoom and secondLargestRoom
 			_digBetweenRooms(
 				roomCollection,
-				map,
 				largestRoom.cells[(size_t) rand() % largestRoom.cells.size()],
 				secondLargestRoom.cells[(size_t) rand() % secondLargestRoom.cells.size()]
 			);
@@ -128,23 +126,23 @@ void MapGenerator::_joinRooms(Map &map) {
 	} while (!enoughRoom);
 }
 
-size_t MapGenerator::_digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, Map &map, size_t cell1Index, size_t cell2Index) {
-	int xStart = (signed) cell1Index % map.getWidth(),
-		yStart = (signed) cell1Index / map.getWidth(),
-		xEnd = (signed) cell2Index % map.getWidth(),
-		yEnd = (signed) cell2Index / map.getWidth(),
+size_t MapGenerator::_digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, size_t cell1Index, size_t cell2Index) {
+	int xStart = (signed) cell1Index % m_map.getWidth(),
+		yStart = (signed) cell1Index / m_map.getWidth(),
+		xEnd = (signed) cell2Index % m_map.getWidth(),
+		yEnd = (signed) cell2Index / m_map.getWidth(),
 		xWay = (xStart < xEnd) - (xStart > xEnd),
 		yWay = (yStart < yEnd) - (yStart > yEnd),
 		xCurr = xStart,
 		yCurr = yStart;
-	size_t cellStart = map.getTileIndex(xStart, yStart),
+	size_t cellStart = m_map.getTileIndex(xStart, yStart),
 		cellIndex;
 
 	std::vector<t_coordinates> cellsToDig = {};
 	while (xCurr != xEnd || yCurr != yEnd) {
-		cellIndex = map.getTileIndex(xCurr, yCurr);
+		cellIndex = m_map.getTileIndex(xCurr, yCurr);
 		// wall found, add it to the list of cells to dig
-		if (!map.isCellWalkable(xCurr, yCurr)) {
+		if (!m_map.isCellWalkable(xCurr, yCurr)) {
 			cellsToDig.push_back({xCurr, yCurr});
 			// @TODO stop if one of the neighbour is a soil different than the
 			// start cell
@@ -167,14 +165,14 @@ size_t MapGenerator::_digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection
 
 	for (auto cell: cellsToDig) {
 		// add cell to room
-		map.setTile(cell.first, cell.second, TERRAIN_SOIL_NORMAL);
+		m_map.setTile(cell.first, cell.second, TERRAIN_SOIL_NORMAL);
 	}
 
 	return cellIndex;
 }
 
-void MapGenerator::_cleanRooms(Map &map) {
-	CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(map);
+void MapGenerator::_cleanRooms() {
+	CaveRoom::S_RoomCollection roomCollection = CaveRoom::findRooms(m_map);
 	auto largest = _largestRoom(roomCollection.rooms);
 	roomCollection.rooms.erase(largest);
 	for_each(
@@ -185,9 +183,9 @@ void MapGenerator::_cleanRooms(Map &map) {
 				room.cells.begin(),
 				room.cells.end(),
 				[&](const unsigned int &cellIndex) {
-					map.setTile(
-						(signed) cellIndex % map.getWidth(),
-						(signed) cellIndex / map.getWidth(),
+					m_map.setTile(
+						(signed) cellIndex % m_map.getWidth(),
+						(signed) cellIndex / m_map.getWidth(),
 						TERRAIN_ROCK_NORMAL
 					);
 				}
@@ -196,28 +194,28 @@ void MapGenerator::_cleanRooms(Map &map) {
 	);
 }
 
-int MapGenerator::_getCountAliveNeighbours(Map &map, int i, int j, E_TerrainType aliveType) {
-	int nbAlive = (map.getTile(i - 1, j - 1) == aliveType)
-	   + (map.getTile(i, j - 1) == aliveType)
-	   + (map.getTile(i + 1, j - 1) == aliveType)
-	   + (map.getTile(i - 1, j) == aliveType)
-	   + (map.getTile(i + 1, j) == aliveType)
-	   + (map.getTile(i - 1, j + 1) == aliveType)
-	   + (map.getTile(i, j + 1) == aliveType)
-	   + (map.getTile(i + 1, j + 1) == aliveType);
+int MapGenerator::_getCountAliveNeighbours(int i, int j, E_TerrainType aliveType) {
+	int nbAlive = (m_map.getTile(i - 1, j - 1) == aliveType)
+	   + (m_map.getTile(i, j - 1) == aliveType)
+	   + (m_map.getTile(i + 1, j - 1) == aliveType)
+	   + (m_map.getTile(i - 1, j) == aliveType)
+	   + (m_map.getTile(i + 1, j) == aliveType)
+	   + (m_map.getTile(i - 1, j + 1) == aliveType)
+	   + (m_map.getTile(i, j + 1) == aliveType)
+	   + (m_map.getTile(i + 1, j + 1) == aliveType);
 
 	return nbAlive;
 }
 
-void MapGenerator::_setStartPoint(Map &map) {
-	int x = (rand() % map.getWidth()),
-		y = (rand() % map.getHeight());
-	std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
-	_findClosestWalkableCell(map, x, y, visited, x, y);
-	map.setStartPoint((float) x, (float) y);
+void MapGenerator::_setStartPoint() {
+	int x = (rand() % m_map.getWidth()),
+		y = (rand() % m_map.getHeight());
+	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
+	_findClosestWalkableCell(x, y, visited, x, y);
+	m_map.setStartPoint((float) x, (float) y);
 }
 
-std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(Map &map, const int x, const int y) {
+std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(const int x, const int y) {
 	int neighbourDirections[][2] = {
 		{-1, 0},
 		{1, 0},
@@ -229,7 +227,7 @@ std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(Map &map, const
 	for (int n = 0; n < 4; ++n) {
 		int xN = x + neighbourDirections[n][0],
 			yN = y + neighbourDirections[n][1];
-		if (map.isCellWalkable(xN, yN, WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION)) {
+		if (m_map.isCellWalkable(xN, yN, WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION)) {
 			neighbours.push_back(std::make_pair(xN, yN));
 		}
 	}
@@ -238,43 +236,51 @@ std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(Map &map, const
 }
 
 bool MapGenerator::_findClosestWalkableCell(
-	Map &map,
 	const int x,
 	const int y,
 	std::vector<bool> &visited,
 	int &xOut,
 	int &yOut
 ) {
-	size_t cellIndex = map.getTileIndex(x, y);
-	if (!map.areCoordinatesValid(x, y) || visited[cellIndex]) {
+	size_t cellIndex = m_map.getTileIndex(x, y);
+	if (!m_map.areCoordinatesValid(x, y) || visited[cellIndex]) {
 		return false;
 	}
 
-	if (map.isCellWalkable(x, y, WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION)) {
+	if (m_map.isCellWalkable(x, y, WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION)) {
 		return true;
 	}
 
 	visited[cellIndex] = true;
-	std::vector<t_coordinates> neighbours = _findWalkableNeighbours(map, x, y);
+	std::vector<t_coordinates> neighbours = _findWalkableNeighbours(x, y);
 	if (neighbours.size()) {
 		xOut = neighbours[0].first;
 		yOut = neighbours[0].second;
 		return true;
 	}
 
-	return _findClosestWalkableCell(map, x + 1, y, visited, xOut, yOut)
-		|| _findClosestWalkableCell(map, x - 1, y, visited, xOut, yOut)
-		|| _findClosestWalkableCell(map, x, y + 1, visited, xOut, yOut)
-		|| _findClosestWalkableCell(map, x, y - 1, visited, xOut, yOut);
+	return _findClosestWalkableCell(x + 1, y, visited, xOut, yOut)
+		|| _findClosestWalkableCell(x - 1, y, visited, xOut, yOut)
+		|| _findClosestWalkableCell(x, y + 1, visited, xOut, yOut)
+		|| _findClosestWalkableCell(x, y - 1, visited, xOut, yOut);
 }
 
-void MapGenerator::_dispatchEnemies(Map &map, const int nbMaxEnemies) {
+void MapGenerator::_dispatchEnemies(const int nbMaxEnemies) {
 	for (int i = 0; i < nbMaxEnemies; ++i) {
-		int x = rand() % map.getWidth(),
-			y = rand() % map.getHeight();
+		int x = rand() % m_map.getWidth(),
+			y = rand() % m_map.getHeight();
 
-		std::vector<bool> visited((size_t) (map.getWidth() * map.getHeight()), false);
-		_findClosestWalkableCell(map, x, y, visited, x, y);
-		map.addEnemySpawnableCell((char) x, (char) y);
+		std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
+		_findClosestWalkableCell(x, y, visited, x, y);
+		m_map.addEnemySpawnableCell((char) x, (char) y);
 	}
+}
+
+void MapGenerator::_addStairToNextLevel() {
+	int x = rand() % m_map.getWidth(),
+		y = rand() % m_map.getHeight();
+
+	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
+	_findClosestWalkableCell(x, y, visited, x, y);
+	m_map.addEvent(x, y, new MapEvent());
 }

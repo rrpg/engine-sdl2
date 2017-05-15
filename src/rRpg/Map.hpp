@@ -31,6 +31,8 @@ class Map {
 	static MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> s_mEnemiesPerMapType;
 
 	E_MapType m_type = DEFAULT;
+	std::string m_sName = "";
+	int m_iLevel = 0;
 	int m_iWidth = 0;
 	int m_iHeight = 0;
 	int m_iDisplayTileWidth = 0;
@@ -40,7 +42,7 @@ class Map {
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, Actor*> m_mActors;
-	std::unordered_map<std::string, MapEvent*> m_mEvents = {};
+	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> m_mEvents = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	FILE *m_tilesFile = 0;
@@ -58,6 +60,11 @@ class Map {
 	Map(const Map &L); // copy constructor
 	Map & operator=(const Map &L); // assignment
 	~Map();
+
+	void setName(std::string name);
+	void setLevel(int level);
+	std::string getName();
+	int getLevel();
 
 	void initializeGrid(E_TerrainType type);
 	void setType(E_MapType type);
@@ -97,6 +104,7 @@ class Map {
 
 	MapEvent* getEvent(const int x, const int y) const;
 	void addEvent(const int x, const int y, MapEvent *event);
+	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> getEvents();
 };
 
 #endif

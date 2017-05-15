@@ -3,5 +3,8 @@
 #include <iostream>
 
 void MapEvent::execute(rRpg *engine) {
-	std::cout << "execute event with engine" << engine << "\n";
+	engine->loadMap(
+		engine->getMap().getName(),
+		engine->getMap().getLevel() + 1
+	);
 }

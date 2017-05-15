@@ -1,8 +1,11 @@
 #include "rRpg.hpp"
+#include "Utils.hpp"
 #include "HUD.hpp"
 #include "MapGenerator.hpp"
 #include "Behaviour/Player.hpp"
 #include "Parser/Map.hpp"
+#include <libgen.h>
+#include <sys/stat.h>
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>
@@ -39,35 +42,51 @@ Actor *rRpg::getHero() {
 	return m_hero;
 }
 
-bool rRpg::loadMap(std::string filePath, std::string tilesFilePath) {
-	FILE *f = 0;
+void rRpg::setTilesFile(std::string tilesFilePath) {
+	m_sTilesFile = tilesFilePath;
+}
+
+bool rRpg::loadMap(std::string mapName, int level) {
 	MapParser parser = MapParser();
+	char filePath[512];
+	sprintf(
+		filePath,
+		"%s/maps/%s-%d.dat",
+		Utils::getDataPath().c_str(),
+		mapName.c_str(),
+		level
+	);
+
+	m_map = Map();
+	parser.setMap(&m_map);
 	// generate the map if it does not exist
-	f = fopen(filePath.c_str(), "r");
-	if (f) {
-		fclose(f);
+	struct stat buffer;
+	if (stat(filePath, &buffer) != 0) {
+		Utils::createFolder(dirname(strdup(filePath)));
+		MapGenerator generator = MapGenerator(m_map);
+		generator.generate(CAVE, 50, 50);
+		parser.saveMap(filePath);
 	}
 	else {
-		MapGenerator generator = MapGenerator();
-		Map map = generator.generate(CAVE, 50, 50);
-		parser.setMap(&map);
-		parser.saveMap(filePath.c_str());
+		// load it
+		E_FileParsingResult res;
+		std::cout << "Loading map: " << filePath << "\n";
+		res = parser.parseFile(filePath);
+		if (res != OK) {
+			std::cout << "error parsing map: " << res << std::endl;
+			return false;
+		}
 	}
 
-	// load it
-	E_FileParsingResult res;
-	parser.setMap(&m_map);
-	std::cout << "Loaded map: " << filePath << "\n";
-	res = parser.parseFile(filePath.c_str());
-	bool ret = true;
-	if (res != OK) {
-		std::cout << "error parsing map: " << res << std::endl;
-		ret = false;
-	}
-
+	m_map.setName(mapName);
+	m_map.setLevel(level);
 	m_map.initEnemies(m_actorFactory);
-	m_map.setTileFile(tilesFilePath.c_str());
-	return ret;
+	m_map.setTileFile(m_sTilesFile.c_str());
+	m_hero->setX((int) m_map.getStartPoint().getX());
+	m_hero->setY((int) m_map.getStartPoint().getY());
+	m_map.addActor(m_hero);
+
+	return true;
 }
 
 bool rRpg::loadTaxonomy(std::string filePath) {
@@ -85,9 +104,6 @@ bool rRpg::loadTaxonomy(std::string filePath) {
 
 void rRpg::initialiseHero() {
 	m_hero = m_actorFactory.createHero();
-	m_hero->setX((int) m_map.getStartPoint().getX());
-	m_hero->setY((int) m_map.getStartPoint().getY());
-	m_map.addActor(m_hero);
 }
 
 void rRpg::update() {

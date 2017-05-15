@@ -11,6 +11,7 @@ class rRpg {
 	ActorFactory m_actorFactory;
 	Map m_map;
 	bool m_bIsBlocked = false;
+	std::string m_sTilesFile = "";
 
 	public:
 	rRpg();
@@ -19,7 +20,8 @@ class rRpg {
 	~rRpg();
 	Map &getMap();
 	Actor *getHero();
-	bool loadMap(std::string filePath, std::string tilesFilePath);
+	void setTilesFile(std::string);
+	bool loadMap(std::string mapName, int level);
 	bool loadTaxonomy(std::string filePath);
 	void initialiseHero();
 	void update();

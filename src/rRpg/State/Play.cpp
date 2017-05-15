@@ -31,14 +31,14 @@ void PlayState::render() {
 
 bool PlayState::onEnter() {
 	bool ret = true;
+	engine.setTilesFile(
+		Game::Instance()->getBinaryPath() + "/../resources/floor-tiles.dat"
+	);
 	ret &= engine.loadTaxonomy(
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
 	);
-	ret &= engine.loadMap(
-		Utils::getDataPath() + "/levels/cave-lvl1.map",
-		Game::Instance()->getBinaryPath() + "/../resources/floor-tiles.dat"
-	);
 	engine.initialiseHero();
+	ret &= engine.loadMap("cave1", 0);
 	return ret;
 }
 

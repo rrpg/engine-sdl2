@@ -26,9 +26,10 @@ Map::Map(const Map &r) :
 	m_iDisplayTileHeight(r.m_iDisplayTileHeight),
 	m_sStartPoint(r.m_sStartPoint),
 	m_vGrid(r.m_vGrid),
-	m_mTerrains(r.m_mTerrains),
+	m_mTerrains({}),
 	m_mTerrainsTileData(r.m_mTerrainsTileData),
 	m_mActors(r.m_mActors),
+	m_mEvents(r.m_mEvents),
 	m_vEnemySpawnableCells(r.m_vEnemySpawnableCells)
 {
 }
@@ -46,14 +47,18 @@ Map & Map::operator=(const Map &r) {
 	m_iDisplayTileHeight = r.m_iDisplayTileHeight;
 	m_sStartPoint = r.m_sStartPoint;
 	m_vGrid = r.m_vGrid;
-	m_mTerrains = r.m_mTerrains;
+	m_mTerrains = {};
 	m_mTerrainsTileData = r.m_mTerrainsTileData;
 	m_mActors = r.m_mActors;
+	m_mEvents = r.m_mEvents;
 	m_vEnemySpawnableCells = r.m_vEnemySpawnableCells;
 	return *this;
 }
 
 Map::~Map() {
+	m_vGrid.clear();
+	m_mTerrainsTileData.clear();
+	m_vEnemySpawnableCells.clear();
 	for (auto actor : m_mActors) {
 		delete actor.second;
 	}
@@ -61,12 +66,31 @@ Map::~Map() {
 		delete terrain.second;
 	}
 	for (auto event : m_mEvents) {
-		delete event.second;
+		delete event.second.second;
 	}
+	m_mActors.clear();
+	m_mTerrains.clear();
+	m_mEvents.clear();
 
 	if (m_tilesFile != 0) {
 		fclose(m_tilesFile);
 	}
+}
+
+void Map::setName(std::string name) {
+	m_sName = name;
+}
+
+void Map::setLevel(int level) {
+	m_iLevel = level;
+}
+
+std::string Map::getName() {
+	return m_sName;
+}
+
+int Map::getLevel() {
+	return m_iLevel;
 }
 
 void Map::setTileFile(const char *tilesFilePath) {
@@ -401,12 +425,17 @@ MapEvent* Map::getEvent(const int x, const int y) const {
 	std::string key = _getCoordsKey(x, y);
 	auto it = m_mEvents.find(key);
 	if (it != m_mEvents.end()) {
-		return it->second;
+		return it->second.second;
 	}
 
 	return NULL;
 }
 
 void Map::addEvent(int x, int y, MapEvent *event) {
-	m_mEvents[_getCoordsKey(x, y)] = event;
+	t_coordinates coords = {x, y};
+	m_mEvents[_getCoordsKey(x, y)] = std::make_pair(coords, event);
+}
+
+std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> Map::getEvents() {
+	return m_mEvents;
 }
