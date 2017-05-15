@@ -337,14 +337,14 @@ bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
 		Terrain::TERRAIN_FLAG_WALKABLE
 	);
 
-	if ((walkableConstraint & WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING) == WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING) {
+	if (walkableConstraint & WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING) {
 		bool hasActorOnCell;
 		auto got = m_mActors.find(_getCoordsKey(x, y));
 		hasActorOnCell = got != m_mActors.end();
 		isWalkable &= !hasActorOnCell;
 	}
 
-	if ((walkableConstraint & WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION) == WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION) {
+	if (walkableConstraint & WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION) {
 		auto spawnableCell = std::find(
 			m_vEnemySpawnableCells.begin(),
 			m_vEnemySpawnableCells.end(),
