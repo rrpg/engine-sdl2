@@ -65,9 +65,6 @@ Map::~Map() {
 	for (auto terrain : m_mTerrains) {
 		delete terrain.second;
 	}
-	for (auto event : m_mEvents) {
-		delete event.second.second;
-	}
 	m_mActors.clear();
 	m_mTerrains.clear();
 	m_mEvents.clear();
@@ -421,21 +418,21 @@ bool Map::moveActor(Actor *a, int newX, int newY) {
 	return true;
 }
 
-MapEvent* Map::getEvent(const int x, const int y) const {
+MapEvent *Map::getEvent(const int x, const int y) {
 	std::string key = _getCoordsKey(x, y);
 	auto it = m_mEvents.find(key);
 	if (it != m_mEvents.end()) {
-		return it->second.second;
+		return &it->second.second;
 	}
 
 	return NULL;
 }
 
-void Map::addEvent(int x, int y, MapEvent *event) {
+void Map::addEvent(int x, int y, MapEvent event) {
 	t_coordinates coords = {x, y};
 	m_mEvents[_getCoordsKey(x, y)] = std::make_pair(coords, event);
 }
 
-std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> Map::getEvents() {
+std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &Map::getEvents() {
 	return m_mEvents;
 }

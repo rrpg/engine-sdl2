@@ -72,7 +72,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map->addEvent((char) xEvent, (char) yEvent, new MapEvent());
+				m_map->addEvent((char) xEvent, (char) yEvent, MapEvent());
 			}
 			break;
 
