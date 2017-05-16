@@ -42,7 +42,7 @@ class Map {
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, Actor*> m_mActors;
-	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> m_mEvents = {};
+	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	FILE *m_tilesFile = 0;
@@ -102,9 +102,9 @@ class Map {
 	std::vector<t_coordinates> getEnemySpawnableCells();
 	void initEnemies(ActorFactory &actorFactory);
 
-	MapEvent* getEvent(const int x, const int y) const;
-	void addEvent(const int x, const int y, MapEvent *event);
-	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent*>> getEvents();
+	MapEvent *getEvent(const int x, const int y);
+	void addEvent(const int x, const int y, MapEvent event);
+	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &getEvents();
 };
 
 #endif

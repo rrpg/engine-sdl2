@@ -282,5 +282,5 @@ void MapGenerator::_addStairToNextLevel() {
 
 	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
 	_findClosestWalkableCell(x, y, visited, x, y);
-	m_map.addEvent(x, y, new MapEvent());
+	m_map.addEvent(x, y, MapEvent());
 }
