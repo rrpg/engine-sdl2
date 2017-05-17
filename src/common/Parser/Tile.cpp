@@ -2,53 +2,26 @@
 #include "Parser/Resource.hpp"
 #include <string.h>
 #include <libgen.h>
-#include <fstream>
 
-TileParser::TileParser(const char *pathFileOut) {
-	m_file = fopen(pathFileOut, "wb");
-}
-
-TileParser::TileParser(const TileParser &r) :
-	m_file(r.m_file)
-{
-}
-
-TileParser & TileParser::operator=(const TileParser &r) {
-	// check for "self assignment" and do nothing in that case
-	if (this == &r) {
-		return *this;
-	}
-
-	m_file = r.m_file;
-	return *this;
+TileParser::TileParser(const char *pathFileOut) : m_file(std::ofstream(pathFileOut, std::ios::binary)) {
 }
 
 TileParser::~TileParser() {
-	fclose (m_file);
+	m_file.close();
 }
 
 bool TileParser::_parseLine(const char *line) {
 	bool retValue = true;
-	char tileset[ResourceParser::MAX_CHAR_RESOURCE_NAME];
-	int tileWidth, tileHeight, tilesetX, tilesetY;
+	S_TileData data;
 	int result = sscanf(
 		line,
 		"%s %d %d %d %d\n",
-		tileset, &tileWidth, &tileHeight, &tilesetX, &tilesetY);
+		data.tileset, &data.width, &data.height, &data.x, &data.y);
 	if (result != 5) {
 		retValue = false;
 	}
 	else {
-		int sizeTilesetName = (int) strlen(tileset);
-		fputc(sizeTilesetName, m_file);
-		fputs(tileset, m_file);
-		for (int pad = sizeTilesetName; pad < MAX_LENGTH_TILESET_NAME; ++pad) {
-			fputc('0', m_file);
-		}
-		fputc((char) tileWidth, m_file);
-		fputc((char) tileHeight, m_file);
-		fputc((char) tilesetX, m_file);
-		fputc((char) tilesetY, m_file);
+		m_file.write((char*)&data, sizeof(data));
 	}
 
 	return retValue;
@@ -65,22 +38,13 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 	E_FileParsingResult retValue = OK;
 	char *fileDir = dirname(const_cast<char*>(file));
 	strncpy(m_sFileDir, fileDir, MAX_CHAR_DIR_PATH);
-	char tileData[MAX_BYTES_PER_CHUNK];
-	while (fin.read(tileData, MAX_BYTES_PER_CHUNK)) {
-		// organise data
-		S_TileData tile = _extractTile(tileData);
-
+	while (fin) {
+		S_TileData tile;
+		fin.read((char*)&tile, sizeof(tile));
 		// export data
-		fputs(tile.tileset, m_file);
-		fputc(' ', m_file);
-		fprintf(m_file, "%d", tile.width);
-		fputc(' ', m_file);
-		fprintf(m_file, "%d", tile.height);
-		fputc(' ', m_file);
-		fprintf(m_file, "%d", tile.x);
-		fputc(' ', m_file);
-		fprintf(m_file, "%d", tile.y);
-		fputc('\n', m_file);
+		m_file << tile.tileset << " " <<
+			tile.width << " " << tile.height << " " <<
+			tile.x << " " << tile.y << "\n";
 	}
 
 	fin.close();
@@ -91,26 +55,11 @@ E_FileParsingResult TileParser::parseBinaryFile(const char* file) {
 int TileParser::getTileInfo(S_TileData &tileInfo, FILE *tileFile, int tileIndex) {
 	int ret = fseek(tileFile, tileIndex * MAX_BYTES_PER_CHUNK, SEEK_SET);
 	if (ret == 0) {
-		char tileData[MAX_BYTES_PER_CHUNK];
 		ret = 0;
-		if (fread(tileData, 1, MAX_BYTES_PER_CHUNK, tileFile) == MAX_BYTES_PER_CHUNK) {
-			tileInfo = _extractTile(tileData);
+		if (fread((char*)&tileInfo, 1, MAX_BYTES_PER_CHUNK, tileFile) == MAX_BYTES_PER_CHUNK) {
 			ret = 1;
 		}
 	}
 
 	return ret;
-}
-
-S_TileData TileParser::_extractTile(char tileData[MAX_BYTES_PER_CHUNK]) {
-	S_TileData tile;
-	for (int c = 0; c < tileData[0]; ++c) {
-		tile.tileset[c] = tileData[c + 1];
-	}
-	tile.tileset[(int) tileData[0]] = '\0';
-	tile.width = tileData[MAX_LENGTH_TILESET_NAME + 1];
-	tile.height = tileData[MAX_LENGTH_TILESET_NAME + 2];
-	tile.x = tileData[MAX_LENGTH_TILESET_NAME + 3];
-	tile.y = tileData[MAX_LENGTH_TILESET_NAME + 4];
-	return tile;
 }

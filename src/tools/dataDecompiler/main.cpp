@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 		fileOut = argv[3];
 
 	if (type == "tiles") {
-		TileParser parser = TileParser(fileOut.c_str());
+		TileParser parser(fileOut.c_str());
 		E_FileParsingResult result = parser.parseBinaryFile(fileIn.c_str());
 		if (result != OK) {
 			std::cerr << "Error while parsing file " << fileIn << ": ";
