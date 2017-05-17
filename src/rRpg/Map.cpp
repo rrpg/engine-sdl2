@@ -399,3 +399,7 @@ void Map::addEvent(int x, int y, MapEvent event) {
 std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &Map::getEvents() {
 	return m_mEvents;
 }
+
+void Map::addObject(int x, int y, Object object) {
+	m_mObjects[_getCoordsKey(x, y)] = object;
+}
