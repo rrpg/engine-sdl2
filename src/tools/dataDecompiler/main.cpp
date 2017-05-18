@@ -49,7 +49,7 @@ bool decompileTilesFile(std::string fileIn, std::string fileOut) {
 	ResourceManager<S_TileData> resourceManager;
 
 	resourceManager.setResourceFile(fileIn);
-	resourceManager.parseFile();
+	resourceManager.parseBinaryFile();
 
 	std::ofstream fileOutStream;
 	fileOutStream.open(fileOut);

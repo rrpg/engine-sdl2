@@ -35,7 +35,7 @@ std::map<int, resourceType> &ResourceManager<resourceType>::getParsedResources()
 }
 
 template <class resourceType>
-void ResourceManager<resourceType>::parseFile() {
+void ResourceManager<resourceType>::parseBinaryFile() {
 	int index = 0;
 	while (!m_resourceFile.eof()) {
 		resourceType resource;

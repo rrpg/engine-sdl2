@@ -15,7 +15,7 @@ template <class resourceType> class ResourceManager {
 	void setResourceFile(std::string resourceFile);
 	void getResource(int index, resourceType &resource);
 	std::map<int, resourceType> &getParsedResources();
-	void parseFile();
+	void parseBinaryFile();
 };
 
 #include "ResourceManager.tpp"
