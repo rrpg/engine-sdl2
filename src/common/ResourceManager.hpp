@@ -16,6 +16,7 @@ template <class resourceType> class ResourceManager {
 	void getResource(int index, resourceType &resource);
 	std::map<int, resourceType> &getParsedResources();
 	void parseBinaryFile();
+	bool saveReadableFile(std::string fileOut, void (callback)(std::ofstream&, resourceType));
 };
 
 #include "ResourceManager.tpp"

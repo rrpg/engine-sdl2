@@ -48,3 +48,23 @@ void ResourceManager<resourceType>::parseBinaryFile() {
 		++index;
 	}
 }
+
+template <class resourceType>
+bool ResourceManager<resourceType>::saveReadableFile(
+	std::string fileOut,
+	void (callback)(std::ofstream&, resourceType)
+) {
+	std::ofstream fileOutStream;
+	fileOutStream.open(fileOut);
+	if (!fileOutStream.good()) {
+		fileOutStream.close();
+		return false;
+	}
+
+	for (auto res : getParsedResources()) {
+		callback(fileOutStream, res.second);
+	}
+
+	fileOutStream.close();
+	return true;
+}

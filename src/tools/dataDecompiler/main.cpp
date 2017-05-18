@@ -5,6 +5,7 @@
 #include "ResourceManager.hpp"
 
 std::string cleanFileInPath(std::string path);
+void writeTileData(std::ofstream &fileOutStream, S_TileData tile);
 bool decompileTilesFile(std::string fileIn, std::string fileOut);
 
 int main(int argc, char* argv[]) {
@@ -45,26 +46,16 @@ std::string cleanFileInPath(std::string path) {
 	}
 }
 
+void writeTileData(std::ofstream &fileOutStream, S_TileData tile) {
+	fileOutStream << tile.tileset << " " <<
+		tile.width << " " << tile.height << " " <<
+		tile.x << " " << tile.y << "\n";
+}
+
 bool decompileTilesFile(std::string fileIn, std::string fileOut) {
 	ResourceManager<S_TileData> resourceManager;
 
 	resourceManager.setResourceFile(fileIn);
 	resourceManager.parseBinaryFile();
-
-	std::ofstream fileOutStream;
-	fileOutStream.open(fileOut);
-	if (!fileOutStream.good()) {
-		fileOutStream.close();
-		return false;
-	}
-
-	for (auto res : resourceManager.getParsedResources()) {
-		S_TileData tile = res.second;
-		fileOutStream << tile.tileset << " " <<
-			tile.width << " " << tile.height << " " <<
-			tile.x << " " << tile.y << "\n";
-	}
-
-	fileOutStream.close();
-	return true;
+	return resourceManager.saveReadableFile(fileOut, writeTileData);
 }
