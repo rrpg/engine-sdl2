@@ -2,8 +2,10 @@
 #include <unistd.h>
 #include <libgen.h>
 #include "Parser/Tile.hpp"
+#include "ResourceManager.hpp"
 
 std::string cleanFileInPath(std::string path);
+bool decompileTilesFile(std::string fileIn, std::string fileOut);
 
 int main(int argc, char* argv[]) {
 	// expects the following arguments:
@@ -20,20 +22,16 @@ int main(int argc, char* argv[]) {
 		fileIn = cleanFileInPath(argv[2]),
 		fileOut = argv[3];
 
+	bool ret;
 	if (type == "tiles") {
-		TileParser parser(fileOut.c_str());
-		E_FileParsingResult result = parser.parseBinaryFile(fileIn.c_str());
-		if (result != OK) {
-			std::cerr << "Error while parsing file " << fileIn << ": ";
-			std::cerr << result << "\n";
-			return 3;
-		}
+		ret = decompileTilesFile(fileIn, fileOut);
 	}
 	else {
 		std::cerr << "Invalid type: " << type << "\n";
 		return 2;
 	}
-	return 0;
+
+	return ret ? 0 : 1;
 }
 
 std::string cleanFileInPath(std::string path) {
@@ -45,4 +43,28 @@ std::string cleanFileInPath(std::string path) {
 		getcwd(cwd, sizeof(cwd));
 		return std::string(cwd) + "/" + path;
 	}
+}
+
+bool decompileTilesFile(std::string fileIn, std::string fileOut) {
+	ResourceManager<S_TileData> resourceManager;
+
+	resourceManager.setResourceFile(fileIn);
+	resourceManager.parseFile();
+
+	std::ofstream fileOutStream;
+	fileOutStream.open(fileOut);
+	if (!fileOutStream.good()) {
+		fileOutStream.close();
+		return false;
+	}
+
+	for (auto res : resourceManager.getParsedResources()) {
+		S_TileData tile = res.second;
+		fileOutStream << tile.tileset << " " <<
+			tile.width << " " << tile.height << " " <<
+			tile.x << " " << tile.y << "\n";
+	}
+
+	fileOutStream.close();
+	return true;
 }
