@@ -6,7 +6,13 @@
 
 std::string cleanFileInPath(std::string path);
 void writeTileData(std::ofstream &fileOutStream, S_TileData tile);
-bool decompileTilesFile(std::string fileIn, std::string fileOut);
+template <typename T>
+bool decompileFile(
+	ResourceManager<T> *resourceManager,
+	void (callback)(std::ofstream&, T),
+	std::string fileIn,
+	std::string fileOut
+);
 
 int main(int argc, char* argv[]) {
 	// expects the following arguments:
@@ -25,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 	bool ret;
 	if (type == "tiles") {
-		ret = decompileTilesFile(fileIn, fileOut);
+		ret = decompileFile(new ResourceManager<S_TileData>(), writeTileData, fileIn, fileOut);
 	}
 	else {
 		std::cerr << "Invalid type: " << type << "\n";
@@ -52,10 +58,16 @@ void writeTileData(std::ofstream &fileOutStream, S_TileData tile) {
 		tile.x << " " << tile.y << "\n";
 }
 
-bool decompileTilesFile(std::string fileIn, std::string fileOut) {
-	ResourceManager<S_TileData> resourceManager;
-
-	resourceManager.setResourceFile(fileIn);
-	resourceManager.parseBinaryFile();
-	return resourceManager.saveReadableFile(fileOut, writeTileData);
+template <typename T>
+bool decompileFile(
+	ResourceManager<T> *resourceManager,
+	void (callback)(std::ofstream&, T),
+	std::string fileIn,
+	std::string fileOut
+) {
+	resourceManager->setResourceFile(fileIn);
+	resourceManager->parseBinaryFile();
+	bool ret = resourceManager->saveReadableFile(fileOut, callback);
+	delete resourceManager;
+	return ret;
 }
