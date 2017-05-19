@@ -68,3 +68,38 @@ bool ResourceManager<resourceType>::saveReadableFile(
 	fileOutStream.close();
 	return true;
 }
+
+template <class resourceType>
+bool ResourceManager<resourceType>::compileFile(
+	std::string fileIn,
+	std::string fileOut,
+	bool (rowCallback)(char*, resourceType&)
+) {
+	std::ifstream fileInStream;
+	std::ofstream fileOutStream;
+	fileInStream.open(fileIn);
+	fileOutStream.open(fileOut);
+	bool ret = true;
+
+	while (!fileInStream.eof()) {
+		char buf[MAX_CHARS_PER_LINE];
+		// @check too long lines
+		fileInStream.getline(buf, MAX_CHARS_PER_LINE);
+
+		if (*buf == '\0' || *buf == '#') {
+			continue;
+		}
+
+		resourceType resource;
+		if (!rowCallback(buf, resource)) {
+			ret = false;
+			break;
+		}
+
+		fileOutStream.write((char*)&resource, sizeof(resource));
+	}
+
+	fileInStream.close();
+	fileOutStream.close();
+	return ret;
+}
