@@ -13,6 +13,7 @@ template <class resourceType> class ResourceManager {
 
 	public:
 	ResourceManager();
+	ResourceManager(const ResourceManager &r);
 	~ResourceManager();
 	void setResourceFile(std::string resourceFile);
 	void getResource(int index, resourceType &resource);

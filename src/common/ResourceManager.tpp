@@ -5,6 +5,13 @@ ResourceManager<resourceType>::ResourceManager() :
 }
 
 template <class resourceType>
+ResourceManager<resourceType>::ResourceManager(const ResourceManager &r) :
+	m_mResources(r.m_mResources),
+	m_resourceFile(std::ifstream())
+{
+}
+
+template <class resourceType>
 ResourceManager<resourceType>::~ResourceManager() {
 	if (m_resourceFile.is_open()) {
 		m_resourceFile.close();
