@@ -11,6 +11,7 @@
 #include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
 #include "types.hpp"
+#include "ResourceManager.hpp"
 
 enum E_MapType {DEFAULT, CAVE};
 
@@ -45,7 +46,7 @@ class Map {
 	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
-	FILE *m_tilesFile = 0;
+	ResourceManager<S_TileData> m_tilesManager;
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
@@ -57,8 +58,6 @@ class Map {
 
 	public:
 	Map();
-	Map(const Map &L); // copy constructor
-	Map & operator=(const Map &L); // assignment
 	~Map();
 
 	void clear();

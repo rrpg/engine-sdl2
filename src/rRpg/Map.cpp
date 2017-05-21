@@ -15,44 +15,8 @@ Map::Map() :
 	m_mTerrains({}),
 	m_mTerrainsTileData({}),
 	m_mActors({}),
-	m_vEnemySpawnableCells({}) {
-}
-
-Map::Map(const Map &r) :
-	m_type(r.m_type),
-	m_iWidth(r.m_iWidth),
-	m_iHeight(r.m_iHeight),
-	m_iDisplayTileWidth(r.m_iDisplayTileWidth),
-	m_iDisplayTileHeight(r.m_iDisplayTileHeight),
-	m_sStartPoint(r.m_sStartPoint),
-	m_vGrid(r.m_vGrid),
-	m_mTerrains({}),
-	m_mTerrainsTileData(r.m_mTerrainsTileData),
-	m_mActors(r.m_mActors),
-	m_mEvents(r.m_mEvents),
-	m_vEnemySpawnableCells(r.m_vEnemySpawnableCells)
-{
-}
-
-Map & Map::operator=(const Map &r) {
-	// check for "self assignment" and do nothing in that case
-	if (this == &r) {
-		return *this;
-	}
-
-	m_type = r.m_type;
-	m_iWidth = r.m_iWidth;
-	m_iHeight = r.m_iHeight;
-	m_iDisplayTileWidth = r.m_iDisplayTileWidth;
-	m_iDisplayTileHeight = r.m_iDisplayTileHeight;
-	m_sStartPoint = r.m_sStartPoint;
-	m_vGrid = r.m_vGrid;
-	m_mTerrains = {};
-	m_mTerrainsTileData = r.m_mTerrainsTileData;
-	m_mActors = r.m_mActors;
-	m_mEvents = r.m_mEvents;
-	m_vEnemySpawnableCells = r.m_vEnemySpawnableCells;
-	return *this;
+	m_vEnemySpawnableCells({}),
+	m_tilesManager(ResourceManager<S_TileData>()) {
 }
 
 Map::~Map() {
@@ -72,10 +36,6 @@ void Map::clear() {
 	m_mActors.clear();
 	m_mTerrains.clear();
 	m_mEvents.clear();
-
-	if (m_tilesFile != 0) {
-		fclose(m_tilesFile);
-	}
 }
 
 void Map::setName(std::string name) {
@@ -95,7 +55,7 @@ int Map::getLevel() {
 }
 
 void Map::setTileFile(const char *tilesFilePath) {
-	m_tilesFile = fopen(tilesFilePath, "r");
+	m_tilesManager.setResourceFile(tilesFilePath);
 }
 
 void Map::clearDeadActors() {
@@ -162,9 +122,9 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 }
 
 S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
-	if (m_tilesFile != 0 && m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
+	if (m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
-		TileParser::getTileInfo(tileData, m_tilesFile, (int) tile);
+		m_tilesManager.getResource(tile, tileData);
 		m_mTerrainsTileData[tile] = tileData;
 	}
 	return m_mTerrainsTileData[tile];
