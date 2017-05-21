@@ -61,6 +61,7 @@ class Map {
 	Map & operator=(const Map &L); // assignment
 	~Map();
 
+	void clear();
 	void setName(std::string name);
 	void setLevel(int level);
 	std::string getName();

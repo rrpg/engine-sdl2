@@ -56,6 +56,10 @@ Map & Map::operator=(const Map &r) {
 }
 
 Map::~Map() {
+	clear();
+}
+
+void Map::clear() {
 	m_vGrid.clear();
 	m_mTerrainsTileData.clear();
 	m_vEnemySpawnableCells.clear();
