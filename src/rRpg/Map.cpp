@@ -1,7 +1,6 @@
 #include "Map.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
-#include "Parser/Tile.hpp"
 
 MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>>({});
 
