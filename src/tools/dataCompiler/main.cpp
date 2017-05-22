@@ -1,11 +1,12 @@
 #include <iostream>
 #include <unistd.h>
 #include <libgen.h>
-#include "Parser/Tile.hpp"
+#include "types.hpp"
 #include "ResourceManager.hpp"
 
 std::string cleanFileInPath(std::string path);
 bool readTileFileLine(char line[MAX_CHARS_PER_LINE], S_TileData &data);
+bool readTilesetFileLine(char line[MAX_CHARS_PER_LINE], S_TilesetMapping &data);
 
 int main(int argc, char* argv[]) {
 	// expects the following arguments:
@@ -25,6 +26,13 @@ int main(int argc, char* argv[]) {
 	if (type == "tiles") {
 		ResourceManager<S_TileData> resourceManager;
 		bool res = resourceManager.compileFile(fileIn, fileOut, readTileFileLine);
+		if (!res) {
+			return 1;
+		}
+	}
+	else if (type == "tilesets") {
+		ResourceManager<S_TilesetMapping> resourceManager;
+		bool res = resourceManager.compileFile(fileIn, fileOut, readTilesetFileLine);
 		if (!res) {
 			return 1;
 		}
@@ -53,4 +61,12 @@ bool readTileFileLine(char line[MAX_CHARS_PER_LINE], S_TileData &data) {
 		"%s %d %d %d %d\n",
 		data.tileset, &data.width, &data.height, &data.x, &data.y);
 	return result == 5;
+}
+
+bool readTilesetFileLine(char line[MAX_CHARS_PER_LINE], S_TilesetMapping &data) {
+	int result = sscanf(
+		line,
+		"%s %s\n",
+		data.tileset, data.filePath);
+	return result == 2;
 }

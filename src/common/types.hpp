@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #define MAX_LENGTH_TILESET_NAME 32
+#define MAX_CHAR_RESOURCE_PATH 255
 
 struct EnumClassHash {
 	template <typename T>
@@ -26,6 +27,11 @@ struct S_TileData {
 	int height;
 	int x;
 	int y;
+};
+
+struct S_TilesetMapping {
+	char tileset[MAX_LENGTH_TILESET_NAME];
+	char filePath[MAX_CHAR_RESOURCE_PATH];
 };
 
 #endif

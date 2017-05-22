@@ -41,6 +41,7 @@ all: game
 
 full: tools game
 	./bin/tools/data-compiler tiles resources/src/floor-tiles.dat resources/floor-tiles.dat
+	./bin/tools/data-compiler tilesets resources/src/tilesets.dat resources/tilesets.dat
 
 game: $(PROG)
 
