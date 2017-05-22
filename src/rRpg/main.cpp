@@ -13,7 +13,6 @@
 const int FPS = 60;
 const int DELAY_TIME = 1000 / FPS;
 
-void _prepareDataFolder();
 void _prepareTilesets(std::string binaryPath);
 
 int main(int argc, char* args[]) {
