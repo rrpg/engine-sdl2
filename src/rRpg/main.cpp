@@ -3,16 +3,18 @@
 #include <stdlib.h>
 #include <iostream>
 #include "globals.hpp"
+#include "types.hpp"
 #include "Utils.hpp"
 #include "SDL2_framework/Game.h"
 #include "State/Play.hpp"
-#include "Parser/Resource.hpp"
+#include "ResourceManager.hpp"
 #include <libgen.h>
 
 const int FPS = 60;
 const int DELAY_TIME = 1000 / FPS;
 
 void _prepareDataFolder();
+void _prepareTilesets(std::string binaryPath);
 
 int main(int argc, char* args[]) {
 	time_t t;
@@ -33,9 +35,7 @@ int main(int argc, char* args[]) {
 		return 1;
 	}
 
-	ResourceParser parser = ResourceParser();
-	std::string tilesetsPath = binaryPath + "/../resources/tilesets.dat";
-	parser.parseFile(tilesetsPath.c_str());
+	_prepareTilesets(binaryPath);
 	g->getStateMachine()->changeState(new PlayState());
 	while (g->isRunning()) {
 		frameStart = SDL_GetTicks();
@@ -55,4 +55,19 @@ int main(int argc, char* args[]) {
 	Game::freeGame();
 
 	return 0;
+}
+
+void _prepareTilesets(std::string binaryPath) {
+	ResourceManager<S_TilesetMapping> resourceManager;
+	resourceManager.setResourceFile(binaryPath + "/../resources/tilesets.dat");
+	resourceManager.parseBinaryFile();
+	for (auto tileset : resourceManager.getParsedResources()) {
+		std::cout << "Resource found: "
+			<< tileset.second.tileset
+			<< " (" << tileset.second.filePath << ")\n";
+		TextureManager::Instance()->addTexture(
+			binaryPath + "/../resources/" + tileset.second.filePath,
+			tileset.second.tileset
+		);
+	}
 }
