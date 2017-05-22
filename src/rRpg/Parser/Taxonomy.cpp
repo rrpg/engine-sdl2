@@ -1,5 +1,5 @@
 #include "Taxonomy.hpp"
-#include "Resource.hpp"
+#include "types.hpp"
 #include "../ActorRace.hpp"
 #include "SDL2_framework/TextureManager.h"
 #include "SDL2_framework/Game.h"
@@ -9,7 +9,7 @@ TaxonomyParser::TaxonomyParser(ActorFactory &actorFactory) : m_actorFactory(acto
 
 bool TaxonomyParser::_parseLine(const char *line) {
 	bool retValue = true;
-	char tileset[ResourceParser::MAX_CHAR_RESOURCE_NAME];
+	char tileset[MAX_LENGTH_TILESET_NAME];
 	int timePerFrame,raceLevel1HP, raceLevel1Defence, raceLevel1Attack,
 		spriteX, spriteY;
 	int result = sscanf(
