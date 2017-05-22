@@ -6,6 +6,7 @@
 
 std::string cleanFileInPath(std::string path);
 void writeTileData(std::ofstream &fileOutStream, S_TileData tile);
+void writeTilesetMapping(std::ofstream &fileOutStream, S_TilesetMapping tile);
 template <typename T>
 bool decompileFile(
 	ResourceManager<T> *resourceManager,
@@ -33,6 +34,9 @@ int main(int argc, char* argv[]) {
 	if (type == "tiles") {
 		ret = decompileFile(new ResourceManager<S_TileData>(), writeTileData, fileIn, fileOut);
 	}
+	if (type == "tiles") {
+		ret = decompileFile(new ResourceManager<S_TilesetMapping>(), writeTilesetMapping, fileIn, fileOut);
+	}
 	else {
 		std::cerr << "Invalid type: " << type << "\n";
 		return 2;
@@ -56,6 +60,10 @@ void writeTileData(std::ofstream &fileOutStream, S_TileData tile) {
 	fileOutStream << tile.tileset << " " <<
 		tile.width << " " << tile.height << " " <<
 		tile.x << " " << tile.y << "\n";
+}
+
+void writeTilesetMapping(std::ofstream &fileOutStream, S_TilesetMapping tile) {
+	fileOutStream << tile.tileset << " " << tile.filePath << "\n";
 }
 
 template <typename T>
