@@ -22,30 +22,30 @@ bool TaxonomyParser::_parseLine(const char *line) {
 		retValue = false;
 	}
 	else {
-		ActorRace* race = new ActorRace(
-			raceLevel1HP,
-			raceLevel1Defence,
-			raceLevel1Attack
-		);
+		S_ActorRaceData raceData;
+		raceData.level1HP = raceLevel1HP;
+		raceData.level1Defence = raceLevel1Defence;
+		raceData.level1Attack = raceLevel1Attack;
+		raceData.timePerFrame = timePerFrame;
+		raceData.spriteX = spriteX;
+		raceData.spriteY = spriteY;
 		if (!timePerFrame) {
-			_addTilesetToRace(race, tileset);
+			_addTilesetToRace(raceData, tileset);
 		}
 		else {
-			race->setTimePerFrame(timePerFrame);
-			_addTilesetToRace(race, std::string(tileset) + "0");
-			_addTilesetToRace(race, std::string(tileset) + "1");
+			_addTilesetToRace(raceData, std::string(tileset) + "0");
+			_addTilesetToRace(raceData, std::string(tileset) + "1");
 		}
 
-		race->setSpriteX(spriteX);
-		race->setSpriteY(spriteY);
+		ActorRace* race = new ActorRace(raceData);
 		m_actorFactory.addActorRaceTaxonomy(race);
 	}
 
 	return retValue;
 }
 
-void TaxonomyParser::_addTilesetToRace(ActorRace *race, std::string tileset) {
-	race->addTilesetName(tileset);
+void TaxonomyParser::_addTilesetToRace(S_ActorRaceData &race, std::string tileset) {
+	race.tilesetNames.push_back(tileset);
 	TextureManager::Instance()->load(
 		tileset,
 		Game::Instance()->getRenderer()

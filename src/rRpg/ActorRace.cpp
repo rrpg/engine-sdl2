@@ -1,11 +1,8 @@
 #include "ActorRace.hpp"
 
-ActorRace::ActorRace(int level1HP, int level1Defence, int level1Attack) :
-	m_data(S_ActorRaceData())
+ActorRace::ActorRace(S_ActorRaceData data) :
+	m_data(data)
 {
-	m_data.level1HP = level1HP;
-	m_data.level1Defence = level1Defence;
-	m_data.level1Attack = level1Attack;
 }
 
 Actor* ActorRace::createActor() {
@@ -19,18 +16,6 @@ Actor* ActorRace::createActor() {
 
 void ActorRace::addTilesetName(std::string name) {
 	m_data.tilesetNames.push_back(name);
-}
-
-void ActorRace::setTimePerFrame(int timePerFrame) {
-	m_data.timePerFrame = timePerFrame;
-}
-
-void ActorRace::setSpriteX(int spriteX) {
-	m_data.spriteX = spriteX;
-}
-
-void ActorRace::setSpriteY(int spriteY) {
-	m_data.spriteY = spriteY;
 }
 
 std::string ActorRace::getTilesetName() {

@@ -8,7 +8,7 @@ class TaxonomyParser : public FileParser {
 	protected:
 	ActorFactory &m_actorFactory;
 	bool _parseLine(const char *line);
-	void _addTilesetToRace(ActorRace *race, std::string tileset);
+	void _addTilesetToRace(S_ActorRaceData &race, std::string tileset);
 
 	public:
 	TaxonomyParser(ActorFactory &actorFactory);

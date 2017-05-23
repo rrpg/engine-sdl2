@@ -11,12 +11,9 @@ class ActorRace {
 	S_ActorRaceData m_data;
 
 	public:
-	ActorRace(int level1HP, int level1Defence, int level1Attack);
+	ActorRace(S_ActorRaceData data);
 	Actor* createActor();
 	void addTilesetName(std::string name);
-	void setTimePerFrame(int timePerFrame);
-	void setSpriteX(int spriteX);
-	void setSpriteY(int spriteY);
 	std::string getTilesetName();
 	int getSpriteX();
 	int getSpriteY();
