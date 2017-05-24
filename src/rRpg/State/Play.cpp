@@ -37,8 +37,10 @@ bool PlayState::onEnter() {
 	ret &= engine.loadTaxonomy(
 		Game::Instance()->getBinaryPath() + "/../resources/taxonomy.dat"
 	);
-	engine.initialiseHero();
-	ret &= engine.loadMap("cave1", 0);
+	if (ret) {
+		engine.initialiseHero();
+		ret &= engine.loadMap("cave1", 0);
+	}
 	return ret;
 }
 
