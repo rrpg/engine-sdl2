@@ -14,19 +14,18 @@ Actor* ActorRace::createActor() {
 	return actor;
 }
 
-void ActorRace::addTilesetName(std::string name) {
-	m_data.tilesetNames.push_back(name);
-}
-
 std::string ActorRace::getTilesetName() {
-	int tilesetIndex = 0;
-	if (m_data.timePerFrame) {
-		uint32_t currTime = SDL_GetTicks();
-		int durationAnimationCycle = m_data.timePerFrame * (int) m_data.tilesetNames.size();
-		int timeInCycle = (int) currTime % durationAnimationCycle;
-		tilesetIndex = timeInCycle / m_data.timePerFrame;
+	if (!m_data.timePerFrame) {
+		return m_data.tileset;
 	}
-	return m_data.tilesetNames[(size_t) tilesetIndex];
+	else {
+		uint32_t currTime = SDL_GetTicks();
+		// the game's animations are of 2frames
+		int durationAnimationCycle = m_data.timePerFrame * 2;
+		int timeInCycle = (int) currTime % durationAnimationCycle;
+		int tilesetIndex = timeInCycle / m_data.timePerFrame;
+		return m_data.tileset + std::to_string(tilesetIndex);
+	}
 }
 
 int ActorRace::getSpriteX() {

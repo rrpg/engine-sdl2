@@ -39,7 +39,7 @@ struct S_ActorRaceData {
 	int level1HP = 0;
 	int level1Defence = 0;
 	int level1Attack = 0;
-	std::vector<std::string> tilesetNames = {};
+	std::string tileset = "";
 	int timePerFrame = 0;
 	int spriteX = 0;
 	int spriteY = 0;

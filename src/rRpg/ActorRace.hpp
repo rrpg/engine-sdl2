@@ -13,7 +13,6 @@ class ActorRace {
 	public:
 	ActorRace(S_ActorRaceData data);
 	Actor* createActor();
-	void addTilesetName(std::string name);
 	std::string getTilesetName();
 	int getSpriteX();
 	int getSpriteY();
