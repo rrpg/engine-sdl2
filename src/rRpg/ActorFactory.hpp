@@ -6,7 +6,6 @@
 #include "GUI/Factory.hpp"
 #include "ActorRace.hpp"
 #include "Actor.hpp"
-#include "Parser/File.hpp"
 
 enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, RACE_RAT, NB_RACES};
 
@@ -19,7 +18,7 @@ class ActorFactory {
 	public:
 	ActorFactory();
 	~ActorFactory();
-	E_FileParsingResult parseTaxonomy(const char* taxonomyFile);
+	bool parseTaxonomy(const char* taxonomyFile);
 	void addActorRaceTaxonomy(ActorRace* race);
 	Actor* createActor(E_ActorRaces race);
 	Actor* createEnemy(E_ActorRaces race);

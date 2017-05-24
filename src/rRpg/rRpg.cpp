@@ -60,12 +60,12 @@ bool rRpg::loadMap(std::string mapName, int level) {
 }
 
 bool rRpg::loadTaxonomy(std::string filePath) {
-	E_FileParsingResult res;
-	res = m_actorFactory.parseTaxonomy(filePath.c_str());
-	std::cout << "Taxonomy parsed\n";
 	bool ret = true;
-	if (res != OK) {
-		std::cout << "error parsing taxonomy: " << res << std::endl;
+	if (m_actorFactory.parseTaxonomy(filePath.c_str())) {
+		std::cout << "Taxonomy parsed\n";
+	}
+	else {
+		std::cout << "error parsing taxonomy" << std::endl;
 		ret = false;
 	}
 

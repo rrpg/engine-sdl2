@@ -16,6 +16,7 @@ class ActorRace {
 	std::string getTilesetName();
 	int getSpriteX();
 	int getSpriteY();
+	void loadTilesetResource();
 };
 
 #endif

@@ -35,3 +35,15 @@ int ActorRace::getSpriteX() {
 int ActorRace::getSpriteY() {
 	return m_data.spriteY;
 }
+
+void ActorRace::loadTilesetResource() {
+	SDL_Renderer* renderer = Game::Instance()->getRenderer();
+
+	if (!m_data.timePerFrame) {
+		TextureManager::Instance()->load(m_data.tileset, renderer);
+	}
+	else {
+		TextureManager::Instance()->load(std::string(m_data.tileset) + "0", renderer);
+		TextureManager::Instance()->load(std::string(m_data.tileset) + "1", renderer);
+	}
+}
