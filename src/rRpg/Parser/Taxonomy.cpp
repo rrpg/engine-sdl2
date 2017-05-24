@@ -9,27 +9,23 @@ TaxonomyParser::TaxonomyParser(ActorFactory &actorFactory) : m_actorFactory(acto
 
 bool TaxonomyParser::_parseLine(const char *line) {
 	bool retValue = true;
-	char tileset[MAX_LENGTH_TILESET_NAME];
-	int timePerFrame,raceLevel1HP, raceLevel1Defence, raceLevel1Attack,
-		spriteX, spriteY;
+	S_ActorRaceData raceData;
 	int result = sscanf(
 		line,
 		"%s %d %d %d %d %d %d\n",
-		tileset, &timePerFrame, &spriteX, &spriteY,
-		&raceLevel1HP, &raceLevel1Defence, &raceLevel1Attack
+		raceData.tileset,
+		&raceData.timePerFrame,
+		&raceData.spriteX,
+		&raceData.spriteY,
+		&raceData.level1HP,
+		&raceData.level1Defence,
+		&raceData.level1Attack
 	);
 	if (result != 7) {
 		retValue = false;
 	}
 	else {
-		S_ActorRaceData raceData;
-		raceData.level1HP = raceLevel1HP;
-		raceData.level1Defence = raceLevel1Defence;
-		raceData.level1Attack = raceLevel1Attack;
-		raceData.timePerFrame = timePerFrame;
-		raceData.spriteX = spriteX;
-		raceData.spriteY = spriteY;
-		_addTilesetToRace(raceData, tileset);
+		_loadTilesetTexture(raceData);
 
 		ActorRace* race = new ActorRace(raceData);
 		m_actorFactory.addActorRaceTaxonomy(race);
@@ -38,15 +34,14 @@ bool TaxonomyParser::_parseLine(const char *line) {
 	return retValue;
 }
 
-void TaxonomyParser::_addTilesetToRace(S_ActorRaceData &race, std::string tileset) {
-	race.tileset = tileset;
+void TaxonomyParser::_loadTilesetTexture(S_ActorRaceData &race) {
 	SDL_Renderer* renderer = Game::Instance()->getRenderer();
 
 	if (!race.timePerFrame) {
-		TextureManager::Instance()->load(tileset, renderer);
+		TextureManager::Instance()->load(race.tileset, renderer);
 	}
 	else {
-		TextureManager::Instance()->load(std::string(tileset) + "0", renderer);
-		TextureManager::Instance()->load(std::string(tileset) + "1", renderer);
+		TextureManager::Instance()->load(std::string(race.tileset) + "0", renderer);
+		TextureManager::Instance()->load(std::string(race.tileset) + "1", renderer);
 	}
 }
