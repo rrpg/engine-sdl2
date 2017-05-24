@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <functional>
 #include <unordered_map>
+#include <vector>
 
 #define MAX_LENGTH_TILESET_NAME 32
 #define MAX_CHAR_RESOURCE_PATH 255
@@ -32,6 +33,16 @@ struct S_TileData {
 struct S_TilesetMapping {
 	char tileset[MAX_LENGTH_TILESET_NAME];
 	char filePath[MAX_CHAR_RESOURCE_PATH];
+};
+
+struct S_ActorRaceData {
+	char tileset[MAX_LENGTH_TILESET_NAME];
+	int level1HP;
+	int level1Defence;
+	int level1Attack;
+	int timePerFrame;
+	int spriteX;
+	int spriteY;
 };
 
 #endif

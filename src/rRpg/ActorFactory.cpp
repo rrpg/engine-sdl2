@@ -1,5 +1,4 @@
 #include "ActorFactory.hpp"
-#include "Parser/Taxonomy.hpp"
 #include "Behaviour/Monster.hpp"
 #include "GUI/Actor.hpp"
 #include <fstream>
@@ -17,10 +16,20 @@ ActorFactory::~ActorFactory() {
 	}
 }
 
-E_FileParsingResult ActorFactory::parseTaxonomy(const char* taxonomyFile) {
-	TaxonomyParser parser = TaxonomyParser(*this);
-	E_FileParsingResult result = parser.parseFile(taxonomyFile);
-	return result;
+bool ActorFactory::parseTaxonomy(const char* taxonomyFile) {
+	ResourceManager<S_ActorRaceData> resourceManager;
+	if (!resourceManager.setResourceFile(taxonomyFile)) {
+		return false;
+	}
+
+	resourceManager.parseBinaryFile();
+	for (auto raceData : resourceManager.getParsedResources()) {
+		ActorRace* race = new ActorRace(raceData.second);
+		race->loadTilesetResource();
+		addActorRaceTaxonomy(race);
+	}
+
+	return true;
 }
 
 void ActorFactory::addActorRaceTaxonomy(ActorRace* race) {

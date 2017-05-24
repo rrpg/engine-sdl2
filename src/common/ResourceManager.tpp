@@ -19,8 +19,9 @@ ResourceManager<resourceType>::~ResourceManager() {
 }
 
 template <class resourceType>
-void ResourceManager<resourceType>::setResourceFile(std::string resourceFile) {
+bool ResourceManager<resourceType>::setResourceFile(std::string resourceFile) {
 	m_resourceFile = std::ifstream(resourceFile, std::ios::binary);
+	return m_resourceFile.is_open();
 }
 
 template <class resourceType>
