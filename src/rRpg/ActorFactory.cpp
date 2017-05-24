@@ -1,5 +1,4 @@
 #include "ActorFactory.hpp"
-#include "Parser/Taxonomy.hpp"
 #include "Behaviour/Monster.hpp"
 #include "GUI/Actor.hpp"
 #include <fstream>
