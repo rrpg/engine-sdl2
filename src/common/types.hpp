@@ -37,12 +37,12 @@ struct S_TilesetMapping {
 
 struct S_ActorRaceData {
 	char tileset[MAX_LENGTH_TILESET_NAME];
-	int level1HP = 0;
-	int level1Defence = 0;
-	int level1Attack = 0;
-	int timePerFrame = 0;
-	int spriteX = 0;
-	int spriteY = 0;
+	int level1HP;
+	int level1Defence;
+	int level1Attack;
+	int timePerFrame;
+	int spriteX;
+	int spriteY;
 };
 
 #endif
