@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 	if (type == "tiles") {
 		ret = decompileFile(new ResourceManager<S_TileData>(), writeTileData, fileIn, fileOut);
 	}
-	if (type == "tiles") {
+	else if (type == "tilesets") {
 		ret = decompileFile(new ResourceManager<S_TilesetMapping>(), writeTilesetMapping, fileIn, fileOut);
 	}
 	else {
