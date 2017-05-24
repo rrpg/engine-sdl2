@@ -7,6 +7,7 @@
 std::string cleanFileInPath(std::string path);
 bool readTileFileLine(char line[MAX_CHARS_PER_LINE], S_TileData &data);
 bool readTilesetFileLine(char line[MAX_CHARS_PER_LINE], S_TilesetMapping &data);
+bool readRaceLine(char line[MAX_CHARS_PER_LINE], S_ActorRaceData &data);
 
 int main(int argc, char* argv[]) {
 	// expects the following arguments:
@@ -33,6 +34,13 @@ int main(int argc, char* argv[]) {
 	else if (type == "tilesets") {
 		ResourceManager<S_TilesetMapping> resourceManager;
 		bool res = resourceManager.compileFile(fileIn, fileOut, readTilesetFileLine);
+		if (!res) {
+			return 1;
+		}
+	}
+	else if (type == "races") {
+		ResourceManager<S_ActorRaceData> resourceManager;
+		bool res = resourceManager.compileFile(fileIn, fileOut, readRaceLine);
 		if (!res) {
 			return 1;
 		}
@@ -69,4 +77,18 @@ bool readTilesetFileLine(char line[MAX_CHARS_PER_LINE], S_TilesetMapping &data) 
 		"%s %s\n",
 		data.tileset, data.filePath);
 	return result == 2;
+}
+
+bool readRaceLine(char line[MAX_CHARS_PER_LINE], S_ActorRaceData &data) {
+	int result = sscanf(
+		line,
+		"%s %d %d %d %d %d %d\n",
+		data.tileset, &data.timePerFrame, &data.spriteX, &data.spriteY,
+		&data.level1HP, &data.level1Defence, &data.level1Attack
+	);
+	if (result != 7) {
+		return false;
+	}
+
+	return true;
 }
