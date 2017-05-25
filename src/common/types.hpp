@@ -45,4 +45,10 @@ struct S_ActorRaceData {
 	int spriteY;
 };
 
+struct S_ObjectData {
+	char tileset[MAX_LENGTH_TILESET_NAME];
+	int spriteX;
+	int spriteY;
+};
+
 #endif

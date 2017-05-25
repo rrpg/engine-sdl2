@@ -8,6 +8,7 @@ std::string cleanFileInPath(std::string path);
 void writeTileData(std::ofstream &fileOutStream, S_TileData tile);
 void writeTilesetMapping(std::ofstream &fileOutStream, S_TilesetMapping tile);
 void writeActorRace(std::ofstream &fileOutStream, S_ActorRaceData race);
+void writeObject(std::ofstream &fileOutStream, S_ObjectData object);
 template <typename T>
 bool decompileFile(
 	ResourceManager<T> *resourceManager,
@@ -40,6 +41,9 @@ int main(int argc, char* argv[]) {
 	}
 	else if (type == "races") {
 		ret = decompileFile(new ResourceManager<S_ActorRaceData>(), writeActorRace, fileIn, fileOut);
+	}
+	else if (type == "objects") {
+		ret = decompileFile(new ResourceManager<S_ObjectData>(), writeObject, fileIn, fileOut);
 	}
 	else {
 		std::cerr << "Invalid type: " << type << "\n";
@@ -75,6 +79,11 @@ void writeActorRace(std::ofstream &fileOutStream, S_ActorRaceData race) {
 		<< race.spriteX << " " << race.spriteY << " "
 		<< race.level1HP << " "
 		<< race.level1Defence << " " << race.level1Attack << "\n";
+}
+
+void writeObject(std::ofstream &fileOutStream, S_ObjectData object) {
+	fileOutStream << object.tileset << " "
+		<< object.spriteX << " " << object.spriteY << "\n";
 }
 
 template <typename T>
