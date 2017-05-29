@@ -51,4 +51,8 @@ struct S_ObjectData {
 	int spriteY;
 };
 
+enum E_Object {
+	OBJECT_STAIR_UP,
+	OBJECT_STAIR_DOWN
+};
 #endif

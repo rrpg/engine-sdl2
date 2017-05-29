@@ -4,7 +4,6 @@
 #include "MapEvent.hpp"
 #include "Parser/File.hpp"
 #include "ActorFactory.hpp"
-#include "Object.hpp"
 #include "Terrain.hpp"
 #include <stdint.h>
 #include <vector>
