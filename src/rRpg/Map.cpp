@@ -404,3 +404,7 @@ void Map::addObject(int x, int y, E_Object object) {
 	t_coordinates coords = {x, y};
 	m_mObjects[_getCoordsKey(x, y)] = std::make_pair(coords, object);
 }
+
+std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> Map::getObjects() {
+	return m_mObjects;
+}
