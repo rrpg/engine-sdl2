@@ -46,6 +46,10 @@ void rRpg::setTilesFile(std::string tilesFilePath) {
 	m_sTilesFile = tilesFilePath;
 }
 
+void rRpg::setObjectsFile(std::string objectsFilePath) {
+	m_sObjectsFile = objectsFilePath;
+}
+
 bool rRpg::loadMap(std::string mapName, int level) {
 	if (!m_mapManager.loadMap(mapName, level)) {
 		return false;
