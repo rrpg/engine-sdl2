@@ -15,7 +15,8 @@ Map::Map() :
 	m_mTerrainsTileData({}),
 	m_mActors({}),
 	m_vEnemySpawnableCells({}),
-	m_tilesManager(ResourceManager<S_TileData>()) {
+	m_tilesManager(ResourceManager<S_TileData>()),
+	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
 
 Map::~Map() {
@@ -55,6 +56,10 @@ int Map::getLevel() {
 
 void Map::setTileFile(const char *tilesFilePath) {
 	m_tilesManager.setResourceFile(tilesFilePath);
+}
+
+void Map::setObjectsFile(const char *objectsFilePath) {
+	m_objectsManager.setResourceFile(objectsFilePath);
 }
 
 void Map::clearDeadActors() {

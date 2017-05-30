@@ -48,6 +48,7 @@ class Map {
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	ResourceManager<S_TileData> m_tilesManager;
+	ResourceManager<S_ObjectData> m_objectsManager;
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
@@ -70,6 +71,7 @@ class Map {
 	void initializeGrid(E_TerrainType type);
 	void setType(E_MapType type);
 	void setTileFile(const char *tileFilePath);
+	void setObjectsFile(const char *objectsFilePath);
 	void setDimensions(int x, int y);
 	void setDisplayTileDimensions(int w, int h);
 	void setTile(int x, int y, E_TerrainType type);
