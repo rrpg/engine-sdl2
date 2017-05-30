@@ -134,6 +134,12 @@ S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
 	return m_mTerrainsTileData[tile];
 }
 
+S_ObjectData Map::_getObjectData(const E_Object objectType) {
+	S_ObjectData objectData;
+	m_objectsManager.getResource(objectType, objectData);
+	return objectData;
+}
+
 void Map::initializeGrid(E_TerrainType type) {
 	int size = m_iWidth * m_iHeight;
 	for (int c = 0; c < size; ++c) {
@@ -248,6 +254,7 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	_renderTerrain(camera, visibleArea, shift);
+	_renderObjects(camera, visibleArea, shift);
 	_renderActors(camera, visibleArea, shift);
 }
 
@@ -291,6 +298,47 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 				game->getRenderer()
 			);
 		}
+	}
+}
+
+void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
+	TextureManager *manager = TextureManager::Instance();
+	Game *game = Game::Instance();
+
+	int shiftX = (int) shift.getX();
+	int shiftY = (int) shift.getY();
+	for (auto object : m_mObjects) {
+		int x = object.second.first.first;
+		int y = object.second.first.second;
+		if ((visibleArea.x > 0 && x < visibleArea.x)
+				|| x > (visibleArea.x + visibleArea.w)
+			|| (visibleArea.y > 0 && y < visibleArea.y)
+				|| y > (visibleArea.y + visibleArea.h)
+		) {
+			continue;
+		}
+
+		S_ObjectData objectData = _getObjectData(object.second.second);
+		int objectWidth = getDisplayTileWidth();
+		int objectHeight = getDisplayTileHeight();
+		int xScreen = x * objectWidth - shiftX + camera.x,
+			yScreen = y * objectHeight - shiftY + camera.y;
+
+		manager->load(objectData.tileset, game->getRenderer());
+		// the rows are 1 based, and the columns are 0 based, which is
+		// stupid
+		manager->drawTile(
+			objectData.tileset,
+			0, // margin
+			0, // spacing
+			xScreen,
+			yScreen,
+			objectWidth,
+			objectHeight,
+			objectData.spriteY + 1,
+			objectData.spriteX,
+			game->getRenderer()
+		);
 	}
 }
 

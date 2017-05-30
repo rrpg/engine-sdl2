@@ -53,7 +53,9 @@ class Map {
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
 	S_TileData _getTerrainTileData(const E_TerrainTile tile);
+	S_ObjectData _getObjectData(const E_Object objectType);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
+	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
 	int _getSameNeighbours(int x, int y);
