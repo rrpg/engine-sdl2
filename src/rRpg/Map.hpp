@@ -44,14 +44,18 @@ class Map {
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, Actor*> m_mActors;
 	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents = {};
+	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	ResourceManager<S_TileData> m_tilesManager;
+	ResourceManager<S_ObjectData> m_objectsManager;
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
 	S_TileData _getTerrainTileData(const E_TerrainTile tile);
+	S_ObjectData _getObjectData(const E_Object objectType);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
+	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
 	int _getSameNeighbours(int x, int y);
@@ -69,6 +73,7 @@ class Map {
 	void initializeGrid(E_TerrainType type);
 	void setType(E_MapType type);
 	void setTileFile(const char *tileFilePath);
+	void setObjectsFile(const char *objectsFilePath);
 	void setDimensions(int x, int y);
 	void setDisplayTileDimensions(int w, int h);
 	void setTile(int x, int y, E_TerrainType type);
@@ -105,6 +110,9 @@ class Map {
 	MapEvent *getEvent(const int x, const int y);
 	void addEvent(const int x, const int y, MapEvent event);
 	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &getEvents();
+
+	void addObject(int x, int y, E_Object object);
+	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();
 };
 
 #endif

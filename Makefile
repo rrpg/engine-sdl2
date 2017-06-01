@@ -43,6 +43,7 @@ full: tools game
 	./bin/tools/data-compiler tiles resources/src/floor-tiles.dat resources/floor-tiles.dat
 	./bin/tools/data-compiler tilesets resources/src/tilesets.dat resources/tilesets.dat
 	./bin/tools/data-compiler races resources/src/taxonomy.dat resources/taxonomy.dat
+	./bin/tools/data-compiler objects resources/src/objects.dat resources/objects.dat
 
 game: $(PROG)
 

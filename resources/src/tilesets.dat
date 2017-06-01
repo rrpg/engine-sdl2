@@ -8,4 +8,5 @@ rodent0 DawnLike/Characters/Rodent0.png
 rodent1 DawnLike/Characters/Rodent1.png
 worldFloor DawnLike/Objects/Floor.png
 worldWall DawnLike/Objects/Wall.png
+floorTiles DawnLike/Objects/Tile.png
 tileset tileset.png

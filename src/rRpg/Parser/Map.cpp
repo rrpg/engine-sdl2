@@ -90,6 +90,21 @@ bool MapParser::_parseLine(const char *line) {
 			}
 			break;
 
+		case 'o':
+			int xObject, yObject, objectType;
+			sscanfResult = sscanf(
+				line,
+				"%d %d %d\n",
+				&xObject, &yObject, &objectType
+			);
+			if (sscanfResult != 3) {
+				retValue = false;
+			}
+			else {
+				m_map->addObject(xObject, yObject, (E_Object) objectType);
+			}
+			break;
+
 		case 'g':
 			int tileWidth, tileHeight;
 			sscanfResult = sscanf(
@@ -160,6 +175,15 @@ bool MapParser::saveMap(const char *filePath) {
 	for (auto event : m_map->getEvents()) {
 		t_coordinates coords = event.second.first;
 		fprintf(mapFile, "E %d %d\n", coords.first, coords.second);
+	}
+
+	for (auto object : m_map->getObjects()) {
+		 t_coordinates coords = object.second.first;
+		fprintf(
+			mapFile,
+			"o %d %d %d\n",
+			coords.first, coords.second, object.second.second
+		);
 	}
 
 	bool newLine = true;

@@ -46,6 +46,10 @@ void rRpg::setTilesFile(std::string tilesFilePath) {
 	m_sTilesFile = tilesFilePath;
 }
 
+void rRpg::setObjectsFile(std::string objectsFilePath) {
+	m_sObjectsFile = objectsFilePath;
+}
+
 bool rRpg::loadMap(std::string mapName, int level) {
 	if (!m_mapManager.loadMap(mapName, level)) {
 		return false;
@@ -53,6 +57,7 @@ bool rRpg::loadMap(std::string mapName, int level) {
 
 	m_mapManager.getMap().initEnemies(m_actorFactory);
 	m_mapManager.getMap().setTileFile(m_sTilesFile.c_str());
+	m_mapManager.getMap().setObjectsFile(m_sObjectsFile.c_str());
 	m_hero->setX((int) m_mapManager.getMap().getStartPoint().getX());
 	m_hero->setY((int) m_mapManager.getMap().getStartPoint().getY());
 	m_mapManager.getMap().addActor(m_hero);

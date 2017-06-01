@@ -15,7 +15,8 @@ Map::Map() :
 	m_mTerrainsTileData({}),
 	m_mActors({}),
 	m_vEnemySpawnableCells({}),
-	m_tilesManager(ResourceManager<S_TileData>()) {
+	m_tilesManager(ResourceManager<S_TileData>()),
+	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
 
 Map::~Map() {
@@ -55,6 +56,10 @@ int Map::getLevel() {
 
 void Map::setTileFile(const char *tilesFilePath) {
 	m_tilesManager.setResourceFile(tilesFilePath);
+}
+
+void Map::setObjectsFile(const char *objectsFilePath) {
+	m_objectsManager.setResourceFile(objectsFilePath);
 }
 
 void Map::clearDeadActors() {
@@ -127,6 +132,12 @@ S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
 		m_mTerrainsTileData[tile] = tileData;
 	}
 	return m_mTerrainsTileData[tile];
+}
+
+S_ObjectData Map::_getObjectData(const E_Object objectType) {
+	S_ObjectData objectData;
+	m_objectsManager.getResource(objectType, objectData);
+	return objectData;
 }
 
 void Map::initializeGrid(E_TerrainType type) {
@@ -243,6 +254,7 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 	};
 
 	_renderTerrain(camera, visibleArea, shift);
+	_renderObjects(camera, visibleArea, shift);
 	_renderActors(camera, visibleArea, shift);
 }
 
@@ -286,6 +298,47 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 				game->getRenderer()
 			);
 		}
+	}
+}
+
+void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
+	TextureManager *manager = TextureManager::Instance();
+	Game *game = Game::Instance();
+
+	int shiftX = (int) shift.getX();
+	int shiftY = (int) shift.getY();
+	for (auto object : m_mObjects) {
+		int x = object.second.first.first;
+		int y = object.second.first.second;
+		if ((visibleArea.x > 0 && x < visibleArea.x)
+				|| x > (visibleArea.x + visibleArea.w)
+			|| (visibleArea.y > 0 && y < visibleArea.y)
+				|| y > (visibleArea.y + visibleArea.h)
+		) {
+			continue;
+		}
+
+		S_ObjectData objectData = _getObjectData(object.second.second);
+		int objectWidth = getDisplayTileWidth();
+		int objectHeight = getDisplayTileHeight();
+		int xScreen = x * objectWidth - shiftX + camera.x,
+			yScreen = y * objectHeight - shiftY + camera.y;
+
+		manager->load(objectData.tileset, game->getRenderer());
+		// the rows are 1 based, and the columns are 0 based, which is
+		// stupid
+		manager->drawTile(
+			objectData.tileset,
+			0, // margin
+			0, // spacing
+			xScreen,
+			yScreen,
+			objectWidth,
+			objectHeight,
+			objectData.spriteY + 1,
+			objectData.spriteX,
+			game->getRenderer()
+		);
 	}
 }
 
@@ -398,4 +451,13 @@ void Map::addEvent(int x, int y, MapEvent event) {
 
 std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &Map::getEvents() {
 	return m_mEvents;
+}
+
+void Map::addObject(int x, int y, E_Object object) {
+	t_coordinates coords = {x, y};
+	m_mObjects[_getCoordsKey(x, y)] = std::make_pair(coords, object);
+}
+
+std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> Map::getObjects() {
+	return m_mObjects;
 }
