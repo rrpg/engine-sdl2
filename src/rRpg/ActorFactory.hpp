@@ -11,7 +11,7 @@ enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, RACE_RAT, NB_RACES};
 
 class ActorFactory {
 	private:
-	std::vector<ActorRace*> m_mTaxonomy = {};
+	std::vector<ActorRace> m_mTaxonomy = {};
 	BehaviourFactory m_behaviourFactory;
 	GraphicFactory m_graphicFactory;
 
@@ -19,7 +19,6 @@ class ActorFactory {
 	ActorFactory();
 	~ActorFactory();
 	bool parseTaxonomy(const char* taxonomyFile);
-	void addActorRaceTaxonomy(ActorRace* race);
 	Actor* createActor(E_ActorRaces race);
 	Actor* createEnemy(E_ActorRaces race);
 	Actor* createHero();
