@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "dataTypes.hpp"
+
 #define MAX_LENGTH_TILESET_NAME 32
 #define MAX_CHAR_RESOURCE_PATH 255
 
@@ -55,4 +57,14 @@ enum E_Object {
 	OBJECT_STAIR_UP,
 	OBJECT_STAIR_DOWN
 };
+
+// int is the perthousand of chance of encounter
+struct S_EnemyProbability {
+	E_ActorRaces race;
+	int probaRangeFrom;
+	int probaRangeTo;
+};
+
+typedef std::pair<int, int> t_coordinates;
+
 #endif

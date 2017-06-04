@@ -16,15 +16,6 @@
 
 enum E_MapType {DEFAULT, CAVE};
 
-// int is the perthousand of chance of encounter
-typedef struct {
-	E_ActorRaces race;
-	int probaRangeFrom;
-	int probaRangeTo;
-} S_EnemyProbability;
-
-typedef std::pair<int, int> t_coordinates;
-
 const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
 const int WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION = 0x2;
 
