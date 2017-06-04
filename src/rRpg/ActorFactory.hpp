@@ -7,8 +7,7 @@
 #include "GUI/Factory.hpp"
 #include "ActorRace.hpp"
 #include "Actor.hpp"
-
-enum E_ActorRaces {RACE_HUMAN, RACE_DEMON, RACE_RAT, NB_RACES};
+#include "dataTypes.hpp"
 
 class ActorFactory {
 	private:
