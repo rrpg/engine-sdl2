@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <limits.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
@@ -19,7 +20,7 @@ int main(int argc, char* args[]) {
 	time_t t;
 	srand((unsigned int) time(&t));
 	Game* g;
-	char buffer[1024];
+	char buffer[PATH_MAX];
 	std::string binaryPath;
 	Uint32 frameStart, frameTime;
 
