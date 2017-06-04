@@ -1,6 +1,7 @@
 #ifndef __ACTOR__
 #define __ACTOR__
 
+#include <memory>
 #include <string>
 #include "Behaviour/Behaviour.hpp"
 #include "GUI/Actor.hpp"
@@ -63,10 +64,10 @@ class Actor {
 	void update(rRpg *engine);
 	void render(int displayShiftX, int displayShiftY);
 
-	bool isNextTo(Actor *actor);
-	bool seesActor(Map &map, Actor *actor);
+	bool isNextTo(std::shared_ptr<Actor> actor);
+	bool seesActor(Map &map, std::shared_ptr<Actor> actor);
 
-	void attack(Actor *target);
+	void attack(std::shared_ptr<Actor> target);
 };
 
 #endif

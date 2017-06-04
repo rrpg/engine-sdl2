@@ -2,7 +2,7 @@
 
 const int HP_HEIGHT = 16;
 
-void HUD::render(Game *game, Actor *hero) {
+void HUD::render(Game *game, std::shared_ptr<Actor> hero) {
 	int leftMargin = 10;
 	int maxHealthWidth = game->getScreenWidth() / 4 - leftMargin;
 	int displayShiftX = leftMargin;

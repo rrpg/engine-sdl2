@@ -4,6 +4,7 @@
 #include "Actor.hpp"
 #include "types.hpp"
 #include <string>
+#include <memory>
 #include <vector>
 
 class ActorRace {
@@ -12,7 +13,7 @@ class ActorRace {
 
 	public:
 	ActorRace(S_ActorRaceData data);
-	Actor* createActor();
+	std::shared_ptr<Actor> createActor();
 	std::string getTilesetName();
 	int getSpriteX();
 	int getSpriteY();

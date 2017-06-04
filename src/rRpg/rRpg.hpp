@@ -4,10 +4,11 @@
 #include "ActorFactory.hpp"
 #include "MapManager.hpp"
 #include <string>
+#include <memory>
 
 class rRpg {
 	private:
-	Actor* m_hero = 0;
+	std::shared_ptr<Actor> m_hero;
 	ActorFactory m_actorFactory;
 	MapManager m_mapManager;
 	bool m_bIsBlocked = false;
@@ -16,11 +17,9 @@ class rRpg {
 
 	public:
 	rRpg();
-	rRpg(const rRpg &r); // copy constructor
-	rRpg & operator=(const rRpg &r); // assignment
 	~rRpg();
 	Map &getMap();
-	Actor *getHero();
+	std::shared_ptr<Actor> getHero();
 	void setTilesFile(std::string);
 	void setObjectsFile(std::string objectsFilePath);
 	bool loadMap(std::string mapName, int level);

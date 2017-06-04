@@ -11,9 +11,6 @@ ActorFactory::ActorFactory() :
 }
 
 ActorFactory::~ActorFactory() {
-	for (auto race : m_mTaxonomy) {
-		free(race);
-	}
 }
 
 bool ActorFactory::parseTaxonomy(const char* taxonomyFile) {
@@ -24,35 +21,31 @@ bool ActorFactory::parseTaxonomy(const char* taxonomyFile) {
 
 	resourceManager.parseBinaryFile();
 	for (auto raceData : resourceManager.getParsedResources()) {
-		ActorRace* race = new ActorRace(raceData.second);
-		race->loadTilesetResource();
-		addActorRaceTaxonomy(race);
+		ActorRace race(raceData.second);
+		race.loadTilesetResource();
+		m_mTaxonomy.push_back(race);
 	}
 
 	return true;
 }
 
-void ActorFactory::addActorRaceTaxonomy(ActorRace* race) {
-	m_mTaxonomy.push_back(race);
-}
-
-Actor* ActorFactory::createActor(E_ActorRaces race) {
+std::shared_ptr<Actor> ActorFactory::createActor(E_ActorRaces race) {
 	if ((size_t) race >= m_mTaxonomy.size()) {
 		return NULL;
 	}
 
-	return m_mTaxonomy[race]->createActor();
+	return m_mTaxonomy[race].createActor();
 }
 
-Actor* ActorFactory::createEnemy(E_ActorRaces race) {
-	Actor* actor = createActor(race);
+std::shared_ptr<Actor> ActorFactory::createEnemy(E_ActorRaces race) {
+	std::shared_ptr<Actor> actor = createActor(race);
 	actor->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_MONSTER));
 	actor->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_ACTOR));
 	return actor;
 }
 
-Actor* ActorFactory::createHero() {
-	Actor* hero = createActor(RACE_HUMAN);
+std::shared_ptr<Actor> ActorFactory::createHero() {
+	std::shared_ptr<Actor> hero = createActor(RACE_HUMAN);
 	hero->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_PLAYER));
 	hero->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_PLAYER));
 	return hero;

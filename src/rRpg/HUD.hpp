@@ -3,10 +3,11 @@
 
 #include "Actor.hpp"
 #include "SDL2_framework/Game.h"
+#include <memory>
 
 class HUD {
 	public:
-	static void render(Game *game, Actor *hero);
+	static void render(Game *game, std::shared_ptr<Actor> hero);
 };
 
 #endif
