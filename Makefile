@@ -54,22 +54,22 @@ game: $(PROG)
 
 $(BUILDDIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CC) $(CCDYNAMICFLAGS) -c -MMD $(patsubst $(BUILDDIR)/%.o,%.cpp,$@) -o $@
+	$(CC) -c -MMD $(patsubst $(BUILDDIR)/%.o,%.cpp,$@) $(CCDYNAMICFLAGS) -o $@
 
 $(BUILDDIRGCW)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CC) $(CCDYNAMICFLAGS) -DGCW -c -MMD $(patsubst $(BUILDDIRGCW)/%.o,%.cpp,$@) -o $@
+	$(CC) -DGCW -c -MMD $(patsubst $(BUILDDIRGCW)/%.o,%.cpp,$@) $(CCDYNAMICFLAGS) -o $@
 
 clean:
 	rm -rf $(BUILDDIR) $(LIBDIR)
 
 $(PROG): $(OBJ)
 	mkdir -p $(BINDIR)
-	$(CC) $(CCDYNAMICFLAGS) -o $(BINDIR)/$@ $^
+	$(CC) -o $(BINDIR)/$@ $^ $(CCDYNAMICFLAGS)
 
 gcw: $(OBJGCW)
 	mkdir -p $(BINDIR)
-	$(CC) $(CCDYNAMICFLAGS) -o $(BINDIR)/$(PROG) $^
+	$(CC) -o $(BINDIR)/$(PROG) $^ $(CCDYNAMICFLAGS)
 
 opk:
 	mkdir -p dist/bin dist/resources/DawnLike/Objects/ dist/resources/DawnLike/Characters/
