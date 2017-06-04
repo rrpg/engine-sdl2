@@ -67,4 +67,6 @@ struct S_EnemyProbability {
 
 typedef std::pair<int, int> t_coordinates;
 
+enum E_MapType {DEFAULT, CAVE};
+
 #endif
