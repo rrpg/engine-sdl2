@@ -59,7 +59,11 @@ std::string cleanFileInPath(std::string path) {
 	}
 	else {
 		char cwd[1024];
-		getcwd(cwd, sizeof(cwd));
+		char* res = getcwd(cwd, sizeof(cwd));
+		if (!res) {
+			return "./" + path;
+		}
+
 		return std::string(cwd) + "/" + path;
 	}
 }
