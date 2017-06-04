@@ -27,9 +27,6 @@ void Map::clear() {
 	m_vGrid.clear();
 	m_mTerrainsTileData.clear();
 	m_vEnemySpawnableCells.clear();
-	for (auto actor : m_mActors) {
-		delete actor.second;
-	}
 	for (auto terrain : m_mTerrains) {
 		delete terrain.second;
 	}
@@ -65,7 +62,6 @@ void Map::setObjectsFile(const char *objectsFilePath) {
 void Map::clearDeadActors() {
 	for (auto it = m_mActors.begin(); it != m_mActors.end();) {
 		if (it->second->isDead()) {
-			delete it->second;
 			it = m_mActors.erase(it);
 		}
 		else {
@@ -209,7 +205,7 @@ void Map::initEnemies(ActorFactory &actorFactory) {
 			enemyClass = s_mEnemiesPerMapType[m_type].begin();
 		}
 
-		Actor* enemy = actorFactory.createEnemy(enemyClass->race);
+		std::shared_ptr<Actor> enemy = actorFactory.createEnemy(enemyClass->race);
 		enemy->setX(enemySpawnCell.first);
 		enemy->setY(enemySpawnCell.second);
 		addActor(enemy);
@@ -220,7 +216,7 @@ Vector2D Map::getStartPoint() {
 	return m_sStartPoint;
 }
 
-void Map::addActor(Actor *actor) {
+void Map::addActor(std::shared_ptr<Actor> actor) {
 	std::string key = _getCoordsKey(actor->getX(), actor->getY());
 	m_mActors[key] = actor;
 }
@@ -398,11 +394,11 @@ bool Map::isCellObstructingView(int x, int y) {
 	);
 }
 
-std::unordered_map<std::string, Actor*> &Map::getActors() {
+std::unordered_map<std::string, std::shared_ptr<Actor>> &Map::getActors() {
 	return m_mActors;
 }
 
-Actor *Map::getActorAt(int x, int y) {
+std::shared_ptr<Actor> Map::getActorAt(int x, int y) {
 	std::string key = _getCoordsKey(x, y);
 	auto it = m_mActors.find(key);
 	if (it != m_mActors.end()) {
@@ -412,7 +408,7 @@ Actor *Map::getActorAt(int x, int y) {
 	return NULL;
 }
 
-bool Map::moveActor(Actor *a, int newX, int newY) {
+bool Map::moveActor(Actor* a, int newX, int newY) {
 	if (!isCellWalkable(newX, newY, WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING)) {
 		return false;
 	}

@@ -5,8 +5,8 @@ ActorRace::ActorRace(S_ActorRaceData data) :
 {
 }
 
-Actor* ActorRace::createActor() {
-	Actor* actor = new Actor(*this);
+std::shared_ptr<Actor> ActorRace::createActor() {
+	std::shared_ptr<Actor> actor(std::make_shared<Actor>(*this));
 	actor->setHealth((int) m_data.level1HP);
 	actor->setMaxHealth(m_data.level1HP);
 	actor->setDefence(m_data.level1Defence);

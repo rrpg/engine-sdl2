@@ -2,6 +2,7 @@
 #define __ACTOR_FACTORY__
 
 #include <vector>
+#include <memory>
 #include "Behaviour/Factory.hpp"
 #include "GUI/Factory.hpp"
 #include "ActorRace.hpp"
@@ -19,9 +20,9 @@ class ActorFactory {
 	ActorFactory();
 	~ActorFactory();
 	bool parseTaxonomy(const char* taxonomyFile);
-	Actor* createActor(E_ActorRaces race);
-	Actor* createEnemy(E_ActorRaces race);
-	Actor* createHero();
+	std::shared_ptr<Actor> createActor(E_ActorRaces race);
+	std::shared_ptr<Actor> createEnemy(E_ActorRaces race);
+	std::shared_ptr<Actor> createHero();
 };
 
 #endif

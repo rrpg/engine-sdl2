@@ -93,7 +93,7 @@ void Actor::render(int displayShiftX, int displayShiftY) {
 	}
 }
 
-bool Actor::isNextTo(Actor *actor) {
+bool Actor::isNextTo(std::shared_ptr<Actor> actor) {
 	int x0 = getX(),
 		x1 = actor->getX(),
 		y0 = getY(),
@@ -103,7 +103,7 @@ bool Actor::isNextTo(Actor *actor) {
 	return (isNext && y0 == y1) || (x0 == x1 && isAbove);
 }
 
-bool Actor::seesActor(Map &map, Actor *actor) {
+bool Actor::seesActor(Map &map, std::shared_ptr<Actor> actor) {
 	int x0 = getX(),
 		y0 = getY(),
 		x1 = actor->getX(),
@@ -156,7 +156,7 @@ bool Actor::seesActor(Map &map, Actor *actor) {
 	return actor1SeesActor2;
 }
 
-void Actor::attack(Actor *target) {
+void Actor::attack(std::shared_ptr<Actor> target) {
 	int attackValue = rand() % m_iAttack;
 	int defence = rand() % target->m_iDefence;
 	int damages = attackValue - defence;

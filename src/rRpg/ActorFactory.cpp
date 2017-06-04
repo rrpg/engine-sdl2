@@ -29,7 +29,7 @@ bool ActorFactory::parseTaxonomy(const char* taxonomyFile) {
 	return true;
 }
 
-Actor* ActorFactory::createActor(E_ActorRaces race) {
+std::shared_ptr<Actor> ActorFactory::createActor(E_ActorRaces race) {
 	if ((size_t) race >= m_mTaxonomy.size()) {
 		return NULL;
 	}
@@ -37,15 +37,15 @@ Actor* ActorFactory::createActor(E_ActorRaces race) {
 	return m_mTaxonomy[race].createActor();
 }
 
-Actor* ActorFactory::createEnemy(E_ActorRaces race) {
-	Actor* actor = createActor(race);
+std::shared_ptr<Actor> ActorFactory::createEnemy(E_ActorRaces race) {
+	std::shared_ptr<Actor> actor = createActor(race);
 	actor->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_MONSTER));
 	actor->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_ACTOR));
 	return actor;
 }
 
-Actor* ActorFactory::createHero() {
-	Actor* hero = createActor(RACE_HUMAN);
+std::shared_ptr<Actor> ActorFactory::createHero() {
+	std::shared_ptr<Actor> hero = createActor(RACE_HUMAN);
 	hero->setBehaviour(m_behaviourFactory.getBehaviour(BEHAVIOUR_PLAYER));
 	hero->setGraphic((GraphicActor*) m_graphicFactory.getGraphic(GRAPHIC_PLAYER));
 	return hero;

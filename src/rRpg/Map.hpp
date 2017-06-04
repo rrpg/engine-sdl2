@@ -1,6 +1,7 @@
 #ifndef __MAP__
 #define __MAP__
 
+#include <memory>
 #include "MapEvent.hpp"
 #include "Parser/File.hpp"
 #include "ActorFactory.hpp"
@@ -42,7 +43,7 @@ class Map {
 	std::vector<E_TerrainType> m_vGrid;
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
-	std::unordered_map<std::string, Actor*> m_mActors;
+	std::unordered_map<std::string, std::shared_ptr<Actor>> m_mActors;
 	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents = {};
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects = {};
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
@@ -96,9 +97,9 @@ class Map {
 
 	E_TerrainType getTile(int x, int y);
 	size_t getTileIndex(int x, int y);
-	void addActor(Actor *actor);
-	std::unordered_map<std::string, Actor*> &getActors();
-	Actor *getActorAt(int x, int y);
+	void addActor(std::shared_ptr<Actor> actor);
+	std::unordered_map<std::string, std::shared_ptr<Actor>> &getActors();
+	std::shared_ptr<Actor> getActorAt(int x, int y);
 	bool moveActor(Actor* actor, int newX, int newY);
 
 	void render(SDL_Rect camera, int centerX, int centerY);

@@ -8,37 +8,19 @@
 #include "SDL2_framework/Game.h"
 
 rRpg::rRpg() :
-	m_hero(0),
+	m_hero(nullptr),
 	m_actorFactory(ActorFactory()),
 	m_mapManager(MapManager())
 {
 }
 
-rRpg::rRpg(const rRpg &r) :
-	m_hero(r.m_hero),
-	m_actorFactory(r.m_actorFactory),
-	m_mapManager(MapManager())
-{
-}
-
-rRpg & rRpg::operator=(const rRpg &r) {
-	// check for "self assignment" and do nothing in that case
-	if (this == &r) {
-		return *this;
-	}
-
-	m_hero = r.m_hero;
-	return *this;
-}
-
-rRpg::~rRpg() {
-}
+rRpg::~rRpg() {}
 
 Map &rRpg::getMap() {
 	return m_mapManager.getMap();
 }
 
-Actor *rRpg::getHero() {
+std::shared_ptr<Actor> rRpg::getHero() {
 	return m_hero;
 }
 
@@ -82,7 +64,7 @@ void rRpg::initialiseHero() {
 }
 
 void rRpg::update() {
-	std::unordered_map<std::string, Actor*> actors = m_mapManager.getMap().getActors();
+	std::unordered_map<std::string, std::shared_ptr<Actor>> actors = m_mapManager.getMap().getActors();
 	unblock();
 
 	m_hero->update(this);
