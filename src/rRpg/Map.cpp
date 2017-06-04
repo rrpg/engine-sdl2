@@ -33,6 +33,7 @@ void Map::clear() {
 	m_mActors.clear();
 	m_mTerrains.clear();
 	m_mEvents.clear();
+	m_mObjects.clear();
 }
 
 void Map::setName(std::string name) {
