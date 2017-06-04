@@ -25,7 +25,11 @@ int main(int argc, char* args[]) {
 
 	Utils::createFolder(Utils::getDataPath().c_str());
 
-	realpath(dirname(args[argc - argc]), buffer);
+	char *res = realpath(dirname(args[argc - argc]), buffer);
+	if (!res) {
+		return 1;
+	}
+
 	binaryPath = buffer;
 	g = Game::Instance();
 	g->setBinaryPath(binaryPath);
