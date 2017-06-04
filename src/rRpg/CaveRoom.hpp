@@ -1,7 +1,10 @@
 #ifndef __CAVE_ROOM__
 #define __CAVE_ROOM__
 
-#include "Map.hpp"
+#include <unordered_map>
+#include <vector>
+
+class Map;
 
 namespace CaveRoom {
 

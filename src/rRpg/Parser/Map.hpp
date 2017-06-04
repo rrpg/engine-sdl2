@@ -2,7 +2,8 @@
 #define __MAP_PARSER__
 
 #include "Parser/File.hpp"
-#include "../Map.hpp"
+
+class Map;
 
 class MapParser : public FileParser {
 	protected:
@@ -13,6 +14,7 @@ class MapParser : public FileParser {
 
 	public:
 	MapParser();
+	~MapParser();
 	MapParser(const MapParser &mP); // copy constructor
 	MapParser & operator=(const MapParser &mP); // assignment
 	void setMap(Map *map);

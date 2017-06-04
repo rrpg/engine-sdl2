@@ -1,6 +1,8 @@
 #include "ActorFactory.hpp"
 #include "Behaviour/Monster.hpp"
+#include "ResourceManager.hpp"
 #include "GUI/Actor.hpp"
+#include "Actor.hpp"
 #include <fstream>
 #include <libgen.h>
 

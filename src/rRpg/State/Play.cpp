@@ -1,6 +1,7 @@
 #include "Play.hpp"
 #include "Utils.hpp"
 #include "GameOver.hpp"
+#include "Actor.hpp"
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/ServiceProvider.h"
 

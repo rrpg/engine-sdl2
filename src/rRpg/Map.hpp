@@ -2,28 +2,20 @@
 #define __MAP__
 
 #include <memory>
-#include "MapEvent.hpp"
-#include "Parser/File.hpp"
-#include "ActorFactory.hpp"
-#include "Terrain.hpp"
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
-#include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
+#include "Terrain.hpp"
+#include "MapEvent.hpp"
 #include "types.hpp"
 #include "ResourceManager.hpp"
+#include "SDL2_framework/Vector2D.h"
 
-enum E_MapType {DEFAULT, CAVE};
-
-// int is the perthousand of chance of encounter
-typedef struct {
-	E_ActorRaces race;
-	int probaRangeFrom;
-	int probaRangeTo;
-} S_EnemyProbability;
-
-typedef std::pair<int, int> t_coordinates;
+class Actor;
+class ActorFactory;
+class MapEvent;
+class Vector2D;
 
 const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
 const int WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION = 0x2;
@@ -39,13 +31,13 @@ class Map {
 	int m_iHeight = 0;
 	int m_iDisplayTileWidth = 0;
 	int m_iDisplayTileHeight = 0;
-	Vector2D m_sStartPoint = Vector2D();
+	Vector2D m_sStartPoint;
 	std::vector<E_TerrainType> m_vGrid;
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, std::shared_ptr<Actor>> m_mActors;
-	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents = {};
-	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects = {};
+	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents;
+	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	ResourceManager<S_TileData> m_tilesManager;

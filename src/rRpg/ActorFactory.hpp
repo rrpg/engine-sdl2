@@ -6,8 +6,12 @@
 #include "Behaviour/Factory.hpp"
 #include "GUI/Factory.hpp"
 #include "ActorRace.hpp"
-#include "Actor.hpp"
 #include "dataTypes.hpp"
+
+class Actor;
+class ActorRace;
+class BehaviourFactory;
+class GraphicFactory;
 
 class ActorFactory {
 	private:

@@ -3,9 +3,9 @@
 
 #include <memory>
 #include <string>
-#include "Behaviour/Behaviour.hpp"
-#include "GUI/Actor.hpp"
 
+class Behaviour;
+class GraphicActor;
 class rRpg;
 class Map;
 class ActorRace;

@@ -1,9 +1,10 @@
 #ifndef __HUD__
 #define __HUD__
 
-#include "Actor.hpp"
-#include "SDL2_framework/Game.h"
 #include <memory>
+
+class Actor;
+class Game;
 
 class HUD {
 	public:

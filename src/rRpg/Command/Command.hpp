@@ -1,8 +1,8 @@
 #ifndef __COMMAND__
 #define __COMMAND__
 
-#include "Actor.hpp"
-#include "Map.hpp"
+class Actor;
+class Map;
 
 class Command {
 	public:

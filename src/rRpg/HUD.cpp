@@ -1,4 +1,6 @@
 #include "HUD.hpp"
+#include "Actor.hpp"
+#include "SDL2_framework/Game.h"
 
 const int HP_HEIGHT = 16;
 

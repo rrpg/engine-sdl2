@@ -2,7 +2,7 @@
 #define __PLAY_STATE__
 
 #include "SDL2_framework/GameState.h"
-#include "../rRpg.hpp"
+#include "rRpg.hpp"
 
 class PlayState : public GameState {
 	private:

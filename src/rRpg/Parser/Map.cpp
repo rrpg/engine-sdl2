@@ -1,4 +1,5 @@
 #include "Map.hpp"
+#include "../Map.hpp"
 #include "Utils.hpp"
 #include "MapEvent.hpp"
 #include "SDL2_framework/TextureManager.h"
@@ -22,6 +23,9 @@ MapParser & MapParser::operator=(const MapParser &mP) {
 
 	m_map = mP.m_map;
 	return *this;
+}
+
+MapParser::~MapParser() {
 }
 
 void MapParser::setMap(Map *map) {

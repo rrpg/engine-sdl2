@@ -3,8 +3,10 @@
 
 #include <string>
 #include <vector>
-#include "Map.hpp"
 #include "CaveRoom.hpp"
+#include "types.hpp"
+
+class Map;
 
 class MapGenerator {
 	private:

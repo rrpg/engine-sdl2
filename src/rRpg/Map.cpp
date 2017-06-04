@@ -1,4 +1,6 @@
 #include "Map.hpp"
+#include "ActorFactory.hpp"
+#include "Actor.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
 
@@ -10,10 +12,13 @@ void Map::_initEnemiesPerMapType() {
 }
 
 Map::Map() :
+	m_sStartPoint(Vector2D()),
 	m_vGrid({}),
 	m_mTerrains({}),
 	m_mTerrainsTileData({}),
 	m_mActors({}),
+	m_mEvents({}),
+	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {

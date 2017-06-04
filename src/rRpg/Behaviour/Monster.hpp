@@ -2,7 +2,9 @@
 #define __BEHAVIOUR_MONSTER__
 
 #include "Behaviour/Behaviour.hpp"
-#include "../Map.hpp"
+
+class rRpg;
+class Actor;
 
 class BehaviourMonster : public Behaviour {
 	private:
