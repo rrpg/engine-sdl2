@@ -30,7 +30,7 @@ class Map {
 	int m_iHeight = 0;
 	int m_iDisplayTileWidth = 0;
 	int m_iDisplayTileHeight = 0;
-	Vector2D m_sStartPoint = Vector2D();
+	Vector2D m_sStartPoint;
 	std::vector<E_TerrainType> m_vGrid;
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;

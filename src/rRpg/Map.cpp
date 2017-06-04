@@ -10,6 +10,7 @@ void Map::_initEnemiesPerMapType() {
 }
 
 Map::Map() :
+	m_sStartPoint(Vector2D()),
 	m_vGrid({}),
 	m_mTerrains({}),
 	m_mTerrainsTileData({}),
