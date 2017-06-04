@@ -2,7 +2,8 @@
 #define __MAP_PARSER__
 
 #include "Parser/File.hpp"
-#include "../Map.hpp"
+
+class Map;
 
 class MapParser : public FileParser {
 	protected:

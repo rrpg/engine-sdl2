@@ -1,6 +1,8 @@
 #include "Actor.hpp"
 #include "../Actor.hpp"
-#include "../ActorRace.hpp"
+#include "ActorRace.hpp"
+#include "SDL2_framework/TextureManager.h"
+#include "SDL2_framework/Game.h"
 
 const int TIME_DISPLAY_HP = 5000;
 

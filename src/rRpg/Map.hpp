@@ -2,16 +2,20 @@
 #define __MAP__
 
 #include <memory>
-#include "MapEvent.hpp"
-#include "ActorFactory.hpp"
-#include "Terrain.hpp"
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
-#include "SDL2_framework/Vector2D.h"
 #include <SDL2/SDL.h>
+#include "Terrain.hpp"
+#include "MapEvent.hpp"
 #include "types.hpp"
 #include "ResourceManager.hpp"
+#include "SDL2_framework/Vector2D.h"
+
+class Actor;
+class ActorFactory;
+class MapEvent;
+class Vector2D;
 
 const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
 const int WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION = 0x2;

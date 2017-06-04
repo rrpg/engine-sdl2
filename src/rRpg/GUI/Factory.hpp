@@ -2,9 +2,10 @@
 #define __GRAPHIC__FACTORY__
 
 #include <vector>
-#include "GUI.hpp"
 
 enum E_Graphics {GRAPHIC_ACTOR, GRAPHIC_PLAYER};
+
+class Graphic;
 
 class GraphicFactory {
 	private:

@@ -1,4 +1,6 @@
 #include "Map.hpp"
+#include "ActorFactory.hpp"
+#include "Actor.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
 

@@ -1,5 +1,6 @@
 #include "MapGenerator.hpp"
 #include "Terrain.hpp"
+#include "Map.hpp"
 #include <limits.h>
 #include <algorithm>
 #include <MapEvent.hpp>

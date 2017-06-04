@@ -2,7 +2,8 @@
 #define __BEHAVIOUR__FACTORY__
 
 #include <vector>
-#include "Behaviour.hpp"
+
+class Behaviour;
 
 enum E_Behaviours {BEHAVIOUR_PLAYER, BEHAVIOUR_MONSTER};
 

@@ -2,8 +2,11 @@
 #define __BEHAVIOUR_PLAYER__
 
 #include "Behaviour/Behaviour.hpp"
-#include "../Map.hpp"
 #include <cstdint>
+
+class Map;
+class rRpg;
+class Actor;
 
 class BehaviourPlayer : public Behaviour {
 	private:

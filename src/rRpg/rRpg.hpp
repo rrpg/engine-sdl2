@@ -6,6 +6,8 @@
 #include <string>
 #include <memory>
 
+class Actor;
+
 class rRpg {
 	private:
 	std::shared_ptr<Actor> m_hero;

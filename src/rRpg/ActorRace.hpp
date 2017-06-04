@@ -1,11 +1,12 @@
 #ifndef __ACTOR_RACE__
 #define __ACTOR_RACE__
 
-#include "Actor.hpp"
 #include "types.hpp"
 #include <string>
 #include <memory>
 #include <vector>
+
+class Actor;
 
 class ActorRace {
 	private:

@@ -1,4 +1,5 @@
 #include "CaveRoom.hpp"
+#include "Map.hpp"
 
 void _floodFill(Map &map, std::vector<char> &dispatchedCells, CaveRoom::S_RoomCollection &roomCollection, CaveRoom::S_Room &currentRoom, int x, int y);
 

@@ -1,5 +1,7 @@
 #include "Actor.hpp"
 #include "rRpg.hpp"
+#include "Behaviour/Behaviour.hpp"
+#include "GUI/Actor.hpp"
 #include <limits.h>
 
 #define LIMIT_FIELD_OF_VIEW 6

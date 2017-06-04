@@ -1,4 +1,8 @@
+#include <SDL2/SDL.h>
 #include "ActorRace.hpp"
+#include "Actor.hpp"
+#include "SDL2_framework/TextureManager.h"
+#include "SDL2_framework/Game.h"
 
 ActorRace::ActorRace(S_ActorRaceData data) :
 	m_data(data)
