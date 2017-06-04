@@ -15,6 +15,8 @@ Map::Map() :
 	m_mTerrains({}),
 	m_mTerrainsTileData({}),
 	m_mActors({}),
+	m_mEvents({}),
+	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
