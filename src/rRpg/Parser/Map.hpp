@@ -13,6 +13,7 @@ class MapParser : public FileParser {
 
 	public:
 	MapParser();
+	~MapParser();
 	MapParser(const MapParser &mP); // copy constructor
 	MapParser & operator=(const MapParser &mP); // assignment
 	void setMap(Map *map);

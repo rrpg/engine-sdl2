@@ -24,6 +24,9 @@ MapParser & MapParser::operator=(const MapParser &mP) {
 	return *this;
 }
 
+MapParser::~MapParser() {
+}
+
 void MapParser::setMap(Map *map) {
 	m_map = map;
 }
