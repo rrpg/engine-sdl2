@@ -12,7 +12,6 @@ MapManager::MapManager() :
 }
 
 bool MapManager::loadMap(std::string mapName, int level) {
-	MapParser parser = MapParser();
 	char filePath[512];
 	sprintf(
 		filePath,
@@ -23,7 +22,7 @@ bool MapManager::loadMap(std::string mapName, int level) {
 	);
 
 	m_map.clear();
-	parser.setMap(&m_map);
+	MapParser parser = MapParser(m_map);
 	// generate the map if it does not exist
 	struct stat buffer;
 	if (stat(filePath, &buffer) != 0) {

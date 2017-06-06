@@ -5,29 +5,10 @@
 #include <string.h>
 #include <libgen.h>
 
-MapParser::MapParser() : m_map(0) {
-}
-
-MapParser::MapParser(const MapParser &mP) :
-	m_map(mP.m_map)
-{
-}
-
-MapParser & MapParser::operator=(const MapParser &mP) {
-	// check for "self assignment" and do nothing in that case
-	if (this == &mP) {
-		return *this;
-	}
-
-	m_map = mP.m_map;
-	return *this;
+MapParser::MapParser(Map &map) : m_map(map) {
 }
 
 MapParser::~MapParser() {
-}
-
-void MapParser::setMap(Map *map) {
-	m_map = map;
 }
 
 bool MapParser::_parseLine(const char *line) {
@@ -48,7 +29,7 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 1) {
 				retValue = false;
 			}
-			m_map->setType((E_MapType) mapType);
+			m_map.setType((E_MapType) mapType);
 			break;
 		case 'd':
 			int w, h;
@@ -56,7 +37,7 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map->setDimensions(w, h);
+			m_map.setDimensions(w, h);
 			break;
 		case 'c':
 			_parseMapContent(line);
@@ -73,7 +54,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map->addEvent((char) xEvent, (char) yEvent, MapEvent());
+				m_map.addEvent((char) xEvent, (char) yEvent, MapEvent());
 			}
 			break;
 
@@ -88,7 +69,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map->addEnemySpawnableCell((char) xEnemy, (char) yEnemy);
+				m_map.addEnemySpawnableCell((char) xEnemy, (char) yEnemy);
 			}
 			break;
 
@@ -103,7 +84,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map->addObject(xObject, yObject, (E_Object) objectType);
+				m_map.addObject(xObject, yObject, (E_Object) objectType);
 			}
 			break;
 
@@ -118,7 +99,7 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map->setDisplayTileDimensions(tileWidth, tileHeight);
+				m_map.setDisplayTileDimensions(tileWidth, tileHeight);
 			}
 			break;
 
@@ -132,7 +113,7 @@ bool MapParser::_parseLine(const char *line) {
 			if (sscanfResult != 2) {
 				retValue = false;
 			}
-			m_map->setStartPoint((float) x, (float) y);
+			m_map.setStartPoint((float) x, (float) y);
 			break;
 		default:
 			break;
@@ -144,7 +125,7 @@ bool MapParser::_parseLine(const char *line) {
 void MapParser::_parseMapContent(const char *line) {
 	while (*line != '\n' && *line != '\0') {
 		short cellTile = *line;
-		m_map->getGrid()->push_back((E_TerrainType) cellTile);
+		m_map.getGrid()->push_back((E_TerrainType) cellTile);
 		++line;
 	}
 }
@@ -159,27 +140,27 @@ bool MapParser::saveMap(const char *filePath) {
 	fprintf(
 		mapFile,
 		"t %d\n",
-		m_map->getType()
+		m_map.getType()
 	);
 
 	fprintf(
 		mapFile,
 		"d %d %d\ng %d %d\ns %d %d\n",
-		m_map->getWidth(), m_map->getHeight(),
-		m_map->getDisplayTileWidth(), m_map->getDisplayTileHeight(),
-		(int) m_map->getStartPoint().getX(), (int) m_map->getStartPoint().getY()
+		m_map.getWidth(), m_map.getHeight(),
+		m_map.getDisplayTileWidth(), m_map.getDisplayTileHeight(),
+		(int) m_map.getStartPoint().getX(), (int) m_map.getStartPoint().getY()
 	);
 
-	for (auto enemyPlace : m_map->getEnemySpawnableCells()) {
+	for (auto enemyPlace : m_map.getEnemySpawnableCells()) {
 		fprintf(mapFile, "e %d %d\n", enemyPlace.first, enemyPlace.second);
 	}
 
-	for (auto event : m_map->getEvents()) {
+	for (auto event : m_map.getEvents()) {
 		t_coordinates coords = event.second.first;
 		fprintf(mapFile, "E %d %d\n", coords.first, coords.second);
 	}
 
-	for (auto object : m_map->getObjects()) {
+	for (auto object : m_map.getObjects()) {
 		 t_coordinates coords = object.second.first;
 		fprintf(
 			mapFile,
@@ -190,7 +171,7 @@ bool MapParser::saveMap(const char *filePath) {
 
 	bool newLine = true;
 	int cellCount = 0;
-	for (auto cell : *(m_map->getGrid())) {
+	for (auto cell : *(m_map.getGrid())) {
 		if (newLine) {
 			fprintf(mapFile, "c ");
 			newLine = false;
