@@ -2,8 +2,6 @@
 #include "../Map.hpp"
 #include "Utils.hpp"
 #include "MapEvent.hpp"
-#include "SDL2_framework/TextureManager.h"
-#include "SDL2_framework/Game.h"
 #include <string.h>
 #include <libgen.h>
 
