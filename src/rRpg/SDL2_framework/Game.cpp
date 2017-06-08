@@ -129,6 +129,7 @@ bool Game::_initSDL(
 bool Game::_loadResources() {
 	const char errorPattern[] = "An error occured while loading the file %s";
 
+	bool ret = true;
 	std::cout << "Load resources \n";
 	for (unsigned long i = 0; i < m_iNbFiles; ++i) {
 		char* errorMessage = (char*) calloc(
@@ -145,7 +146,7 @@ bool Game::_loadResources() {
 			sprintf(errorMessage, errorPattern, m_vResourceFiles[i].second.c_str());
 			std::cout << errorMessage << "\n";
 			std::cout << strerror(errno) << "\n";
-			return false;
+			ret = false;
 		}
 		else {
 			std::cout << "Resource " << m_vResourceFiles[i].second << " loaded\n";
@@ -153,7 +154,7 @@ bool Game::_loadResources() {
 		free(errorMessage);
 	}
 
-	return true;
+	return ret;
 }
 
 /**
