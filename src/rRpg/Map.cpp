@@ -306,16 +306,14 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
-
-	int shiftX = (int) shift.getX();
-	int shiftY = (int) shift.getY();
+	int displayShiftX = camera.x - (int) shift.getX();
+	int displayShiftY = camera.y - (int) shift.getY();
 	for (auto object : m_mObjects) {
-		int x = object.second.first.first;
-		int y = object.second.first.second;
-		if ((visibleArea.x > 0 && x < visibleArea.x)
-				|| x > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && y < visibleArea.y)
-				|| y > (visibleArea.y + visibleArea.h)
+		t_coordinates objectPosition = object.second.first;
+		if ((visibleArea.x > 0 && objectPosition.first < visibleArea.x)
+				|| objectPosition.first > (visibleArea.x + visibleArea.w)
+			|| (visibleArea.y > 0 && objectPosition.second < visibleArea.y)
+				|| objectPosition.second > (visibleArea.y + visibleArea.h)
 		) {
 			continue;
 		}
@@ -323,8 +321,8 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 		S_ObjectData objectData = _getObjectData(object.second.second);
 		int objectWidth = getDisplayTileWidth();
 		int objectHeight = getDisplayTileHeight();
-		int xScreen = x * objectWidth - shiftX + camera.x,
-			yScreen = y * objectHeight - shiftY + camera.y;
+		int xScreen = x * objectWidth - displayShiftX,
+			yScreen = y * objectHeight - displayShiftY;
 
 		manager->load(objectData.tileset, game->getRenderer());
 		// the rows are 1 based, and the columns are 0 based, which is
