@@ -10,6 +10,7 @@
 #include "MapEvent.hpp"
 #include "types.hpp"
 #include "ResourceManager.hpp"
+#include "GUI/Object.hpp"
 #include "SDL2_framework/Vector2D.h"
 
 class Actor;
@@ -40,6 +41,7 @@ class Map {
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
+	GraphicObject m_graphicObject;
 	ResourceManager<S_TileData> m_tilesManager;
 	ResourceManager<S_ObjectData> m_objectsManager;
 

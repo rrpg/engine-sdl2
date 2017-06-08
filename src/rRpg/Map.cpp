@@ -20,6 +20,7 @@ Map::Map() :
 	m_mEvents({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
+	m_graphicObject(GraphicObject()),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
@@ -319,26 +320,7 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 		}
 
 		S_ObjectData objectData = _getObjectData(object.second.second);
-		int objectWidth = getDisplayTileWidth();
-		int objectHeight = getDisplayTileHeight();
-		int xScreen = x * objectWidth - displayShiftX,
-			yScreen = y * objectHeight - displayShiftY;
-
-		manager->load(objectData.tileset, game->getRenderer());
-		// the rows are 1 based, and the columns are 0 based, which is
-		// stupid
-		manager->drawTile(
-			objectData.tileset,
-			0, // margin
-			0, // spacing
-			xScreen,
-			yScreen,
-			objectWidth,
-			objectHeight,
-			objectData.spriteY + 1,
-			objectData.spriteX,
-			game->getRenderer()
-		);
+		m_graphicObject.render(manager, game, displayShiftX, displayShiftY, objectData, objectPosition);
 	}
 }
 
