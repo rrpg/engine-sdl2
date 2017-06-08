@@ -14,7 +14,7 @@
 const int FPS = 60;
 const int DELAY_TIME = 1000 / FPS;
 
-void _prepareTilesets(std::string binaryPath);
+void _prepareTilesets(std::string binaryPath, Game *g);
 
 int main(int argc, char* args[]) {
 	time_t t;
@@ -33,13 +33,13 @@ int main(int argc, char* args[]) {
 
 	binaryPath = buffer;
 	g = Game::Instance();
+	_prepareTilesets(binaryPath, g);
 	g->setBinaryPath(binaryPath);
 	if (!g->init("rRpg", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, FULL_SCREEN)) {
 		Game::freeGame();
 		return 1;
 	}
 
-	_prepareTilesets(binaryPath);
 	g->getStateMachine()->changeState(new PlayState());
 	while (g->isRunning()) {
 		frameStart = SDL_GetTicks();
@@ -61,7 +61,7 @@ int main(int argc, char* args[]) {
 	return 0;
 }
 
-void _prepareTilesets(std::string binaryPath) {
+void _prepareTilesets(std::string binaryPath, Game *g) {
 	ResourceManager<S_TilesetMapping> resourceManager;
 	resourceManager.setResourceFile(binaryPath + "/../resources/tilesets.dat");
 	resourceManager.parseBinaryFile();
@@ -69,9 +69,9 @@ void _prepareTilesets(std::string binaryPath) {
 		std::cout << "Resource found: "
 			<< tileset.second.tileset
 			<< " (" << tileset.second.filePath << ")\n";
-		TextureManager::Instance()->addTexture(
-			binaryPath + "/../resources/" + tileset.second.filePath,
-			tileset.second.tileset
+		g->addResource(
+			tileset.second.tileset,
+			binaryPath + "/../resources/" + tileset.second.filePath
 		);
 	}
 }

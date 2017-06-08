@@ -285,7 +285,6 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			int xScreen = x * tileData.width - shiftX + camera.x,
 				yScreen = y * tileData.height - shiftY + camera.y;
 
-			manager->load(tileData.tileset, game->getRenderer());
 			// the rows are 1 based, and the columns are 0 based, which is
 			// stupid
 			manager->drawTile(
