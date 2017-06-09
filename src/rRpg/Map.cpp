@@ -21,6 +21,7 @@ Map::Map() :
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
 	m_graphicObject(GraphicObject()),
+	m_graphicTerrain(GraphicTerrain()),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
@@ -266,8 +267,8 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
-	int shiftX = (int) shift.getX();
-	int shiftY = (int) shift.getY();
+	int displayShiftX = (int) shift.getX() + camera.x;
+	int displayShiftY = (int) shift.getY() + camera.y;
 	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
 		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
 			if (!areCoordinatesValid(x, y)) {
@@ -282,22 +283,14 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 					15 : _getSameNeighbours(x, y)
 			);
 			S_TileData tileData = _getTerrainTileData(tile);
-			int xScreen = x * tileData.width - shiftX + camera.x,
-				yScreen = y * tileData.height - shiftY + camera.y;
-
-			// the rows are 1 based, and the columns are 0 based, which is
-			// stupid
-			manager->drawTile(
-				tileData.tileset,
-				0, // margin
-				0, // spacing
-				xScreen,
-				yScreen,
-				tileData.width,
-				tileData.height,
-				tileData.y + 1,
-				tileData.x,
-				game->getRenderer()
+			t_coordinates position = {x, y};
+			m_graphicTerrain.render(
+				manager,
+				game,
+				displayShiftX,
+				displayShiftY,
+				tileData,
+				position
 			);
 		}
 	}
@@ -319,7 +312,14 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 		}
 
 		S_ObjectData objectData = _getObjectData(object.second.second);
-		m_graphicObject.render(manager, game, displayShiftX, displayShiftY, objectData, objectPosition);
+		m_graphicObject.render(
+			manager,
+			game,
+			displayShiftX,
+			displayShiftY,
+			objectData,
+			objectPosition
+		);
 	}
 }
 

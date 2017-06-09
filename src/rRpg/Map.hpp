@@ -11,6 +11,7 @@
 #include "types.hpp"
 #include "ResourceManager.hpp"
 #include "GUI/Object.hpp"
+#include "GUI/Terrain.hpp"
 #include "SDL2_framework/Vector2D.h"
 
 class Actor;
@@ -42,6 +43,7 @@ class Map {
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
 	GraphicObject m_graphicObject;
+	GraphicTerrain m_graphicTerrain;
 	ResourceManager<S_TileData> m_tilesManager;
 	ResourceManager<S_ObjectData> m_objectsManager;
 
