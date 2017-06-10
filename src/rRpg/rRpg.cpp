@@ -11,14 +11,14 @@
 rRpg::rRpg() :
 	m_hero(nullptr),
 	m_actorFactory(ActorFactory()),
-	m_mapManager(MapManager())
+	m_map(Map())
 {
 }
 
 rRpg::~rRpg() {}
 
 Map &rRpg::getMap() {
-	return m_mapManager.getMap();
+	return m_map;
 }
 
 std::shared_ptr<Actor> rRpg::getHero() {
@@ -34,16 +34,17 @@ void rRpg::setObjectsFile(std::string objectsFilePath) {
 }
 
 bool rRpg::loadMap(std::string mapName, int level) {
-	if (!m_mapManager.loadMap(mapName, level)) {
+	MapManager manager;
+	if (!manager.loadMap(m_map, mapName, level)) {
 		return false;
 	}
 
-	m_mapManager.getMap().initEnemies(m_actorFactory);
-	m_mapManager.getMap().setTileFile(m_sTilesFile.c_str());
-	m_mapManager.getMap().setObjectsFile(m_sObjectsFile.c_str());
-	m_hero->setX((int) m_mapManager.getMap().getStartPoint().getX());
-	m_hero->setY((int) m_mapManager.getMap().getStartPoint().getY());
-	m_mapManager.getMap().addActor(m_hero);
+	m_map.initEnemies(m_actorFactory);
+	m_map.setTileFile(m_sTilesFile.c_str());
+	m_map.setObjectsFile(m_sObjectsFile.c_str());
+	m_hero->setX((int) m_map.getStartPoint().getX());
+	m_hero->setY((int) m_map.getStartPoint().getY());
+	m_map.addActor(m_hero);
 	return true;
 }
 
@@ -65,7 +66,7 @@ void rRpg::initialiseHero() {
 }
 
 void rRpg::update() {
-	std::unordered_map<std::string, std::shared_ptr<Actor>> actors = m_mapManager.getMap().getActors();
+	std::unordered_map<std::string, std::shared_ptr<Actor>> actors = m_map.getActors();
 	unblock();
 
 	m_hero->update(this);
@@ -76,7 +77,7 @@ void rRpg::update() {
 	}
 
 	if (!m_hero->isDead()) {
-		m_mapManager.getMap().clearDeadActors();
+		m_map.clearDeadActors();
 	}
 }
 
@@ -85,7 +86,7 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_mapManager.getMap().render(camera, m_hero->getX(), m_hero->getY());
+	m_map.render(camera, m_hero->getX(), m_hero->getY());
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

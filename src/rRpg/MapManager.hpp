@@ -4,13 +4,8 @@
 #include "Map.hpp"
 
 class MapManager {
-	private:
-	Map m_map;
-
 	public:
-	MapManager();
-	bool loadMap(std::string mapName, int level);
-	Map &getMap();
+	bool loadMap(Map &map, std::string mapName, int level);
 };
 
 #endif
