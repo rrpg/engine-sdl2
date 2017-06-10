@@ -1,6 +1,10 @@
 #include "Map.hpp"
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
+#include "GUI.hpp"
+#include "GUI/Factory.hpp"
+#include "GUI/Terrain.hpp"
+#include "GUI/Object.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
 
@@ -11,7 +15,7 @@ void Map::_initEnemiesPerMapType() {
 	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
 }
 
-Map::Map() :
+Map::Map(GraphicFactory &graphicFactory) :
 	m_sStartPoint(Vector2D()),
 	m_vGrid({}),
 	m_mTerrains({}),
@@ -20,8 +24,7 @@ Map::Map() :
 	m_mEvents({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
-	m_graphicObject(GraphicObject()),
-	m_graphicTerrain(GraphicTerrain()),
+	m_graphicFactory(graphicFactory),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
@@ -284,7 +287,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			);
 			S_TileData tileData = _getTerrainTileData(tile);
 			t_coordinates position = {x, y};
-			m_graphicTerrain.render(
+			((GraphicTerrain*) m_graphicFactory.getGraphic(GRAPHIC_TERRAIN))->render(
 				manager,
 				game,
 				displayShiftX,
@@ -312,7 +315,7 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 		}
 
 		S_ObjectData objectData = _getObjectData(object.second.second);
-		m_graphicObject.render(
+		((GraphicObject*) m_graphicFactory.getGraphic(GRAPHIC_OBJECT))->render(
 			manager,
 			game,
 			displayShiftX,

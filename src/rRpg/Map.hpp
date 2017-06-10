@@ -9,9 +9,8 @@
 #include "Terrain.hpp"
 #include "MapEvent.hpp"
 #include "types.hpp"
+#include "GUI/Factory.hpp"
 #include "ResourceManager.hpp"
-#include "GUI/Object.hpp"
-#include "GUI/Terrain.hpp"
 #include "SDL2_framework/Vector2D.h"
 
 class Actor;
@@ -42,8 +41,8 @@ class Map {
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
-	GraphicObject m_graphicObject;
-	GraphicTerrain m_graphicTerrain;
+	GraphicFactory &m_graphicFactory;
+
 	ResourceManager<S_TileData> m_tilesManager;
 	ResourceManager<S_ObjectData> m_objectsManager;
 
@@ -58,7 +57,7 @@ class Map {
 	int _getSameNeighbours(int x, int y);
 
 	public:
-	Map();
+	Map(GraphicFactory &graphicFactory);
 	~Map();
 
 	void clear();

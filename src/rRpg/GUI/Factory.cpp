@@ -1,11 +1,15 @@
 #include "GUI/Factory.hpp"
+#include "GUI/Terrain.hpp"
+#include "GUI/Object.hpp"
 #include "GUI/Actor.hpp"
 #include "GUI/Player.hpp"
 
 GraphicFactory::GraphicFactory() {
 	m_vGraphics = {
+		new GraphicTerrain(),
+		new GraphicObject(),
 		new GraphicActor(),
-		new GraphicPlayer(),
+		new GraphicPlayer()
 	};
 }
 

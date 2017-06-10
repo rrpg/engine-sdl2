@@ -3,7 +3,7 @@
 
 #include <vector>
 
-enum E_Graphics {GRAPHIC_ACTOR, GRAPHIC_PLAYER};
+enum E_Graphics {GRAPHIC_TERRAIN, GRAPHIC_OBJECT, GRAPHIC_ACTOR, GRAPHIC_PLAYER};
 
 class Graphic;
 
