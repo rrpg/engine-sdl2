@@ -6,12 +6,7 @@
 #include <sys/stat.h>
 #include <iostream>
 
-MapManager::MapManager() :
-	m_map(Map())
-{
-}
-
-bool MapManager::loadMap(std::string mapName, int level) {
+bool MapManager::loadMap(Map &map, std::string mapName, int level) {
 	char filePath[512];
 	sprintf(
 		filePath,
@@ -21,13 +16,13 @@ bool MapManager::loadMap(std::string mapName, int level) {
 		level
 	);
 
-	m_map.clear();
-	MapParser parser = MapParser(m_map);
+	map.clear();
+	MapParser parser = MapParser(map);
 	// generate the map if it does not exist
 	struct stat buffer;
 	if (stat(filePath, &buffer) != 0) {
 		Utils::createFolder(dirname(strdup(filePath)));
-		MapGenerator generator = MapGenerator(m_map);
+		MapGenerator generator = MapGenerator(map);
 		generator.generate(CAVE, 50, 50);
 		parser.saveMap(filePath);
 	}
@@ -42,12 +37,8 @@ bool MapManager::loadMap(std::string mapName, int level) {
 		}
 	}
 
-	m_map.setName(mapName);
-	m_map.setLevel(level);
+	map.setName(mapName);
+	map.setLevel(level);
 
 	return true;
-}
-
-Map &MapManager::getMap() {
-	return m_map;
 }
