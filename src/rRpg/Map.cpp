@@ -287,7 +287,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			);
 			S_TileData tileData = _getTerrainTileData(tile);
 			t_coordinates position = {x, y};
-			((GraphicTerrain*) m_graphicFactory.getGraphic(GRAPHIC_TERRAIN))->render(
+			m_graphicFactory.getGraphicTerrain()->render(
 				manager,
 				game,
 				displayShiftX,
@@ -315,7 +315,7 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 		}
 
 		S_ObjectData objectData = _getObjectData(object.second.second);
-		((GraphicObject*) m_graphicFactory.getGraphic(GRAPHIC_OBJECT))->render(
+		m_graphicFactory.getGraphicObject()->render(
 			manager,
 			game,
 			displayShiftX,

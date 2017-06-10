@@ -19,6 +19,22 @@ GraphicFactory::~GraphicFactory() {
 	}
 }
 
-Graphic *GraphicFactory::getGraphic(E_Graphics graphic) {
+Graphic *GraphicFactory::_getGraphic(E_Graphics graphic) {
 	return m_vGraphics[graphic];
+}
+
+GraphicTerrain *GraphicFactory::getGraphicTerrain() {
+	return (GraphicTerrain*) _getGraphic(GRAPHIC_TERRAIN);
+}
+
+GraphicObject *GraphicFactory::getGraphicObject() {
+	return (GraphicObject*) _getGraphic(GRAPHIC_OBJECT);
+}
+
+GraphicActor *GraphicFactory::getGraphicActor() {
+	return (GraphicActor*) _getGraphic(GRAPHIC_ACTOR);
+}
+
+GraphicPlayer *GraphicFactory::getGraphicPlayer() {
+	return (GraphicPlayer*) _getGraphic(GRAPHIC_PLAYER);
 }
