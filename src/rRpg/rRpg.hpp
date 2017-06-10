@@ -2,6 +2,7 @@
 #define __RRPG__
 
 #include "ActorFactory.hpp"
+#include "GUI/Factory.hpp"
 #include "Map.hpp"
 #include <string>
 #include <memory>
@@ -11,6 +12,7 @@ class Actor;
 class rRpg {
 	private:
 	std::shared_ptr<Actor> m_hero;
+	GraphicFactory m_graphicFactory;
 	ActorFactory m_actorFactory;
 	Map m_map;
 	bool m_bIsBlocked = false;

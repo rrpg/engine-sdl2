@@ -6,9 +6,9 @@
 #include <fstream>
 #include <libgen.h>
 
-ActorFactory::ActorFactory() :
+ActorFactory::ActorFactory(GraphicFactory &graphicFactory) :
 	m_behaviourFactory(BehaviourFactory()),
-	m_graphicFactory(GraphicFactory())
+	m_graphicFactory(graphicFactory)
 {
 }
 

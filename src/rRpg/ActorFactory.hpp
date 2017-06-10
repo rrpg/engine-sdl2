@@ -17,10 +17,10 @@ class ActorFactory {
 	private:
 	std::vector<ActorRace> m_mTaxonomy = {};
 	BehaviourFactory m_behaviourFactory;
-	GraphicFactory m_graphicFactory;
+	GraphicFactory &m_graphicFactory;
 
 	public:
-	ActorFactory();
+	ActorFactory(GraphicFactory &graphicFactory);
 	~ActorFactory();
 	bool parseTaxonomy(const char* taxonomyFile);
 	std::shared_ptr<Actor> createActor(E_ActorRaces race);

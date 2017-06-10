@@ -10,7 +10,8 @@
 
 rRpg::rRpg() :
 	m_hero(nullptr),
-	m_actorFactory(ActorFactory()),
+	m_graphicFactory(GraphicFactory()),
+	m_actorFactory(ActorFactory(m_graphicFactory)),
 	m_map(Map())
 {
 }
