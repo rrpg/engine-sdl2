@@ -1,6 +1,10 @@
 #include "Map.hpp"
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
+#include "GUI.hpp"
+#include "GUI/Factory.hpp"
+#include "GUI/Terrain.hpp"
+#include "GUI/Object.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
 
@@ -11,7 +15,7 @@ void Map::_initEnemiesPerMapType() {
 	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
 }
 
-Map::Map() :
+Map::Map(GraphicFactory &graphicFactory) :
 	m_sStartPoint(Vector2D()),
 	m_vGrid({}),
 	m_mTerrains({}),
@@ -20,6 +24,7 @@ Map::Map() :
 	m_mEvents({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
+	m_graphicFactory(graphicFactory),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
@@ -265,8 +270,8 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
-	int shiftX = (int) shift.getX();
-	int shiftY = (int) shift.getY();
+	int displayShiftX = (int) shift.getX() + camera.x;
+	int displayShiftY = (int) shift.getY() + camera.y;
 	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
 		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
 			if (!areCoordinatesValid(x, y)) {
@@ -281,23 +286,14 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 					15 : _getSameNeighbours(x, y)
 			);
 			S_TileData tileData = _getTerrainTileData(tile);
-			int xScreen = x * tileData.width - shiftX + camera.x,
-				yScreen = y * tileData.height - shiftY + camera.y;
-
-			manager->load(tileData.tileset, game->getRenderer());
-			// the rows are 1 based, and the columns are 0 based, which is
-			// stupid
-			manager->drawTile(
-				tileData.tileset,
-				0, // margin
-				0, // spacing
-				xScreen,
-				yScreen,
-				tileData.width,
-				tileData.height,
-				tileData.y + 1,
-				tileData.x,
-				game->getRenderer()
+			t_coordinates position = {x, y};
+			m_graphicFactory.getGraphicTerrain()->render(
+				manager,
+				game,
+				displayShiftX,
+				displayShiftY,
+				tileData,
+				position
 			);
 		}
 	}
@@ -306,40 +302,26 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
-
-	int shiftX = (int) shift.getX();
-	int shiftY = (int) shift.getY();
+	int displayShiftX = camera.x - (int) shift.getX();
+	int displayShiftY = camera.y - (int) shift.getY();
 	for (auto object : m_mObjects) {
-		int x = object.second.first.first;
-		int y = object.second.first.second;
-		if ((visibleArea.x > 0 && x < visibleArea.x)
-				|| x > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && y < visibleArea.y)
-				|| y > (visibleArea.y + visibleArea.h)
+		t_coordinates objectPosition = object.second.first;
+		if ((visibleArea.x > 0 && objectPosition.first < visibleArea.x)
+				|| objectPosition.first > (visibleArea.x + visibleArea.w)
+			|| (visibleArea.y > 0 && objectPosition.second < visibleArea.y)
+				|| objectPosition.second > (visibleArea.y + visibleArea.h)
 		) {
 			continue;
 		}
 
 		S_ObjectData objectData = _getObjectData(object.second.second);
-		int objectWidth = getDisplayTileWidth();
-		int objectHeight = getDisplayTileHeight();
-		int xScreen = x * objectWidth - shiftX + camera.x,
-			yScreen = y * objectHeight - shiftY + camera.y;
-
-		manager->load(objectData.tileset, game->getRenderer());
-		// the rows are 1 based, and the columns are 0 based, which is
-		// stupid
-		manager->drawTile(
-			objectData.tileset,
-			0, // margin
-			0, // spacing
-			xScreen,
-			yScreen,
-			objectWidth,
-			objectHeight,
-			objectData.spriteY + 1,
-			objectData.spriteX,
-			game->getRenderer()
+		m_graphicFactory.getGraphicObject()->render(
+			manager,
+			game,
+			displayShiftX,
+			displayShiftY,
+			objectData,
+			objectPosition
 		);
 	}
 }

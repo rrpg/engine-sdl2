@@ -3,18 +3,26 @@
 
 #include <vector>
 
-enum E_Graphics {GRAPHIC_ACTOR, GRAPHIC_PLAYER};
+enum E_Graphics {GRAPHIC_TERRAIN, GRAPHIC_OBJECT, GRAPHIC_ACTOR, GRAPHIC_PLAYER};
 
 class Graphic;
+class GraphicTerrain;
+class GraphicObject;
+class GraphicActor;
+class GraphicPlayer;
 
 class GraphicFactory {
 	private:
 	std::vector<Graphic*> m_vGraphics = {};
+	Graphic *_getGraphic(E_Graphics graphic);
 
 	public:
 	GraphicFactory();
 	~GraphicFactory();
-	Graphic *getGraphic(E_Graphics graphic);
+	GraphicTerrain *getGraphicTerrain();
+	GraphicObject *getGraphicObject();
+	GraphicActor *getGraphicActor();
+	GraphicPlayer *getGraphicPlayer();
 
 };
 

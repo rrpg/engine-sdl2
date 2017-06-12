@@ -3,9 +3,6 @@
 
 #include "GUI.hpp"
 
-const int TILE_WIDTH = 16;
-const int TILE_HEIGHT = 16;
-
 class Actor;
 class TextureManager;
 class Game;
