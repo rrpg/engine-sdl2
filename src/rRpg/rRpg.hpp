@@ -26,6 +26,7 @@ class rRpg {
 	std::shared_ptr<Actor> getHero();
 	void setTilesFile(std::string);
 	void setObjectsFile(std::string objectsFilePath);
+	bool loadInitialMap();
 	bool loadMap(std::string mapName, int level);
 	bool loadTaxonomy(std::string filePath);
 	void initialiseHero();
