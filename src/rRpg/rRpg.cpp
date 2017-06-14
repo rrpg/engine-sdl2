@@ -40,7 +40,12 @@ bool rRpg::loadInitialMap() {
 
 bool rRpg::loadMap(std::string mapName, int level) {
 	MapManager manager;
-	if (!manager.loadMap(m_map, mapName, level)) {
+	if (manager.mapExists(mapName, level)) {
+		if (!manager.loadMap(m_map, mapName, level)) {
+			return false;
+		}
+	}
+	else if (!manager.generateMap(m_map, mapName, level)) {
 		return false;
 	}
 
