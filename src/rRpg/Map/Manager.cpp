@@ -1,7 +1,7 @@
 #include "Map/Manager.hpp"
 #include "Map/Generator.hpp"
+#include "Map/Parser.hpp"
 #include "Utils.hpp"
-#include "Parser/Map.hpp"
 #include <libgen.h>
 #include <sys/stat.h>
 #include <iostream>
