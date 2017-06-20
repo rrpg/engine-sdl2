@@ -6,12 +6,12 @@
 
 class MapManager {
 	private:
-	void _getMapPath(std::string mapName, int level, char filePath[PATH_MAX]);
+	void _getMapPath(std::string mapName, char filePath[PATH_MAX]);
 
 	public:
-	bool loadMap(Map &map, std::string mapName, int level);
-	bool mapExists(std::string mapName, int level);
-	bool generateMap(Map &map, std::string mapName, int level);
+	bool loadMap(Map &map, std::string mapName);
+	bool mapExists(std::string mapName);
+	bool generateMap(Map &map, std::string mapName);
 };
 
 #endif

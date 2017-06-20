@@ -6,27 +6,26 @@
 #include <sys/stat.h>
 #include <iostream>
 
-void MapManager::_getMapPath(std::string mapName, int level, char filePath[PATH_MAX]) {
+void MapManager::_getMapPath(std::string mapName, char filePath[PATH_MAX]) {
 	sprintf(
 		filePath,
-		"%s/maps/%s-%d.dat",
+		"%s/maps/%s.dat",
 		Utils::getDataPath().c_str(),
-		mapName.c_str(),
-		level
+		mapName.c_str()
 	);
 }
 
-bool MapManager::mapExists(std::string mapName, int level) {
+bool MapManager::mapExists(std::string mapName) {
 	char filePath[PATH_MAX];
-	_getMapPath(mapName, level, filePath);
+	_getMapPath(mapName, filePath);
 
 	struct stat buffer;
 	return stat(filePath, &buffer) == 0;
 }
 
-bool MapManager::generateMap(Map &map, std::string mapName, int level) {
+bool MapManager::generateMap(Map &map, std::string mapName) {
 	char filePath[PATH_MAX];
-	_getMapPath(mapName, level, filePath);
+	_getMapPath(mapName, filePath);
 	Utils::createFolder(dirname(strdup(filePath)));
 
 	map.clear();
@@ -37,9 +36,9 @@ bool MapManager::generateMap(Map &map, std::string mapName, int level) {
 	return parser.saveMap(filePath);
 }
 
-bool MapManager::loadMap(Map &map, std::string mapName, int level) {
+bool MapManager::loadMap(Map &map, std::string mapName) {
 	char filePath[PATH_MAX];
-	_getMapPath(mapName, level, filePath);
+	_getMapPath(mapName, filePath);
 
 	map.clear();
 	MapParser parser = MapParser(map);
@@ -54,7 +53,6 @@ bool MapManager::loadMap(Map &map, std::string mapName, int level) {
 	}
 
 	map.setName(mapName);
-	map.setLevel(level);
 
 	return true;
 }
