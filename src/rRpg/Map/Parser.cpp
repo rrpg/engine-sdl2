@@ -60,18 +60,16 @@ bool MapParser::_parseLine(const char *line) {
 
 		case 'E':
 			int xEvent, yEvent;
+			S_MapChangeEventData event;
 			sscanfResult = sscanf(
 				line,
-				"%d %d \n",
-				&xEvent, &yEvent
+				"%d %d %s %d\n",
+				&xEvent, &yEvent, event.mapName, &event.mapLevel
 			);
-			if (sscanfResult != 2) {
+			if (sscanfResult != 4) {
 				retValue = false;
 			}
 			else {
-				S_MapChangeEventData event;
-				strncpy(event.mapName, m_map.getName().c_str(), MAX_LENGTH_MAP_NAME);
-				event.mapLevel = m_map.getLevel() + 1;
 				m_map.addEvent((char) xEvent, (char) yEvent, event);
 			}
 			break;
@@ -173,7 +171,15 @@ bool MapParser::saveMap(const char *filePath) {
 
 	for (auto event : m_map.getEvents()) {
 		t_coordinates coords = event.second.first;
-		fprintf(mapFile, "E %d %d\n", coords.first, coords.second);
+		S_MapChangeEventData eventData = event.second.second;
+		fprintf(
+			mapFile,
+			"E %d %d %s %d\n",
+			coords.first,
+			coords.second,
+			eventData.mapName,
+			eventData.mapLevel
+		);
 	}
 
 	for (auto object : m_map.getObjects()) {
