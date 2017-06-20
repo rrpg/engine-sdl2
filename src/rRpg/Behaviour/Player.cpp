@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include "rRpg.hpp"
 #include "Actor.hpp"
+#include "Map/Event.hpp"
 #include "Command/Move.hpp"
 #include "Command/Attack.hpp"
 #include "SDL2_framework/UserActions.h"
@@ -68,8 +69,8 @@ bool BehaviourPlayer::_tryMove(Actor *actor, rRpg *engine, int x, int y) {
 	Map &map = engine->getMap();
 	bool moved = command.execute(actor, map, x, y);
 	if (moved && map.hasEvent(x, y)) {
-		MapEvent *event = map.getEvent(x, y);
-		event.execute(engine);
+		MapEvent event = MapEvent();
+		event.execute(engine, map.getEvent(x, y));
 	}
 
 	return moved;

@@ -1,6 +1,5 @@
 #include "Map.hpp"
 #include "Utils.hpp"
-#include "Map/Event.hpp"
 #include "Map/Parser.hpp"
 #include <string.h>
 #include <libgen.h>
@@ -70,7 +69,10 @@ bool MapParser::_parseLine(const char *line) {
 				retValue = false;
 			}
 			else {
-				m_map.addEvent((char) xEvent, (char) yEvent, MapEvent());
+				S_MapChangeEventData event;
+				strncpy(event.mapName, m_map.getName().c_str(), MAX_LENGTH_MAP_NAME);
+				event.mapLevel = m_map.getLevel() + 1;
+				m_map.addEvent((char) xEvent, (char) yEvent, event);
 			}
 			break;
 

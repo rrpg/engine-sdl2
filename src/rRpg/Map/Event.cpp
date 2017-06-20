@@ -2,9 +2,6 @@
 #include "rRpg.hpp"
 #include <iostream>
 
-void MapEvent::execute(rRpg *engine) {
-	engine->loadMap(
-		engine->getMap().getName(),
-		engine->getMap().getLevel() + 1
-	);
+void MapEvent::execute(rRpg *engine, const S_MapChangeEventData event) {
+	engine->loadMap(event.mapName, event.mapLevel);
 }

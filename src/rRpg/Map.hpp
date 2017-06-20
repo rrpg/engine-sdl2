@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <SDL2/SDL.h>
 #include "Terrain.hpp"
-#include "Map/Event.hpp"
 #include "types.hpp"
 #include "GUI/Factory.hpp"
 #include "ResourceManager.hpp"
@@ -37,7 +36,7 @@ class Map {
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, std::shared_ptr<Actor>> m_mActors;
-	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> m_mEvents;
+	std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> m_mEvents;
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
@@ -104,9 +103,9 @@ class Map {
 	void initEnemies(ActorFactory &actorFactory);
 
 	bool hasEvent(const int x, const int y);
-	MapEvent *getEvent(const int x, const int y);
-	void addEvent(const int x, const int y, MapEvent event);
-	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &getEvents();
+	S_MapChangeEventData getEvent(const int x, const int y);
+	void addEvent(int x, int y, S_MapChangeEventData event);
+	std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> &getEvents();
 
 	void addObject(int x, int y, E_Object object);
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();

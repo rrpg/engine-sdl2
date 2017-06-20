@@ -3,7 +3,6 @@
 #include "Map.hpp"
 #include <limits.h>
 #include <algorithm>
-#include "Map/Event.hpp"
 
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
@@ -283,6 +282,9 @@ void MapGenerator::_addStairToNextLevel() {
 
 	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
 	_findClosestWalkableCell(x, y, visited, x, y);
-	m_map.addEvent(x, y, MapEvent());
+	S_MapChangeEventData event;
+	strncpy(event.mapName, m_map.getName().c_str(), MAX_LENGTH_MAP_NAME);
+	event.mapLevel = m_map.getLevel() + 1;
+	m_map.addEvent(x, y, event);
 	m_map.addObject(x, y, OBJECT_STAIR_DOWN);
 }
