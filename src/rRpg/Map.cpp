@@ -418,22 +418,24 @@ bool Map::moveActor(Actor* a, int newX, int newY) {
 	return true;
 }
 
-MapEvent *Map::getEvent(const int x, const int y) {
+bool Map::hasEvent(const int x, const int y) {
 	std::string key = _getCoordsKey(x, y);
 	auto it = m_mEvents.find(key);
-	if (it != m_mEvents.end()) {
-		return &it->second.second;
-	}
-
-	return NULL;
+	return it != m_mEvents.end();
 }
 
-void Map::addEvent(int x, int y, MapEvent event) {
+S_MapChangeEventData Map::getEvent(const int x, const int y) {
+	std::string key = _getCoordsKey(x, y);
+	auto it = m_mEvents.find(key);
+	return it->second.second;
+}
+
+void Map::addEvent(int x, int y, S_MapChangeEventData event) {
 	t_coordinates coords = {x, y};
 	m_mEvents[_getCoordsKey(x, y)] = std::make_pair(coords, event);
 }
 
-std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &Map::getEvents() {
+std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> &Map::getEvents() {
 	return m_mEvents;
 }
 
