@@ -40,17 +40,16 @@ bool rRpg::loadInitialMap() {
 
 bool rRpg::loadMap(std::string mapName, int level) {
 	MapManager manager;
-	mapName += "-" + std::to_string(level);
-	if (manager.mapExists(mapName)) {
-		if (!manager.loadMap(m_map, mapName)) {
+	std::string mapFile = mapName + "-" + std::to_string(level);
+	if (manager.mapExists(mapFile)) {
+		if (!manager.loadMap(m_map, mapFile)) {
 			return false;
 		}
 	}
-	else if (!manager.generateMap(m_map, mapName)) {
+	else if (!manager.generateMap(m_map, mapFile, mapName, level)) {
 		return false;
 	}
 
-	m_map.setLevel(level);
 	m_map.initEnemies(m_actorFactory);
 	m_map.setTileFile(m_sTilesFile.c_str());
 	m_map.setObjectsFile(m_sObjectsFile.c_str());

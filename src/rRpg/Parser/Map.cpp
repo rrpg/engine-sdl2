@@ -23,6 +23,22 @@ bool MapParser::_parseLine(const char *line) {
 	type = *line;
 	line += 2;
 	switch (type) {
+		case 'n':
+			char mapName[128];
+			sscanfResult = sscanf(line, "%s\n", mapName);
+			if (sscanfResult != 1) {
+				retValue = false;
+			}
+			m_map.setName(mapName);
+			break;
+		case 'l':
+			int mapLevel;
+			sscanfResult = sscanf(line, "%d\n", &mapLevel);
+			if (sscanfResult != 1) {
+				retValue = false;
+			}
+			m_map.setLevel(mapLevel);
+			break;
 		case 't':
 			int mapType;
 			sscanfResult = sscanf(line, "%d\n", &mapType);
@@ -137,11 +153,9 @@ bool MapParser::saveMap(const char *filePath) {
 		return false;
 	}
 
-	fprintf(
-		mapFile,
-		"t %d\n",
-		m_map.getType()
-	);
+	fprintf(mapFile, "n %s\n", m_map.getName().c_str());
+	fprintf(mapFile, "l %d\n", m_map.getLevel());
+	fprintf(mapFile, "t %d\n", m_map.getType());
 
 	fprintf(
 		mapFile,

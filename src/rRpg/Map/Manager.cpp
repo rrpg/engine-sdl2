@@ -23,12 +23,14 @@ bool MapManager::mapExists(std::string mapName) {
 	return stat(filePath, &buffer) == 0;
 }
 
-bool MapManager::generateMap(Map &map, std::string mapName) {
+bool MapManager::generateMap(Map &map, std::string mapFile, std::string mapName, int level) {
 	char filePath[PATH_MAX];
-	_getMapPath(mapName, filePath);
+	_getMapPath(mapFile, filePath);
 	Utils::createFolder(dirname(strdup(filePath)));
 
 	map.clear();
+	map.setName(mapName);
+	map.setLevel(level);
 	MapParser parser = MapParser(map);
 
 	MapGenerator generator = MapGenerator(map);
@@ -51,8 +53,6 @@ bool MapManager::loadMap(Map &map, std::string mapName) {
 		std::cout << "error parsing map: " << res << std::endl;
 		return false;
 	}
-
-	map.setName(mapName);
 
 	return true;
 }
