@@ -1,5 +1,5 @@
-#include "MapManager.hpp"
-#include "MapGenerator.hpp"
+#include "Map/Manager.hpp"
+#include "Map/Generator.hpp"
 #include "Utils.hpp"
 #include "Parser/Map.hpp"
 #include <libgen.h>

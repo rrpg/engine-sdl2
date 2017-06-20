@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <SDL2/SDL.h>
 #include "Terrain.hpp"
-#include "MapEvent.hpp"
+#include "Map/Event.hpp"
 #include "types.hpp"
 #include "GUI/Factory.hpp"
 #include "ResourceManager.hpp"

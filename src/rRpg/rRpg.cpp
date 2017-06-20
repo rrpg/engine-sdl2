@@ -1,6 +1,6 @@
 #include "rRpg.hpp"
 #include "HUD.hpp"
-#include "MapManager.hpp"
+#include "Map/Manager.hpp"
 #include "Actor.hpp"
 #include "Behaviour/Player.hpp"
 #include <SDL2/SDL.h>

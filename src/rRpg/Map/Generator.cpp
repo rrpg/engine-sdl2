@@ -1,9 +1,9 @@
-#include "MapGenerator.hpp"
+#include "Map/Generator.hpp"
 #include "Terrain.hpp"
 #include "Map.hpp"
 #include <limits.h>
 #include <algorithm>
-#include <MapEvent.hpp>
+#include "Map/Event.hpp"
 
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }

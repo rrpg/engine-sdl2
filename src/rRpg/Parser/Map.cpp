@@ -1,7 +1,7 @@
 #include "Map.hpp"
 #include "../Map.hpp"
 #include "Utils.hpp"
-#include "MapEvent.hpp"
+#include "Map/Event.hpp"
 #include <string.h>
 #include <libgen.h>
 
