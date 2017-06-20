@@ -67,11 +67,9 @@ bool BehaviourPlayer::_tryMove(Actor *actor, rRpg *engine, int x, int y) {
 	MoveCommand command = MoveCommand();
 	Map &map = engine->getMap();
 	bool moved = command.execute(actor, map, x, y);
-	if (moved) {
+	if (moved && map.hasEvent(x, y)) {
 		MapEvent *event = map.getEvent(x, y);
-		if (event != 0) {
-			event->execute(engine);
-		}
+		event.execute(engine);
 	}
 
 	return moved;

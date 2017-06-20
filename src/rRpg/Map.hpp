@@ -103,6 +103,7 @@ class Map {
 	std::vector<t_coordinates> getEnemySpawnableCells();
 	void initEnemies(ActorFactory &actorFactory);
 
+	bool hasEvent(const int x, const int y);
 	MapEvent *getEvent(const int x, const int y);
 	void addEvent(const int x, const int y, MapEvent event);
 	std::unordered_map<std::string, std::pair<t_coordinates, MapEvent>> &getEvents();

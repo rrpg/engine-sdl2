@@ -418,14 +418,16 @@ bool Map::moveActor(Actor* a, int newX, int newY) {
 	return true;
 }
 
+bool Map::hasEvent(const int x, const int y) {
+	std::string key = _getCoordsKey(x, y);
+	auto it = m_mEvents.find(key);
+	return it != m_mEvents.end();
+}
+
 MapEvent *Map::getEvent(const int x, const int y) {
 	std::string key = _getCoordsKey(x, y);
 	auto it = m_mEvents.find(key);
-	if (it != m_mEvents.end()) {
-		return &it->second.second;
-	}
-
-	return NULL;
+	return &it->second.second;
 }
 
 void Map::addEvent(int x, int y, MapEvent event) {
