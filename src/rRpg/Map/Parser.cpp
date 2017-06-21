@@ -1,7 +1,6 @@
 #include "Map.hpp"
-#include "../Map.hpp"
 #include "Utils.hpp"
-#include "MapEvent.hpp"
+#include "Map/Parser.hpp"
 #include <string.h>
 #include <libgen.h>
 
@@ -23,6 +22,22 @@ bool MapParser::_parseLine(const char *line) {
 	type = *line;
 	line += 2;
 	switch (type) {
+		case 'n':
+			char mapName[128];
+			sscanfResult = sscanf(line, "%s\n", mapName);
+			if (sscanfResult != 1) {
+				retValue = false;
+			}
+			m_map.setName(mapName);
+			break;
+		case 'l':
+			int mapLevel;
+			sscanfResult = sscanf(line, "%d\n", &mapLevel);
+			if (sscanfResult != 1) {
+				retValue = false;
+			}
+			m_map.setLevel(mapLevel);
+			break;
 		case 't':
 			int mapType;
 			sscanfResult = sscanf(line, "%d\n", &mapType);
@@ -45,16 +60,17 @@ bool MapParser::_parseLine(const char *line) {
 
 		case 'E':
 			int xEvent, yEvent;
+			S_MapChangeEventData event;
 			sscanfResult = sscanf(
 				line,
-				"%d %d \n",
-				&xEvent, &yEvent
+				"%d %d %s %d\n",
+				&xEvent, &yEvent, event.mapName, &event.mapLevel
 			);
-			if (sscanfResult != 2) {
+			if (sscanfResult != 4) {
 				retValue = false;
 			}
 			else {
-				m_map.addEvent((char) xEvent, (char) yEvent, MapEvent());
+				m_map.addEvent((char) xEvent, (char) yEvent, event);
 			}
 			break;
 
@@ -137,11 +153,9 @@ bool MapParser::saveMap(const char *filePath) {
 		return false;
 	}
 
-	fprintf(
-		mapFile,
-		"t %d\n",
-		m_map.getType()
-	);
+	fprintf(mapFile, "n %s\n", m_map.getName().c_str());
+	fprintf(mapFile, "l %d\n", m_map.getLevel());
+	fprintf(mapFile, "t %d\n", m_map.getType());
 
 	fprintf(
 		mapFile,
@@ -157,7 +171,15 @@ bool MapParser::saveMap(const char *filePath) {
 
 	for (auto event : m_map.getEvents()) {
 		t_coordinates coords = event.second.first;
-		fprintf(mapFile, "E %d %d\n", coords.first, coords.second);
+		S_MapChangeEventData eventData = event.second.second;
+		fprintf(
+			mapFile,
+			"E %d %d %s %d\n",
+			coords.first,
+			coords.second,
+			eventData.mapName,
+			eventData.mapLevel
+		);
 	}
 
 	for (auto object : m_map.getObjects()) {

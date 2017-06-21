@@ -9,6 +9,7 @@
 
 #include "dataTypes.hpp"
 
+#define MAX_LENGTH_MAP_NAME 128
 #define MAX_LENGTH_TILESET_NAME 32
 #define MAX_CHAR_RESOURCE_PATH 255
 
@@ -53,6 +54,11 @@ struct S_ObjectData {
 	int spriteY;
 };
 
+struct S_MapChangeEventData {
+	char mapName[MAX_LENGTH_MAP_NAME];
+	int mapLevel;
+};
+
 enum E_Object {
 	OBJECT_STAIR_UP,
 	OBJECT_STAIR_DOWN
@@ -68,5 +74,14 @@ struct S_EnemyProbability {
 typedef std::pair<int, int> t_coordinates;
 
 enum E_MapType {DEFAULT, CAVE};
+
+struct S_MapSpecs {
+	char name[MAX_LENGTH_MAP_NAME];
+	int level;
+	E_MapType type;
+	int width;
+	int height;
+	int nbEnemies;
+};
 
 #endif

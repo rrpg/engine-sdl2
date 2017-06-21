@@ -1,24 +1,23 @@
-#include "MapGenerator.hpp"
+#include "Map/Generator.hpp"
 #include "Terrain.hpp"
 #include "Map.hpp"
 #include <limits.h>
 #include <algorithm>
-#include <MapEvent.hpp>
 
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
-void MapGenerator::generate(E_MapType type, short width, short height) {
-	m_map.setType(type);
-	m_map.setDimensions(width, height);
+void MapGenerator::generate(S_MapSpecs specs) {
+	m_map.setType(specs.type);
+	m_map.setDimensions(specs.width, specs.height);
 	m_map.setDisplayTileDimensions(16, 16);
 
-	if (type == CAVE) {
-		_generateCave();
+	if (specs.type == CAVE) {
+		_generateCave(specs.nbEnemies);
 	}
 }
 
-void MapGenerator::_generateCave() {
+void MapGenerator::_generateCave(int nbEnemies) {
 	m_map.initializeGrid(TERRAIN_ROCK_NORMAL);
 	_initialiseAutomaton();
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
@@ -29,7 +28,7 @@ void MapGenerator::_generateCave() {
 	_cleanRooms();
 
 	_setStartPoint();
-	_dispatchEnemies(15);
+	_dispatchEnemies(nbEnemies);
 	_addStairToNextLevel();
 }
 
@@ -283,6 +282,9 @@ void MapGenerator::_addStairToNextLevel() {
 
 	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
 	_findClosestWalkableCell(x, y, visited, x, y);
-	m_map.addEvent(x, y, MapEvent());
+	S_MapChangeEventData event;
+	strncpy(event.mapName, m_map.getName().c_str(), MAX_LENGTH_MAP_NAME);
+	event.mapLevel = m_map.getLevel() + 1;
+	m_map.addEvent(x, y, event);
 	m_map.addObject(x, y, OBJECT_STAIR_DOWN);
 }
