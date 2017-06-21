@@ -23,18 +23,18 @@ bool MapManager::mapExists(std::string mapName) {
 	return stat(filePath, &buffer) == 0;
 }
 
-bool MapManager::generateMap(Map &map, std::string mapFile, std::string mapName, int level) {
+bool MapManager::generateMap(Map &map, std::string mapFile, S_MapSpecs specs) {
 	char filePath[PATH_MAX];
 	_getMapPath(mapFile, filePath);
 	Utils::createFolder(dirname(strdup(filePath)));
 
 	map.clear();
-	map.setName(mapName);
-	map.setLevel(level);
+	map.setName(specs.name);
+	map.setLevel(specs.level);
 	MapParser parser = MapParser(map);
 
 	MapGenerator generator = MapGenerator(map);
-	generator.generate(CAVE, 50, 50);
+	generator.generate(specs);
 	return parser.saveMap(filePath);
 }
 

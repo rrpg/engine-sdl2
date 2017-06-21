@@ -75,4 +75,13 @@ typedef std::pair<int, int> t_coordinates;
 
 enum E_MapType {DEFAULT, CAVE};
 
+struct S_MapSpecs {
+	char name[MAX_LENGTH_MAP_NAME];
+	int level;
+	E_MapType type;
+	int width;
+	int height;
+	int nbEnemies;
+};
+
 #endif

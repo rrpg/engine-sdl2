@@ -11,7 +11,7 @@ class MapManager {
 	public:
 	bool loadMap(Map &map, std::string mapName);
 	bool mapExists(std::string mapName);
-	bool generateMap(Map &map, std::string mapFile, std::string mapName, int level);
+	bool generateMap(Map &map, std::string mapFile, S_MapSpecs specs);
 };
 
 #endif

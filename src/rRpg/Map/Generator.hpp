@@ -12,7 +12,7 @@ class MapGenerator {
 	private:
 	Map &m_map;
 
-	void _generateCave();
+	void _generateCave(int nbEnemies);
 	void _initialiseAutomaton();
 	void _automatonStep();
 	void _joinRooms();
@@ -34,7 +34,7 @@ class MapGenerator {
 
 	public:
 	MapGenerator(Map &map);
-	void generate(E_MapType type, short width, short height);
+	void generate(S_MapSpecs specs);
 };
 
 #endif

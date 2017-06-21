@@ -41,12 +41,20 @@ bool rRpg::loadInitialMap() {
 bool rRpg::loadMap(std::string mapName, int level) {
 	MapManager manager;
 	std::string mapFile = mapName + "-" + std::to_string(level);
+	S_MapSpecs specs;
+	strncpy(specs.name, mapName.c_str(), MAX_LENGTH_MAP_NAME);
+	specs.level = level;
+	specs.type = CAVE;
+	specs.width = 50;
+	specs.height = 50;
+	specs.nbEnemies = 15;
+
 	if (manager.mapExists(mapFile)) {
 		if (!manager.loadMap(m_map, mapFile)) {
 			return false;
 		}
 	}
-	else if (!manager.generateMap(m_map, mapFile, mapName, level)) {
+	else if (!manager.generateMap(m_map, mapFile, specs)) {
 		return false;
 	}
 
