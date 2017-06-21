@@ -30,7 +30,7 @@ class MapGenerator {
 		int &yOut
 	);
 	void _dispatchEnemies(const int nbMaxEnemies);
-	void _addStairToNextLevel();
+	void _addStair(int direction);
 
 	public:
 	MapGenerator(Map &map);
