@@ -34,7 +34,7 @@ class MapGenerator {
 
 	public:
 	MapGenerator(Map &map);
-	void generate(E_MapType type, short width, short height);
+	void generate(S_MapSpecs specs);
 };
 
 #endif

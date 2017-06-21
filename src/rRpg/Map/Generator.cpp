@@ -7,13 +7,13 @@
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
-void MapGenerator::generate(E_MapType type, short width, short height) {
-	m_map.setType(type);
-	m_map.setDimensions(width, height);
+void MapGenerator::generate(S_MapSpecs specs) {
+	m_map.setType(specs.type);
+	m_map.setDimensions(specs.width, specs.height);
 	m_map.setDisplayTileDimensions(16, 16);
 
-	if (type == CAVE) {
-		_generateCave(15);
+	if (specs.type == CAVE) {
+		_generateCave(specs.nbEnemies);
 	}
 }
 
