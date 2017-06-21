@@ -1,4 +1,5 @@
 #include "rRpg.hpp"
+#include "globals.hpp"
 #include "HUD.hpp"
 #include "Map/Manager.hpp"
 #include "Actor.hpp"
@@ -38,8 +39,19 @@ bool rRpg::loadInitialMap() {
 	return loadMap("start", 0);
 }
 
+bool rRpg::loadStartMap() {
+	std::string mapFile = GAME_START_MAP;
+	S_MapSpecs specs;
+	strncpy(specs.name, "start", MAX_LENGTH_MAP_NAME);
+	specs.level = 0;
+	specs.type = CAVE;
+	specs.width = 20;
+	specs.height = 20;
+	specs.nbEnemies = 0;
+	return _loadMap(mapFile, specs);
+}
+
 bool rRpg::loadMap(std::string mapName, int level) {
-	MapManager manager;
 	std::string mapFile = mapName + "-" + std::to_string(level);
 	S_MapSpecs specs;
 	strncpy(specs.name, mapName.c_str(), MAX_LENGTH_MAP_NAME);
@@ -48,7 +60,11 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	specs.width = 50;
 	specs.height = 50;
 	specs.nbEnemies = 15;
+	return _loadMap(mapFile, specs);
+}
 
+bool rRpg::_loadMap(std::string mapFile, S_MapSpecs specs) {
+	MapManager manager;
 	if (manager.mapExists(mapFile)) {
 		if (!manager.loadMap(m_map, mapFile)) {
 			return false;

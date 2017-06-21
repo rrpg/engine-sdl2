@@ -43,7 +43,7 @@ bool PlayState::onEnter() {
 	);
 	if (ret) {
 		engine.initialiseHero();
-		ret &= engine.loadMap("cave1", 0);
+		ret &= engine.loadStartMap();
 	}
 	return ret;
 }

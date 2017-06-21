@@ -11,5 +11,6 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 #endif
 const char * const GAME_DATA_FOLDER = ".rrpg/";
+const char * const GAME_START_MAP = "start-map";
 
 #endif

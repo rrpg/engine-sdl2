@@ -19,6 +19,8 @@ class rRpg {
 	std::string m_sTilesFile = "";
 	std::string m_sObjectsFile = "";
 
+	bool _loadMap(std::string mapFile, S_MapSpecs specs);
+
 	public:
 	rRpg();
 	~rRpg();
@@ -27,6 +29,7 @@ class rRpg {
 	void setTilesFile(std::string);
 	void setObjectsFile(std::string objectsFilePath);
 	bool loadInitialMap();
+	bool loadStartMap();
 	bool loadMap(std::string mapName, int level);
 	bool loadTaxonomy(std::string filePath);
 	void initialiseHero();
