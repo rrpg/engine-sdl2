@@ -40,9 +40,9 @@ bool rRpg::loadInitialMap() {
 }
 
 bool rRpg::loadStartMap() {
-	std::string mapFile = GAME_START_MAP;
+	std::string mapFile = std::string(GAME_START_MAP) + "-0";
 	S_MapSpecs specs;
-	strncpy(specs.name, "start", MAX_LENGTH_MAP_NAME);
+	strncpy(specs.name, GAME_START_MAP, MAX_LENGTH_MAP_NAME);
 	specs.level = 0;
 	specs.type = CAVE;
 	specs.width = 20;
