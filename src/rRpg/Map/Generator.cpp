@@ -296,5 +296,5 @@ void MapGenerator::_addStair(int direction, int x, int y) {
 	strncpy(event.mapName, m_map.getName().c_str(), MAX_LENGTH_MAP_NAME);
 	event.mapLevel = m_map.getLevel() + direction;
 	m_map.addEvent(x, y, event);
-	m_map.addObject(x, y, OBJECT_STAIR_DOWN);
+	m_map.addObject(x, y, direction == STAIR_UP ? OBJECT_STAIR_UP : OBJECT_STAIR_DOWN);
 }
