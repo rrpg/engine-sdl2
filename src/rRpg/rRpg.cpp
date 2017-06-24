@@ -52,7 +52,7 @@ bool rRpg::loadStartMap() {
 }
 
 bool rRpg::loadMap(std::string mapName, int level) {
-	std::string mapFile = mapName + "-" + std::to_string(level);
+	std::string mapFile = m_map.getKeyName(mapName, level);
 	S_MapSpecs specs;
 	strncpy(specs.name, mapName.c_str(), MAX_LENGTH_MAP_NAME);
 	specs.level = level;

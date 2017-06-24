@@ -63,6 +63,7 @@ class Map {
 	~Map();
 
 	void clear();
+	std::string getKeyName(std::string name = "", int level = -1);
 	void setName(std::string name);
 	void setLevel(int level);
 	std::string getName();

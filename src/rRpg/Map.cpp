@@ -47,6 +47,15 @@ void Map::clear() {
 	m_mObjects.clear();
 }
 
+std::string Map::getKeyName(std::string name, int level) {
+	if (name == "" || level == -1) {
+		return m_sName + "-" + std::to_string(m_iLevel);
+	}
+	else {
+		return name + "-" + std::to_string(level);
+	}
+}
+
 void Map::setName(std::string name) {
 	m_sName = name;
 }
