@@ -22,6 +22,7 @@ Map::Map(GraphicFactory &graphicFactory) :
 	m_mTerrainsTileData({}),
 	m_mActors({}),
 	m_mEvents({}),
+	m_mMapJunctions({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
 	m_graphicFactory(graphicFactory),
@@ -433,6 +434,7 @@ S_MapChangeEventData Map::getEvent(const int x, const int y) {
 void Map::addEvent(int x, int y, S_MapChangeEventData event) {
 	t_coordinates coords = {x, y};
 	m_mEvents[_getCoordsKey(x, y)] = std::make_pair(coords, event);
+	m_mMapJunctions[getKeyName(event.mapName, event.mapLevel)] = coords;
 }
 
 std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> &Map::getEvents() {
