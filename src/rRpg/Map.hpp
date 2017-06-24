@@ -111,6 +111,8 @@ class Map {
 	void addEvent(int x, int y, S_MapChangeEventData event);
 	std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> &getEvents();
 
+	t_coordinates *getMapJunction(std::string mapKeyName);
+
 	void addObject(int x, int y, E_Object object);
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();
 };

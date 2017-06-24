@@ -450,6 +450,15 @@ std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> 
 	return m_mEvents;
 }
 
+t_coordinates *Map::getMapJunction(std::string mapKeyName) {
+	auto it = m_mMapJunctions.find(mapKeyName);
+	if (it == m_mMapJunctions.end()) {
+		return NULL;
+	}
+
+	return &it->second;
+}
+
 void Map::addObject(int x, int y, E_Object object) {
 	t_coordinates coords = {x, y};
 	m_mObjects[_getCoordsKey(x, y)] = std::make_pair(coords, object);
