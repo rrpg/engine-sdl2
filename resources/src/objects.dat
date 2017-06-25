@@ -1,6 +1,6 @@
 # format:
 # tileName x y
 # OBJECT_STAIR_UP
-floorTiles 6 3
+floorTiles 5 3
 # OBJECT_STAIR_DOWN
 floorTiles 7 3

@@ -4,6 +4,9 @@
 #include <limits.h>
 #include <algorithm>
 
+#define STAIR_UP -1
+#define STAIR_DOWN 1
+
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
@@ -29,7 +32,7 @@ void MapGenerator::_generateCave(int nbEnemies) {
 
 	_setStartPoint();
 	_dispatchEnemies(nbEnemies);
-	_addStairToNextLevel();
+	_addStair(STAIR_DOWN);
 }
 
 void MapGenerator::_initialiseAutomaton() {
@@ -213,6 +216,7 @@ void MapGenerator::_setStartPoint() {
 	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
 	_findClosestWalkableCell(x, y, visited, x, y);
 	m_map.setStartPoint((float) x, (float) y);
+	_addStair(STAIR_UP, x, y);
 }
 
 std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(const int x, const int y) {
@@ -276,15 +280,21 @@ void MapGenerator::_dispatchEnemies(const int nbMaxEnemies) {
 	}
 }
 
-void MapGenerator::_addStairToNextLevel() {
-	int x = rand() % m_map.getWidth(),
-		y = rand() % m_map.getHeight();
+void MapGenerator::_addStair(int direction, int x, int y) {
+	if (direction == STAIR_UP && m_map.getLevel() == 0) {
+		return;
+	}
 
-	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-	_findClosestWalkableCell(x, y, visited, x, y);
+	if (x < 0 || y < 0) {
+		x = rand() % m_map.getWidth();
+		y = rand() % m_map.getHeight();
+		std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
+		_findClosestWalkableCell(x, y, visited, x, y);
+	}
+
 	S_MapChangeEventData event;
 	strncpy(event.mapName, m_map.getName().c_str(), MAX_LENGTH_MAP_NAME);
-	event.mapLevel = m_map.getLevel() + 1;
+	event.mapLevel = m_map.getLevel() + direction;
 	m_map.addEvent(x, y, event);
-	m_map.addObject(x, y, OBJECT_STAIR_DOWN);
+	m_map.addObject(x, y, direction == STAIR_UP ? OBJECT_STAIR_UP : OBJECT_STAIR_DOWN);
 }

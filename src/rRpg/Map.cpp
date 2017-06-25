@@ -22,6 +22,7 @@ Map::Map(GraphicFactory &graphicFactory) :
 	m_mTerrainsTileData({}),
 	m_mActors({}),
 	m_mEvents({}),
+	m_mMapJunctions({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
 	m_graphicFactory(graphicFactory),
@@ -44,6 +45,15 @@ void Map::clear() {
 	m_mTerrains.clear();
 	m_mEvents.clear();
 	m_mObjects.clear();
+}
+
+std::string Map::getKeyName(std::string name, int level) {
+	if (name == "" || level == -1) {
+		return m_sName + "-" + std::to_string(m_iLevel);
+	}
+	else {
+		return name + "-" + std::to_string(level);
+	}
 }
 
 void Map::setName(std::string name) {
@@ -433,10 +443,20 @@ S_MapChangeEventData Map::getEvent(const int x, const int y) {
 void Map::addEvent(int x, int y, S_MapChangeEventData event) {
 	t_coordinates coords = {x, y};
 	m_mEvents[_getCoordsKey(x, y)] = std::make_pair(coords, event);
+	m_mMapJunctions[getKeyName(event.mapName, event.mapLevel)] = coords;
 }
 
 std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> &Map::getEvents() {
 	return m_mEvents;
+}
+
+t_coordinates *Map::getMapJunction(std::string mapKeyName) {
+	auto it = m_mMapJunctions.find(mapKeyName);
+	if (it == m_mMapJunctions.end()) {
+		return NULL;
+	}
+
+	return &it->second;
 }
 
 void Map::addObject(int x, int y, E_Object object) {

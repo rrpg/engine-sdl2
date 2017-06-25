@@ -37,6 +37,9 @@ class Map {
 	MyUnorderedMap<E_TerrainTile, S_TileData> m_mTerrainsTileData;
 	std::unordered_map<std::string, std::shared_ptr<Actor>> m_mActors;
 	std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> m_mEvents;
+	// map of mapnames -> coordinates, list the maps linked to the current one
+	// and where in the maps the player would arrive
+	std::unordered_map<std::string, t_coordinates> m_mMapJunctions;
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
@@ -60,6 +63,7 @@ class Map {
 	~Map();
 
 	void clear();
+	std::string getKeyName(std::string name = "", int level = -1);
 	void setName(std::string name);
 	void setLevel(int level);
 	std::string getName();
@@ -106,6 +110,8 @@ class Map {
 	S_MapChangeEventData getEvent(const int x, const int y);
 	void addEvent(int x, int y, S_MapChangeEventData event);
 	std::unordered_map<std::string, std::pair<t_coordinates, S_MapChangeEventData>> &getEvents();
+
+	t_coordinates *getMapJunction(std::string mapKeyName);
 
 	void addObject(int x, int y, E_Object object);
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();

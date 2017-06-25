@@ -40,9 +40,9 @@ bool rRpg::loadInitialMap() {
 }
 
 bool rRpg::loadStartMap() {
-	std::string mapFile = GAME_START_MAP;
+	std::string mapFile = std::string(GAME_START_MAP) + "-0";
 	S_MapSpecs specs;
-	strncpy(specs.name, "start", MAX_LENGTH_MAP_NAME);
+	strncpy(specs.name, GAME_START_MAP, MAX_LENGTH_MAP_NAME);
 	specs.level = 0;
 	specs.type = CAVE;
 	specs.width = 20;
@@ -52,7 +52,7 @@ bool rRpg::loadStartMap() {
 }
 
 bool rRpg::loadMap(std::string mapName, int level) {
-	std::string mapFile = mapName + "-" + std::to_string(level);
+	std::string mapFile = m_map.getKeyName(mapName, level);
 	S_MapSpecs specs;
 	strncpy(specs.name, mapName.c_str(), MAX_LENGTH_MAP_NAME);
 	specs.level = level;
@@ -65,6 +65,7 @@ bool rRpg::loadMap(std::string mapName, int level) {
 
 bool rRpg::_loadMap(std::string mapFile, S_MapSpecs specs) {
 	MapManager manager;
+	std::string prevMapKey = m_map.getKeyName();
 	if (manager.mapExists(mapFile)) {
 		if (!manager.loadMap(m_map, mapFile)) {
 			return false;
@@ -74,11 +75,22 @@ bool rRpg::_loadMap(std::string mapFile, S_MapSpecs specs) {
 		return false;
 	}
 
+	int x, y;
+	t_coordinates *startPoint = m_map.getMapJunction(prevMapKey);
+	if (startPoint == NULL) {
+		x = (int) m_map.getStartPoint().getX();
+		y = (int) m_map.getStartPoint().getY();
+	}
+	else {
+		x = startPoint->first;
+		y = startPoint->second;
+	}
+
 	m_map.initEnemies(m_actorFactory);
 	m_map.setTileFile(m_sTilesFile.c_str());
 	m_map.setObjectsFile(m_sObjectsFile.c_str());
-	m_hero->setX((int) m_map.getStartPoint().getX());
-	m_hero->setY((int) m_map.getStartPoint().getY());
+	m_hero->setX(x);
+	m_hero->setY(y);
 	m_map.addActor(m_hero);
 	return true;
 }
