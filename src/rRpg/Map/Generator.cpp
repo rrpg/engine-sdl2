@@ -7,6 +7,8 @@
 #define STAIR_UP -1
 #define STAIR_DOWN 1
 
+#define CAVE_MAX_LEVEL 10
+
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
@@ -32,7 +34,10 @@ void MapGenerator::_generateCave(S_MapSpecs specs) {
 
 	_setStartPoint();
 	_dispatchEnemies(specs.nbEnemies);
-	_addStair(STAIR_DOWN);
+
+	if (specs.level <= CAVE_MAX_LEVEL) {
+		_addStair(STAIR_DOWN);
+	}
 }
 
 void MapGenerator::_initialiseAutomaton() {
