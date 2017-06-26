@@ -16,11 +16,11 @@ void MapGenerator::generate(S_MapSpecs specs) {
 	m_map.setDisplayTileDimensions(16, 16);
 
 	if (specs.type == CAVE) {
-		_generateCave(specs.nbEnemies);
+		_generateCave(specs);
 	}
 }
 
-void MapGenerator::_generateCave(int nbEnemies) {
+void MapGenerator::_generateCave(S_MapSpecs specs) {
 	m_map.initializeGrid(TERRAIN_ROCK_NORMAL);
 	_initialiseAutomaton();
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
@@ -31,7 +31,7 @@ void MapGenerator::_generateCave(int nbEnemies) {
 	_cleanRooms();
 
 	_setStartPoint();
-	_dispatchEnemies(nbEnemies);
+	_dispatchEnemies(specs.nbEnemies);
 	_addStair(STAIR_DOWN);
 }
 
