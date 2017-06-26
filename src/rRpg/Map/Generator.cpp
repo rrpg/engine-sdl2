@@ -33,7 +33,9 @@ void MapGenerator::_generateCave(S_MapSpecs specs) {
 	_cleanRooms();
 
 	_setStartPoint();
-	_dispatchEnemies(specs.nbEnemies);
+	if (specs.hasEnemies) {
+		_dispatchEnemies(specs.width * specs.height * 4 / 1000);
+	}
 
 	if (specs.level <= CAVE_MAX_LEVEL) {
 		_addStair(STAIR_DOWN);
