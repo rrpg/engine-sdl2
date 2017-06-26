@@ -47,7 +47,7 @@ bool rRpg::loadStartMap() {
 	specs.type = CAVE;
 	specs.width = 20;
 	specs.height = 20;
-	specs.nbEnemies = 0;
+	specs.hasEnemies = false;
 	return _loadMap(mapFile, specs);
 }
 
@@ -59,7 +59,7 @@ bool rRpg::loadMap(std::string mapName, int level) {
 	specs.type = CAVE;
 	specs.width = 50;
 	specs.height = 50;
-	specs.nbEnemies = 15;
+	specs.hasEnemies = true;
 	return _loadMap(mapFile, specs);
 }
 

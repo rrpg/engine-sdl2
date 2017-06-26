@@ -81,7 +81,7 @@ struct S_MapSpecs {
 	E_MapType type;
 	int width;
 	int height;
-	int nbEnemies;
+	bool hasEnemies;
 };
 
 #endif
