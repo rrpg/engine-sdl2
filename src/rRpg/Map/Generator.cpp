@@ -7,6 +7,8 @@
 #define STAIR_UP -1
 #define STAIR_DOWN 1
 
+#define CAVE_MAX_LEVEL 10
+
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
@@ -16,11 +18,11 @@ void MapGenerator::generate(S_MapSpecs specs) {
 	m_map.setDisplayTileDimensions(16, 16);
 
 	if (specs.type == CAVE) {
-		_generateCave(specs.nbEnemies);
+		_generateCave(specs);
 	}
 }
 
-void MapGenerator::_generateCave(int nbEnemies) {
+void MapGenerator::_generateCave(S_MapSpecs specs) {
 	m_map.initializeGrid(TERRAIN_ROCK_NORMAL);
 	_initialiseAutomaton();
 	for (int step = 0, nbSteps = 3; step < nbSteps; ++step) {
@@ -31,8 +33,11 @@ void MapGenerator::_generateCave(int nbEnemies) {
 	_cleanRooms();
 
 	_setStartPoint();
-	_dispatchEnemies(nbEnemies);
-	_addStair(STAIR_DOWN);
+	_dispatchEnemies(specs.nbEnemies);
+
+	if (specs.level <= CAVE_MAX_LEVEL) {
+		_addStair(STAIR_DOWN);
+	}
 }
 
 void MapGenerator::_initialiseAutomaton() {
