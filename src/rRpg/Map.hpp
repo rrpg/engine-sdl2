@@ -48,7 +48,7 @@ class Map {
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
-	S_TileData _getTerrainTileData(const E_TerrainTile tile);
+	S_TileData _getTerrainTileData(int x, int y);
 	S_ObjectData _getObjectData(const E_Object objectType);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
 	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
