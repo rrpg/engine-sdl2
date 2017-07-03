@@ -48,8 +48,6 @@ class Map {
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
-	S_TileData _getTerrainTileData(int x, int y);
-	S_ObjectData _getObjectData(const E_Object objectType);
 	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
 	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
@@ -93,6 +91,7 @@ class Map {
 
 	E_TerrainType getTile(int x, int y);
 	size_t getTileIndex(int x, int y);
+	S_TileData getTerrainTileData(int x, int y);
 	void addActor(std::shared_ptr<Actor> actor);
 	std::unordered_map<std::string, std::shared_ptr<Actor>> &getActors();
 	std::shared_ptr<Actor> getActorAt(int x, int y);
@@ -113,6 +112,7 @@ class Map {
 
 	void addObject(int x, int y, E_Object object);
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();
+	S_ObjectData getObjectData(const E_Object objectType);
 };
 
 #endif

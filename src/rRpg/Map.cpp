@@ -140,7 +140,7 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-S_TileData Map::_getTerrainTileData(int x, int y) {
+S_TileData Map::getTerrainTileData(int x, int y) {
 	E_TerrainType type = getTile(x, y);
 	Terrain *terrain = _getTerrain(type);
 	E_TerrainTile tile = Terrain::getTerrainTile(
@@ -156,7 +156,7 @@ S_TileData Map::_getTerrainTileData(int x, int y) {
 	return m_mTerrainsTileData[tile];
 }
 
-S_ObjectData Map::_getObjectData(const E_Object objectType) {
+S_ObjectData Map::getObjectData(const E_Object objectType) {
 	S_ObjectData objectData;
 	m_objectsManager.getResource(objectType, objectData);
 	return objectData;
@@ -293,7 +293,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, 
 				continue;
 			}
 
-			S_TileData tileData = _getTerrainTileData(x, y);
+			S_TileData tileData = getTerrainTileData(x, y);
 			t_coordinates position = {x, y};
 			graphicFactory.getGraphicTerrain()->render(
 				manager,
@@ -322,7 +322,7 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, 
 			continue;
 		}
 
-		S_ObjectData objectData = _getObjectData(object.second.second);
+		S_ObjectData objectData = getObjectData(object.second.second);
 		graphicFactory.getGraphicObject()->render(
 			manager,
 			game,
