@@ -104,21 +104,6 @@ bool MapParser::_parseLine(const char *line) {
 			}
 			break;
 
-		case 'g':
-			int tileWidth, tileHeight;
-			sscanfResult = sscanf(
-				line,
-				"%d %d\n",
-				&tileWidth, &tileHeight
-			);
-			if (sscanfResult != 2) {
-				retValue = false;
-			}
-			else {
-				m_map.setDisplayTileDimensions(tileWidth, tileHeight);
-			}
-			break;
-
 		case 's':
 			int x, y;
 			sscanfResult = sscanf(
@@ -159,9 +144,8 @@ bool MapParser::saveMap(const char *filePath) {
 
 	fprintf(
 		mapFile,
-		"d %d %d\ng %d %d\ns %d %d\n",
+		"d %d %d\ns %d %d\n",
 		m_map.getWidth(), m_map.getHeight(),
-		m_map.getDisplayTileWidth(), m_map.getDisplayTileHeight(),
 		(int) m_map.getStartPoint().getX(), (int) m_map.getStartPoint().getY()
 	);
 

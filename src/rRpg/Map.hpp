@@ -29,8 +29,6 @@ class Map {
 	int m_iLevel = 0;
 	int m_iWidth = 0;
 	int m_iHeight = 0;
-	int m_iDisplayTileWidth = 0;
-	int m_iDisplayTileHeight = 0;
 	Vector2D m_sStartPoint;
 	std::vector<E_TerrainType> m_vGrid;
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
@@ -70,7 +68,6 @@ class Map {
 	void setTileFile(const char *tileFilePath);
 	void setObjectsFile(const char *objectsFilePath);
 	void setDimensions(int x, int y);
-	void setDisplayTileDimensions(int w, int h);
 	void setTile(int x, int y, E_TerrainType type);
 	void setStartPoint(float x, float y);
 
@@ -81,8 +78,6 @@ class Map {
 	bool isCellObstructingView(int x, int y);
 	E_MapType getType();
 	Vector2D getStartPoint();
-	int getDisplayTileWidth();
-	int getDisplayTileHeight();
 	std::vector<E_TerrainType>* getGrid();
 	void setGrid(std::vector<E_TerrainType> grid);
 

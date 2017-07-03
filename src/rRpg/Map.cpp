@@ -114,11 +114,6 @@ void Map::setDimensions(int w, int h) {
 	m_iHeight = h;
 }
 
-void Map::setDisplayTileDimensions(int w, int h) {
-	m_iDisplayTileWidth = w;
-	m_iDisplayTileHeight = h;
-}
-
 Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
@@ -197,14 +192,6 @@ int Map::getHeight() {
 	return m_iHeight;
 }
 
-int Map::getDisplayTileWidth() {
-	return m_iDisplayTileWidth;
-}
-
-int Map::getDisplayTileHeight() {
-	return m_iDisplayTileHeight;
-}
-
 void Map::addEnemySpawnableCell(char x, char y) {
 	m_vEnemySpawnableCells.push_back(std::make_pair(x, y));
 }
@@ -259,8 +246,8 @@ int Map::_getSameNeighbours(int x, int y) {
 
 void Map::render(SDL_Rect camera, GraphicFactory &graphicFactory, int centerX, int centerY) {
 	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
-		cameraHeightGrid = camera.h / m_iDisplayTileHeight;
+	int cameraWidthGrid = camera.w / 16,
+		cameraHeightGrid = camera.h / 16;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible
@@ -271,8 +258,8 @@ void Map::render(SDL_Rect camera, GraphicFactory &graphicFactory, int centerX, i
 	};
 
 	Vector2D shift = {
-		(float) (visibleArea.x * m_iDisplayTileWidth),
-		(float) (visibleArea.y * m_iDisplayTileHeight)
+		(float) (visibleArea.x * 16),
+		(float) (visibleArea.y * 16)
 	};
 
 	_renderTerrain(camera, visibleArea, shift, graphicFactory);
