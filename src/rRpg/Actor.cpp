@@ -3,6 +3,7 @@
 #include "Behaviour/Behaviour.hpp"
 #include "GUI/Actor.hpp"
 #include <limits.h>
+#include <SDL2/SDL.h>
 
 #define LIMIT_FIELD_OF_VIEW 6
 
