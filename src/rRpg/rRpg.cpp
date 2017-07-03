@@ -2,6 +2,7 @@
 #include "globals.hpp"
 #include "HUD.hpp"
 #include "Map/Manager.hpp"
+#include "Map/Renderer.hpp"
 #include "Actor.hpp"
 #include "Behaviour/Player.hpp"
 #include <SDL2/SDL.h>
@@ -133,7 +134,13 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_map.render(camera, m_graphicFactory, m_hero->getX(), m_hero->getY());
+	t_coordinates center = {m_hero->getX(), m_hero->getY()};
+	MapRenderer::render(
+		camera,
+		m_map,
+		m_graphicFactory,
+		center
+	);
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

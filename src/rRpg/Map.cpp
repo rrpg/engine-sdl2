@@ -1,9 +1,6 @@
 #include "Map.hpp"
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
-#include "GUI.hpp"
-#include "GUI/Terrain.hpp"
-#include "GUI/Object.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
 
@@ -242,102 +239,6 @@ int Map::_getSameNeighbours(int x, int y) {
 		+ (1 << 3) * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
 
 	return nbNeighbours;
-}
-
-void Map::render(SDL_Rect camera, GraphicFactory &graphicFactory, int centerX, int centerY) {
-	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / 16,
-		cameraHeightGrid = camera.h / 16;
-
-	SDL_Rect visibleArea = {
-		// portion of the map which is visible
-		centerX - cameraWidthGrid / 2,
-		centerY - cameraHeightGrid / 2,
-		cameraWidthGrid,
-		cameraHeightGrid
-	};
-
-	Vector2D shift = {
-		(float) (visibleArea.x * 16),
-		(float) (visibleArea.y * 16)
-	};
-
-	_renderTerrain(camera, visibleArea, shift, graphicFactory);
-	_renderObjects(camera, visibleArea, shift, graphicFactory);
-	_renderActors(camera, visibleArea, shift);
-}
-
-void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory) {
-	// camera is in pixels in the window
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-
-	int displayShiftX = (int) shift.getX() + camera.x;
-	int displayShiftY = (int) shift.getY() + camera.y;
-	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
-		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
-			if (!areCoordinatesValid(x, y)) {
-				continue;
-			}
-
-			S_TileData tileData = getTerrainTileData(x, y);
-			t_coordinates position = {x, y};
-			graphicFactory.getGraphicTerrain()->render(
-				manager,
-				game,
-				displayShiftX,
-				displayShiftY,
-				tileData,
-				position
-			);
-		}
-	}
-}
-
-void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory) {
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-	int displayShiftX = camera.x - (int) shift.getX();
-	int displayShiftY = camera.y - (int) shift.getY();
-	for (auto object : m_mObjects) {
-		t_coordinates objectPosition = object.second.first;
-		if ((visibleArea.x > 0 && objectPosition.first < visibleArea.x)
-				|| objectPosition.first > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && objectPosition.second < visibleArea.y)
-				|| objectPosition.second > (visibleArea.y + visibleArea.h)
-		) {
-			continue;
-		}
-
-		S_ObjectData objectData = getObjectData(object.second.second);
-		graphicFactory.getGraphicObject()->render(
-			manager,
-			game,
-			displayShiftX,
-			displayShiftY,
-			objectData,
-			objectPosition
-		);
-	}
-}
-
-void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
-	int displayShiftX = camera.x - (int) shift.getX();
-	int displayShiftY = camera.y - (int) shift.getY();
-	for (auto actor : m_mActors) {
-		if ((visibleArea.x > 0 && actor.second->getX() < visibleArea.x)
-				|| actor.second->getX() > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && actor.second->getY() < visibleArea.y)
-				|| actor.second->getY() > (visibleArea.y + visibleArea.h)
-		) {
-			continue;
-		}
-
-		actor.second->render(
-			displayShiftX,
-			displayShiftY
-		);
-	}
 }
 
 bool Map::areCoordinatesValid(int x, int y) {

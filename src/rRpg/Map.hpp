@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
-#include <SDL2/SDL.h>
 #include "Terrain.hpp"
 #include "types.hpp"
 #include "GUI/Factory.hpp"
@@ -46,9 +45,6 @@ class Map {
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
-	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
-	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
-	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
 	int _getSameNeighbours(int x, int y);
 
@@ -91,8 +87,6 @@ class Map {
 	std::unordered_map<std::string, std::shared_ptr<Actor>> &getActors();
 	std::shared_ptr<Actor> getActorAt(int x, int y);
 	bool moveActor(Actor* actor, int newX, int newY);
-
-	void render(SDL_Rect camera, GraphicFactory &graphicFactory, int centerX, int centerY);
 
 	void addEnemySpawnableCell(char x, char y);
 	std::vector<t_coordinates> getEnemySpawnableCells();
