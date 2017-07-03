@@ -43,8 +43,6 @@ class Map {
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
-	GraphicFactory &m_graphicFactory;
-
 	ResourceManager<S_TileData> m_tilesManager;
 	ResourceManager<S_ObjectData> m_objectsManager;
 
@@ -52,14 +50,14 @@ class Map {
 	Terrain *_getTerrain(E_TerrainType type);
 	S_TileData _getTerrainTileData(const E_TerrainTile tile);
 	S_ObjectData _getObjectData(const E_Object objectType);
-	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
-	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
+	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
+	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory);
 	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
 	int _getSameNeighbours(int x, int y);
 
 	public:
-	Map(GraphicFactory &graphicFactory);
+	Map();
 	~Map();
 
 	void clear();
@@ -100,7 +98,7 @@ class Map {
 	std::shared_ptr<Actor> getActorAt(int x, int y);
 	bool moveActor(Actor* actor, int newX, int newY);
 
-	void render(SDL_Rect camera, int centerX, int centerY);
+	void render(SDL_Rect camera, GraphicFactory &graphicFactory, int centerX, int centerY);
 
 	void addEnemySpawnableCell(char x, char y);
 	std::vector<t_coordinates> getEnemySpawnableCells();

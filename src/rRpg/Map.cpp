@@ -2,7 +2,6 @@
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
 #include "GUI.hpp"
-#include "GUI/Factory.hpp"
 #include "GUI/Terrain.hpp"
 #include "GUI/Object.hpp"
 #include <algorithm>
@@ -15,7 +14,7 @@ void Map::_initEnemiesPerMapType() {
 	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
 }
 
-Map::Map(GraphicFactory &graphicFactory) :
+Map::Map() :
 	m_sStartPoint(Vector2D()),
 	m_vGrid({}),
 	m_mTerrains({}),
@@ -25,7 +24,6 @@ Map::Map(GraphicFactory &graphicFactory) :
 	m_mMapJunctions({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
-	m_graphicFactory(graphicFactory),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
@@ -252,7 +250,7 @@ int Map::_getSameNeighbours(int x, int y) {
 	return nbNeighbours;
 }
 
-void Map::render(SDL_Rect camera, int centerX, int centerY) {
+void Map::render(SDL_Rect camera, GraphicFactory &graphicFactory, int centerX, int centerY) {
 	// x,y coords in the grid
 	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
 		cameraHeightGrid = camera.h / m_iDisplayTileHeight;
@@ -270,12 +268,12 @@ void Map::render(SDL_Rect camera, int centerX, int centerY) {
 		(float) (visibleArea.y * m_iDisplayTileHeight)
 	};
 
-	_renderTerrain(camera, visibleArea, shift);
-	_renderObjects(camera, visibleArea, shift);
+	_renderTerrain(camera, visibleArea, shift, graphicFactory);
+	_renderObjects(camera, visibleArea, shift, graphicFactory);
 	_renderActors(camera, visibleArea, shift);
 }
 
-void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
+void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
@@ -297,7 +295,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 			);
 			S_TileData tileData = _getTerrainTileData(tile);
 			t_coordinates position = {x, y};
-			m_graphicFactory.getGraphicTerrain()->render(
+			graphicFactory.getGraphicTerrain()->render(
 				manager,
 				game,
 				displayShiftX,
@@ -309,7 +307,7 @@ void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 	}
 }
 
-void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
+void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift, GraphicFactory &graphicFactory) {
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 	int displayShiftX = camera.x - (int) shift.getX();
@@ -325,7 +323,7 @@ void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) 
 		}
 
 		S_ObjectData objectData = _getObjectData(object.second.second);
-		m_graphicFactory.getGraphicObject()->render(
+		graphicFactory.getGraphicObject()->render(
 			manager,
 			game,
 			displayShiftX,

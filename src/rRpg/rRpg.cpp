@@ -13,7 +13,7 @@ rRpg::rRpg() :
 	m_hero(nullptr),
 	m_graphicFactory(GraphicFactory()),
 	m_actorFactory(ActorFactory(m_graphicFactory)),
-	m_map(Map(m_graphicFactory))
+	m_map(Map())
 {
 }
 
@@ -133,7 +133,7 @@ void rRpg::render() {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
 	};
-	m_map.render(camera, m_hero->getX(), m_hero->getY());
+	m_map.render(camera, m_graphicFactory, m_hero->getX(), m_hero->getY());
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }
