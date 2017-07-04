@@ -6,6 +6,7 @@
 #include "Map.hpp"
 #include <string>
 #include <memory>
+#include <SDL2/SDL.h>
 
 class Actor;
 
@@ -18,6 +19,7 @@ class rRpg {
 	bool m_bIsBlocked = false;
 	std::string m_sTilesFile = "";
 	std::string m_sObjectsFile = "";
+	SDL_Rect m_camera = {};
 
 	bool _loadMap(std::string mapFile, S_MapSpecs specs);
 
