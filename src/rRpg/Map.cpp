@@ -1,10 +1,6 @@
 #include "Map.hpp"
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
-#include "GUI.hpp"
-#include "GUI/Factory.hpp"
-#include "GUI/Terrain.hpp"
-#include "GUI/Object.hpp"
 #include <algorithm>
 #include "SDL2_framework/Game.h"
 
@@ -15,7 +11,7 @@ void Map::_initEnemiesPerMapType() {
 	s_mEnemiesPerMapType[CAVE] = {{RACE_DEMON, 0, 1}, {RACE_HUMAN, 2, 250}, {RACE_RAT, 251, 1000}};
 }
 
-Map::Map(GraphicFactory &graphicFactory) :
+Map::Map() :
 	m_sStartPoint(Vector2D()),
 	m_vGrid({}),
 	m_mTerrains({}),
@@ -25,7 +21,6 @@ Map::Map(GraphicFactory &graphicFactory) :
 	m_mMapJunctions({}),
 	m_mObjects({}),
 	m_vEnemySpawnableCells({}),
-	m_graphicFactory(graphicFactory),
 	m_tilesManager(ResourceManager<S_TileData>()),
 	m_objectsManager(ResourceManager<S_ObjectData>()) {
 }
@@ -116,11 +111,6 @@ void Map::setDimensions(int w, int h) {
 	m_iHeight = h;
 }
 
-void Map::setDisplayTileDimensions(int w, int h) {
-	m_iDisplayTileWidth = w;
-	m_iDisplayTileHeight = h;
-}
-
 Terrain *Map::_getTerrain(E_TerrainType type) {
 	if (m_mTerrains.find(type) == m_mTerrains.end()) {
 		Terrain *terrain = new Terrain();
@@ -142,7 +132,14 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
+S_TileData Map::getTerrainTileData(int x, int y) {
+	E_TerrainType type = getTile(x, y);
+	Terrain *terrain = _getTerrain(type);
+	E_TerrainTile tile = Terrain::getTerrainTile(
+		type,
+		terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
+			15 : _getSameNeighbours(x, y)
+	);
 	if (m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
 		m_tilesManager.getResource(tile, tileData);
@@ -151,7 +148,7 @@ S_TileData Map::_getTerrainTileData(const E_TerrainTile tile) {
 	return m_mTerrainsTileData[tile];
 }
 
-S_ObjectData Map::_getObjectData(const E_Object objectType) {
+S_ObjectData Map::getObjectData(const E_Object objectType) {
 	S_ObjectData objectData;
 	m_objectsManager.getResource(objectType, objectData);
 	return objectData;
@@ -190,14 +187,6 @@ int Map::getWidth() {
 
 int Map::getHeight() {
 	return m_iHeight;
-}
-
-int Map::getDisplayTileWidth() {
-	return m_iDisplayTileWidth;
-}
-
-int Map::getDisplayTileHeight() {
-	return m_iDisplayTileHeight;
 }
 
 void Map::addEnemySpawnableCell(char x, char y) {
@@ -250,109 +239,6 @@ int Map::_getSameNeighbours(int x, int y) {
 		+ (1 << 3) * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
 
 	return nbNeighbours;
-}
-
-void Map::render(SDL_Rect camera, int centerX, int centerY) {
-	// x,y coords in the grid
-	int cameraWidthGrid = camera.w / m_iDisplayTileWidth,
-		cameraHeightGrid = camera.h / m_iDisplayTileHeight;
-
-	SDL_Rect visibleArea = {
-		// portion of the map which is visible
-		centerX - cameraWidthGrid / 2,
-		centerY - cameraHeightGrid / 2,
-		cameraWidthGrid,
-		cameraHeightGrid
-	};
-
-	Vector2D shift = {
-		(float) (visibleArea.x * m_iDisplayTileWidth),
-		(float) (visibleArea.y * m_iDisplayTileHeight)
-	};
-
-	_renderTerrain(camera, visibleArea, shift);
-	_renderObjects(camera, visibleArea, shift);
-	_renderActors(camera, visibleArea, shift);
-}
-
-void Map::_renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
-	// camera is in pixels in the window
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-
-	int displayShiftX = (int) shift.getX() + camera.x;
-	int displayShiftY = (int) shift.getY() + camera.y;
-	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
-		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
-			if (!areCoordinatesValid(x, y)) {
-				continue;
-			}
-
-			E_TerrainType type = getTile(x, y);
-			Terrain *terrain = _getTerrain(type);
-			E_TerrainTile tile = Terrain::getTerrainTile(
-				type,
-				terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
-					15 : _getSameNeighbours(x, y)
-			);
-			S_TileData tileData = _getTerrainTileData(tile);
-			t_coordinates position = {x, y};
-			m_graphicFactory.getGraphicTerrain()->render(
-				manager,
-				game,
-				displayShiftX,
-				displayShiftY,
-				tileData,
-				position
-			);
-		}
-	}
-}
-
-void Map::_renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-	int displayShiftX = camera.x - (int) shift.getX();
-	int displayShiftY = camera.y - (int) shift.getY();
-	for (auto object : m_mObjects) {
-		t_coordinates objectPosition = object.second.first;
-		if ((visibleArea.x > 0 && objectPosition.first < visibleArea.x)
-				|| objectPosition.first > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && objectPosition.second < visibleArea.y)
-				|| objectPosition.second > (visibleArea.y + visibleArea.h)
-		) {
-			continue;
-		}
-
-		S_ObjectData objectData = _getObjectData(object.second.second);
-		m_graphicFactory.getGraphicObject()->render(
-			manager,
-			game,
-			displayShiftX,
-			displayShiftY,
-			objectData,
-			objectPosition
-		);
-	}
-}
-
-void Map::_renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift) {
-	int displayShiftX = camera.x - (int) shift.getX();
-	int displayShiftY = camera.y - (int) shift.getY();
-	for (auto actor : m_mActors) {
-		if ((visibleArea.x > 0 && actor.second->getX() < visibleArea.x)
-				|| actor.second->getX() > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && actor.second->getY() < visibleArea.y)
-				|| actor.second->getY() > (visibleArea.y + visibleArea.h)
-		) {
-			continue;
-		}
-
-		actor.second->render(
-			displayShiftX,
-			displayShiftY
-		);
-	}
 }
 
 bool Map::areCoordinatesValid(int x, int y) {

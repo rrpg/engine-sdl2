@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <vector>
 #include <unordered_map>
-#include <SDL2/SDL.h>
 #include "Terrain.hpp"
 #include "types.hpp"
 #include "GUI/Factory.hpp"
@@ -29,8 +28,6 @@ class Map {
 	int m_iLevel = 0;
 	int m_iWidth = 0;
 	int m_iHeight = 0;
-	int m_iDisplayTileWidth = 0;
-	int m_iDisplayTileHeight = 0;
 	Vector2D m_sStartPoint;
 	std::vector<E_TerrainType> m_vGrid;
 	MyUnorderedMap<E_TerrainType, Terrain*> m_mTerrains;
@@ -43,23 +40,16 @@ class Map {
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> m_mObjects;
 	std::vector<t_coordinates> m_vEnemySpawnableCells;
 
-	GraphicFactory &m_graphicFactory;
-
 	ResourceManager<S_TileData> m_tilesManager;
 	ResourceManager<S_ObjectData> m_objectsManager;
 
 	static void _initEnemiesPerMapType();
 	Terrain *_getTerrain(E_TerrainType type);
-	S_TileData _getTerrainTileData(const E_TerrainTile tile);
-	S_ObjectData _getObjectData(const E_Object objectType);
-	void _renderTerrain(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
-	void _renderObjects(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
-	void _renderActors(SDL_Rect camera, SDL_Rect visibleArea, Vector2D shift);
 	static std::string _getCoordsKey(int x, int y);
 	int _getSameNeighbours(int x, int y);
 
 	public:
-	Map(GraphicFactory &graphicFactory);
+	Map();
 	~Map();
 
 	void clear();
@@ -74,7 +64,6 @@ class Map {
 	void setTileFile(const char *tileFilePath);
 	void setObjectsFile(const char *objectsFilePath);
 	void setDimensions(int x, int y);
-	void setDisplayTileDimensions(int w, int h);
 	void setTile(int x, int y, E_TerrainType type);
 	void setStartPoint(float x, float y);
 
@@ -85,8 +74,6 @@ class Map {
 	bool isCellObstructingView(int x, int y);
 	E_MapType getType();
 	Vector2D getStartPoint();
-	int getDisplayTileWidth();
-	int getDisplayTileHeight();
 	std::vector<E_TerrainType>* getGrid();
 	void setGrid(std::vector<E_TerrainType> grid);
 
@@ -95,12 +82,11 @@ class Map {
 
 	E_TerrainType getTile(int x, int y);
 	size_t getTileIndex(int x, int y);
+	S_TileData getTerrainTileData(int x, int y);
 	void addActor(std::shared_ptr<Actor> actor);
 	std::unordered_map<std::string, std::shared_ptr<Actor>> &getActors();
 	std::shared_ptr<Actor> getActorAt(int x, int y);
 	bool moveActor(Actor* actor, int newX, int newY);
-
-	void render(SDL_Rect camera, int centerX, int centerY);
 
 	void addEnemySpawnableCell(char x, char y);
 	std::vector<t_coordinates> getEnemySpawnableCells();
@@ -115,6 +101,7 @@ class Map {
 
 	void addObject(int x, int y, E_Object object);
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();
+	S_ObjectData getObjectData(const E_Object objectType);
 };
 
 #endif

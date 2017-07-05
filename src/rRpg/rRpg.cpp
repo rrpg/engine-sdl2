@@ -2,9 +2,9 @@
 #include "globals.hpp"
 #include "HUD.hpp"
 #include "Map/Manager.hpp"
+#include "Map/Renderer.hpp"
 #include "Actor.hpp"
 #include "Behaviour/Player.hpp"
-#include <SDL2/SDL.h>
 #include <iostream>
 #include <iterator>
 #include "SDL2_framework/Game.h"
@@ -13,8 +13,13 @@ rRpg::rRpg() :
 	m_hero(nullptr),
 	m_graphicFactory(GraphicFactory()),
 	m_actorFactory(ActorFactory(m_graphicFactory)),
-	m_map(Map(m_graphicFactory))
+	m_map(Map()),
+	m_mapRenderer(MapRenderer(m_map, m_graphicFactory))
 {
+	m_mapRenderer.setCamera({
+		0, 0,
+		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
+	});
 }
 
 rRpg::~rRpg() {}
@@ -129,11 +134,10 @@ void rRpg::update() {
 }
 
 void rRpg::render() {
-	SDL_Rect camera = {
-		0, 0,
-		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
-	};
-	m_map.render(camera, m_hero->getX(), m_hero->getY());
+	t_coordinates center = {m_hero->getX(), m_hero->getY()};
+	m_mapRenderer.render(
+		center
+	);
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

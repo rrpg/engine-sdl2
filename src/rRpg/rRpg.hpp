@@ -3,6 +3,7 @@
 
 #include "ActorFactory.hpp"
 #include "GUI/Factory.hpp"
+#include "Map/Renderer.hpp"
 #include "Map.hpp"
 #include <string>
 #include <memory>
@@ -15,6 +16,7 @@ class rRpg {
 	GraphicFactory m_graphicFactory;
 	ActorFactory m_actorFactory;
 	Map m_map;
+	MapRenderer m_mapRenderer;
 	bool m_bIsBlocked = false;
 	std::string m_sTilesFile = "";
 	std::string m_sObjectsFile = "";

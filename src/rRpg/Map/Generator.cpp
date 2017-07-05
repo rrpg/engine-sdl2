@@ -15,7 +15,6 @@ MapGenerator::MapGenerator(Map &map) : m_map(map) {
 void MapGenerator::generate(S_MapSpecs specs) {
 	m_map.setType(specs.type);
 	m_map.setDimensions(specs.width, specs.height);
-	m_map.setDisplayTileDimensions(16, 16);
 
 	if (specs.type == CAVE) {
 		_generateCave(specs);
