@@ -20,7 +20,7 @@ void MapRenderer::setCamera(SDL_Rect camera) {
 	m_camera = camera;
 }
 
-void MapRenderer::render(t_coordinates center) {
+void MapRenderer::render(std::vector<t_coordinates> fov, t_coordinates center) {
 	// x,y coords in the grid
 	int cameraWidthGrid = m_camera.w / DISPLAY_TILE_WIDTH,
 		cameraHeightGrid = m_camera.h / DISPLAY_TILE_HEIGHT;
@@ -38,35 +38,37 @@ void MapRenderer::render(t_coordinates center) {
 		(float) (visibleArea.y * DISPLAY_TILE_HEIGHT)
 	};
 
-	_renderTerrain(visibleArea, shift);
+	_renderTerrain(fov, visibleArea, shift);
 	_renderObjects(visibleArea, shift);
 	_renderActors(visibleArea, shift);
 }
 
-void MapRenderer::_renderTerrain(SDL_Rect visibleArea, Vector2D shift) {
+void MapRenderer::_renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
 	int displayShiftX = (int) shift.getX() + m_camera.x;
 	int displayShiftY = (int) shift.getY() + m_camera.y;
-	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
-		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
-			if (!m_map.areCoordinatesValid(x, y)) {
-				continue;
-			}
-
-			S_TileData tileData = m_map.getTerrainTileData(x, y);
-			t_coordinates position = {x, y};
-			m_graphicFactory.getGraphicTerrain()->render(
-				manager,
-				game,
-				displayShiftX,
-				displayShiftY,
-				tileData,
-				position
-			);
+	for (auto cell : fov) {
+		int x = cell.first,
+			y = cell.second;
+		if (x < visibleArea.x || x > visibleArea.x + visibleArea.w
+			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
+		) {
+			continue;
 		}
+
+		S_TileData tileData = m_map.getTerrainTileData(x, y);
+		t_coordinates position = {x, y};
+		m_graphicFactory.getGraphicTerrain()->render(
+			manager,
+			game,
+			displayShiftX,
+			displayShiftY,
+			tileData,
+			position
+		);
 	}
 }
 

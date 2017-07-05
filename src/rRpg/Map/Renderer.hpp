@@ -14,14 +14,14 @@ class MapRenderer {
 	Map &m_map;
 	GraphicFactory &m_graphicFactory;
 
-	void _renderTerrain(SDL_Rect visibleArea, Vector2D shift);
+	void _renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
 	void _renderObjects(SDL_Rect visibleArea, Vector2D shift);
 	void _renderActors(SDL_Rect visibleArea, Vector2D shift);
 
 	public:
 	MapRenderer(Map &map, GraphicFactory &graphicFactory);
 	void setCamera(SDL_Rect camera);
-	void render(t_coordinates center);
+	void render(std::vector<t_coordinates> fov, t_coordinates center);
 };
 
 #endif
