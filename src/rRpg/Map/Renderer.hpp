@@ -10,12 +10,18 @@ class Vector2D;
 
 class MapRenderer {
 	private:
-	static void _renderTerrain(SDL_Rect, Map&, GraphicFactory&, SDL_Rect, Vector2D);
-	static void _renderObjects(SDL_Rect, Map&, GraphicFactory&, SDL_Rect, Vector2D);
-	static void _renderActors(SDL_Rect camera, Map &map, SDL_Rect visibleArea, Vector2D shift);
+	SDL_Rect m_camera = {};
+	Map &m_map;
+	GraphicFactory &m_graphicFactory;
+
+	void _renderTerrain(SDL_Rect visibleArea, Vector2D shift);
+	void _renderObjects(SDL_Rect visibleArea, Vector2D shift);
+	void _renderActors(SDL_Rect visibleArea, Vector2D shift);
 
 	public:
-	static void render(SDL_Rect camera, Map &map, GraphicFactory &graphicFactory, t_coordinates center);
+	MapRenderer(Map &map, GraphicFactory &graphicFactory);
+	void setCamera(SDL_Rect camera);
+	void render(t_coordinates center);
 };
 
 #endif

@@ -13,12 +13,13 @@ rRpg::rRpg() :
 	m_hero(nullptr),
 	m_graphicFactory(GraphicFactory()),
 	m_actorFactory(ActorFactory(m_graphicFactory)),
-	m_map(Map())
+	m_map(Map()),
+	m_mapRenderer(MapRenderer(m_map, m_graphicFactory))
 {
-	m_camera = {
+	m_mapRenderer.setCamera({
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
-	};
+	});
 }
 
 rRpg::~rRpg() {}
@@ -134,10 +135,7 @@ void rRpg::update() {
 
 void rRpg::render() {
 	t_coordinates center = {m_hero->getX(), m_hero->getY()};
-	MapRenderer::render(
-		m_camera,
-		m_map,
-		m_graphicFactory,
+	m_mapRenderer.render(
 		center
 	);
 	// render HUD

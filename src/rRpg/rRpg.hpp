@@ -3,10 +3,10 @@
 
 #include "ActorFactory.hpp"
 #include "GUI/Factory.hpp"
+#include "Map/Renderer.hpp"
 #include "Map.hpp"
 #include <string>
 #include <memory>
-#include <SDL2/SDL.h>
 
 class Actor;
 
@@ -16,10 +16,10 @@ class rRpg {
 	GraphicFactory m_graphicFactory;
 	ActorFactory m_actorFactory;
 	Map m_map;
+	MapRenderer m_mapRenderer;
 	bool m_bIsBlocked = false;
 	std::string m_sTilesFile = "";
 	std::string m_sObjectsFile = "";
-	SDL_Rect m_camera = {};
 
 	bool _loadMap(std::string mapFile, S_MapSpecs specs);
 
