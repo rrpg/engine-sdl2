@@ -1,5 +1,6 @@
 #include "rRpg.hpp"
 #include "globals.hpp"
+#include "FieldOfView.hpp"
 #include "HUD.hpp"
 #include "Map/Manager.hpp"
 #include "Map/Renderer.hpp"
@@ -134,8 +135,11 @@ void rRpg::update() {
 }
 
 void rRpg::render() {
+	FieldOfView fov;
+	fov.calculate(m_map, m_hero);
 	t_coordinates center = {m_hero->getX(), m_hero->getY()};
 	m_mapRenderer.render(
+		fov.getVisible(),
 		center
 	);
 	// render HUD

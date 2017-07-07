@@ -353,3 +353,13 @@ void Map::addObject(int x, int y, E_Object object) {
 std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> Map::getObjects() {
 	return m_mObjects;
 }
+
+E_Object *Map::getObjectAt(int x, int y) {
+	std::string key = _getCoordsKey(x, y);
+	auto it = m_mObjects.find(key);
+	if (it != m_mObjects.end()) {
+		return &it->second.second;
+	}
+
+	return NULL;
+}

@@ -20,7 +20,7 @@ void MapRenderer::setCamera(SDL_Rect camera) {
 	m_camera = camera;
 }
 
-void MapRenderer::render(t_coordinates center) {
+void MapRenderer::render(std::vector<t_coordinates> fov, t_coordinates center) {
 	// x,y coords in the grid
 	int cameraWidthGrid = m_camera.w / DISPLAY_TILE_WIDTH,
 		cameraHeightGrid = m_camera.h / DISPLAY_TILE_HEIGHT;
@@ -38,78 +38,85 @@ void MapRenderer::render(t_coordinates center) {
 		(float) (visibleArea.y * DISPLAY_TILE_HEIGHT)
 	};
 
-	_renderTerrain(visibleArea, shift);
-	_renderObjects(visibleArea, shift);
-	_renderActors(visibleArea, shift);
+	_renderTerrain(fov, visibleArea, shift);
+	_renderObjects(fov, visibleArea, shift);
+	_renderActors(fov, visibleArea, shift);
 }
 
-void MapRenderer::_renderTerrain(SDL_Rect visibleArea, Vector2D shift) {
+void MapRenderer::_renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
 	int displayShiftX = (int) shift.getX() + m_camera.x;
 	int displayShiftY = (int) shift.getY() + m_camera.y;
-	for (int y = visibleArea.y; y < visibleArea.y + visibleArea.h; ++y) {
-		for (int x = visibleArea.x; x < visibleArea.x + visibleArea.w; ++x) {
-			if (!m_map.areCoordinatesValid(x, y)) {
-				continue;
-			}
-
-			S_TileData tileData = m_map.getTerrainTileData(x, y);
-			t_coordinates position = {x, y};
-			m_graphicFactory.getGraphicTerrain()->render(
-				manager,
-				game,
-				displayShiftX,
-				displayShiftY,
-				tileData,
-				position
-			);
-		}
-	}
-}
-
-void MapRenderer::_renderObjects(SDL_Rect visibleArea, Vector2D shift) {
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-	int displayShiftX = m_camera.x - (int) shift.getX();
-	int displayShiftY = m_camera.y - (int) shift.getY();
-	for (auto object : m_map.getObjects()) {
-		t_coordinates objectPosition = object.second.first;
-		if ((visibleArea.x > 0 && objectPosition.first < visibleArea.x)
-				|| objectPosition.first > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && objectPosition.second < visibleArea.y)
-				|| objectPosition.second > (visibleArea.y + visibleArea.h)
+	for (auto cell : fov) {
+		int x = cell.first,
+			y = cell.second;
+		if (x < visibleArea.x || x > visibleArea.x + visibleArea.w
+			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
 		) {
 			continue;
 		}
 
-		S_ObjectData objectData = m_map.getObjectData(object.second.second);
+		S_TileData tileData = m_map.getTerrainTileData(x, y);
+		t_coordinates position = {x, y};
+		m_graphicFactory.getGraphicTerrain()->render(
+			manager,
+			game,
+			displayShiftX,
+			displayShiftY,
+			tileData,
+			position
+		);
+	}
+}
+
+void MapRenderer::_renderObjects(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
+	TextureManager *manager = TextureManager::Instance();
+	Game *game = Game::Instance();
+	int displayShiftX = m_camera.x - (int) shift.getX();
+	int displayShiftY = m_camera.y - (int) shift.getY();
+	for (auto cell : fov) {
+		int x = cell.first,
+			y = cell.second;
+
+		E_Object *object = m_map.getObjectAt(x, y);
+		if (object == NULL
+			|| x < visibleArea.x || x > visibleArea.x + visibleArea.w
+			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
+		) {
+			continue;
+		}
+
+		S_ObjectData objectData = m_map.getObjectData(*object);
 		m_graphicFactory.getGraphicObject()->render(
 			manager,
 			game,
 			displayShiftX,
 			displayShiftY,
 			objectData,
-			objectPosition
+			cell
 		);
 	}
 }
 
-void MapRenderer::_renderActors(SDL_Rect visibleArea, Vector2D shift) {
+void MapRenderer::_renderActors(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
-	for (auto actor : m_map.getActors()) {
-		if ((visibleArea.x > 0 && actor.second->getX() < visibleArea.x)
-				|| actor.second->getX() > (visibleArea.x + visibleArea.w)
-			|| (visibleArea.y > 0 && actor.second->getY() < visibleArea.y)
-				|| actor.second->getY() > (visibleArea.y + visibleArea.h)
+	for (auto cell : fov) {
+		int x = cell.first,
+			y = cell.second;
+
+		std::shared_ptr<Actor> actor = m_map.getActorAt(x, y);
+		if (actor == NULL
+			|| x < visibleArea.x || x > visibleArea.x + visibleArea.w
+			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
 		) {
 			continue;
 		}
 
-		actor.second->render(
+		actor->render(
 			displayShiftX,
 			displayShiftY
 		);
