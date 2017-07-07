@@ -15,8 +15,8 @@ class MapRenderer {
 	GraphicFactory &m_graphicFactory;
 
 	void _renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
-	void _renderObjects(SDL_Rect visibleArea, Vector2D shift);
-	void _renderActors(SDL_Rect visibleArea, Vector2D shift);
+	void _renderObjects(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
+	void _renderActors(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
 
 	public:
 	MapRenderer(Map &map, GraphicFactory &graphicFactory);
