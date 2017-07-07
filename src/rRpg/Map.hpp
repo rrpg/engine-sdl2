@@ -102,6 +102,7 @@ class Map {
 	void addObject(int x, int y, E_Object object);
 	std::unordered_map<std::string, std::pair<t_coordinates, E_Object>> getObjects();
 	S_ObjectData getObjectData(const E_Object objectType);
+	E_Object *getObjectAt(int x, int y);
 };
 
 #endif
