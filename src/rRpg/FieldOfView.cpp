@@ -13,6 +13,9 @@ static int multipliers[4][8] = {
 	{1, 0, 0, 1, -1, 0, 0, -1}
 };
 
+FieldOfView::FieldOfView(SDL_Rect visibleArea) : m_visibleArea(visibleArea) {
+}
+
 void FieldOfView::calculate(Map &map, std::shared_ptr<Actor> reference) {
 	m_vVisibleCells.clear();
 	m_vVisibleCells.push_back({reference->getX(), reference->getY()});

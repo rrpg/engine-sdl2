@@ -2,6 +2,7 @@
 #include "globals.hpp"
 #include "FieldOfView.hpp"
 #include "HUD.hpp"
+#include "GUI.hpp"
 #include "Map/Manager.hpp"
 #include "Map/Renderer.hpp"
 #include "Actor.hpp"
@@ -137,9 +138,20 @@ void rRpg::update() {
 }
 
 void rRpg::render() {
-	FieldOfView fov;
-	fov.calculate(m_map, m_hero);
 	t_coordinates center = {m_hero->getX(), m_hero->getY()};
+	// x,y coords in the grid
+	int cameraWidthGrid = m_camera.w / TILE_WIDTH,
+		cameraHeightGrid = m_camera.h / TILE_HEIGHT;
+
+	SDL_Rect visibleArea = {
+		// portion of the map which is visible
+		center.first - cameraWidthGrid / 2,
+		center.second - cameraHeightGrid / 2,
+		cameraWidthGrid,
+		cameraHeightGrid
+	};
+	FieldOfView fov(visibleArea);
+	fov.calculate(m_map, m_hero);
 	m_mapRenderer.render(
 		fov.getVisible(),
 		center
