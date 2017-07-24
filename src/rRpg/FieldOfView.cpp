@@ -16,9 +16,18 @@ static int multipliers[4][8] = {
 FieldOfView::FieldOfView(SDL_Rect visibleArea) : m_visibleArea(visibleArea) {
 }
 
+void FieldOfView::_setCellVisible(int x, int y) {
+	int relativeX = x - m_visibleArea.x,
+		relativeY = y - m_visibleArea.y;
+	long unsigned cellRelativeIndex = (long unsigned) (relativeY * m_visibleArea.w + relativeX);
+	m_vVisibleCells[cellRelativeIndex] = 1;
+}
+
 void FieldOfView::calculate(Map &map, std::shared_ptr<Actor> reference) {
 	m_vVisibleCells.clear();
-	m_vVisibleCells.push_back({reference->getX(), reference->getY()});
+	long unsigned sizeView = (unsigned) (m_visibleArea.w * m_visibleArea.h);
+	m_vVisibleCells.assign(sizeView, 0);
+	_setCellVisible(reference->getX(), reference->getY());
 	for (int i = 0; i < 8; ++i) {
 		_lightQuadrant(
 			map,
@@ -73,7 +82,7 @@ void FieldOfView::_lightQuadrant(
 
             int radius2 = SQ_PLAYER_DEPTH_OF_VIEW;
             if ((int) (dx * dx + dy * dy) < radius2) {
-				m_vVisibleCells.push_back({ax, ay});
+				_setCellVisible(ax, ay);
             }
 
             if (blocked) {
@@ -97,6 +106,16 @@ void FieldOfView::_lightQuadrant(
     }
 }
 
-const std::vector<t_coordinates> &FieldOfView::getVisible() {
-	return m_vVisibleCells;
+std::vector<t_coordinates> FieldOfView::getVisible() {
+	long unsigned sizeView = m_vVisibleCells.size();
+	std::vector<t_coordinates> visible = {};
+	for (long unsigned i = 0; i < sizeView; ++i) {
+		if (m_vVisibleCells[i]) {
+			visible.push_back({
+				(long unsigned) m_visibleArea.x + i % (long unsigned) m_visibleArea.w,
+				(long unsigned) m_visibleArea.y + i / (long unsigned) m_visibleArea.w
+			});
+		}
+	}
+	return visible;
 }

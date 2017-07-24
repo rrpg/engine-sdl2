@@ -11,7 +11,7 @@ class Map;
 
 class FieldOfView {
 	private:
-	std::vector<t_coordinates> m_vVisibleCells = {};
+	std::vector<int> m_vVisibleCells = {};
 	SDL_Rect m_visibleArea;
 
 	void _lightQuadrant(
@@ -20,11 +20,12 @@ class FieldOfView {
 		double startSlope, double endSlope,
 		int xx, int xy, int yx, int yy
 	);
+	void _setCellVisible(int x, int y);
 
 	public:
 	FieldOfView(SDL_Rect visibleArea);
 	void calculate(Map &map, std::shared_ptr<Actor> reference);
-	const std::vector<t_coordinates> &getVisible();
+	std::vector<t_coordinates> getVisible();
 };
 
 #endif
