@@ -17,10 +17,12 @@ rRpg::rRpg() :
 	m_map(Map()),
 	m_mapRenderer(MapRenderer(m_map, m_graphicFactory))
 {
-	m_mapRenderer.setCamera({
+	m_camera = {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
-	});
+	};
+
+	m_mapRenderer.setCamera(m_camera);
 }
 
 rRpg::~rRpg() {}
