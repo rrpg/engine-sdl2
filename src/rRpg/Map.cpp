@@ -87,10 +87,9 @@ void Map::clearDeadActors() {
 }
 
 std::string Map::_getCoordsKey(int x, int y) {
-	char xStr[100], yStr[100];
-	sprintf(xStr, "%d", x);
-	sprintf(yStr, "%d", y);
-	return std::string(xStr) + "-" + std::string(yStr);
+	char key[100];
+	sprintf(key, "%d-%d", x, y);
+	return key;
 }
 
 void Map::setType(E_MapType type) {
