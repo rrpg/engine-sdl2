@@ -119,3 +119,7 @@ std::vector<t_coordinates> FieldOfView::getVisibleCells() {
 	}
 	return visible;
 }
+
+SDL_Rect &FieldOfView::getVisibleArea() {
+	return m_visibleArea;
+}

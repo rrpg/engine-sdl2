@@ -152,7 +152,7 @@ void rRpg::render() {
 	};
 	FieldOfView fov(visibleArea);
 	fov.calculate(m_map, m_hero);
-	m_mapRenderer.render(fov, center);
+	m_mapRenderer.render(fov);
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

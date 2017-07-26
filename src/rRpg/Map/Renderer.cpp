@@ -18,19 +18,8 @@ void MapRenderer::setCamera(SDL_Rect camera) {
 	m_camera = camera;
 }
 
-void MapRenderer::render(FieldOfView &fov, t_coordinates center) {
-	// x,y coords in the grid
-	int cameraWidthGrid = m_camera.w / TILE_WIDTH,
-		cameraHeightGrid = m_camera.h / TILE_HEIGHT;
-
-	SDL_Rect visibleArea = {
-		// portion of the map which is visible
-		center.first - cameraWidthGrid / 2,
-		center.second - cameraHeightGrid / 2,
-		cameraWidthGrid,
-		cameraHeightGrid
-	};
-
+void MapRenderer::render(FieldOfView &fov) {
+	SDL_Rect visibleArea = fov.getVisibleArea();
 	Vector2D shift = {
 		(float) (visibleArea.x * TILE_WIDTH),
 		(float) (visibleArea.y * TILE_HEIGHT)

@@ -22,7 +22,7 @@ class MapRenderer {
 	public:
 	MapRenderer(Map &map, GraphicFactory &graphicFactory);
 	void setCamera(SDL_Rect camera);
-	void render(FieldOfView &fov, t_coordinates center);
+	void render(FieldOfView &fov);
 };
 
 #endif
