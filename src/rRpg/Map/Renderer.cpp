@@ -116,9 +116,6 @@ void MapRenderer::_renderActors(std::vector<t_coordinates> fov, SDL_Rect visible
 			continue;
 		}
 
-		actor->render(
-			displayShiftX,
-			displayShiftY
-		);
+		actor->render(displayShiftX, displayShiftY);
 	}
 }
