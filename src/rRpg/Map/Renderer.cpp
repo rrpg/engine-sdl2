@@ -7,9 +7,6 @@
 #include "GUI/Object.hpp"
 #include "SDL2_framework/Vector2D.h"
 
-#define DISPLAY_TILE_WIDTH 16
-#define DISPLAY_TILE_HEIGHT 16
-
 MapRenderer::MapRenderer(Map &map, GraphicFactory &graphicFactory) :
 	m_map(map),
 	m_graphicFactory(graphicFactory)
@@ -22,8 +19,8 @@ void MapRenderer::setCamera(SDL_Rect camera) {
 
 void MapRenderer::render(std::vector<t_coordinates> fov, t_coordinates center) {
 	// x,y coords in the grid
-	int cameraWidthGrid = m_camera.w / DISPLAY_TILE_WIDTH,
-		cameraHeightGrid = m_camera.h / DISPLAY_TILE_HEIGHT;
+	int cameraWidthGrid = m_camera.w / TILE_WIDTH,
+		cameraHeightGrid = m_camera.h / TILE_HEIGHT;
 
 	SDL_Rect visibleArea = {
 		// portion of the map which is visible
@@ -34,8 +31,8 @@ void MapRenderer::render(std::vector<t_coordinates> fov, t_coordinates center) {
 	};
 
 	Vector2D shift = {
-		(float) (visibleArea.x * DISPLAY_TILE_WIDTH),
-		(float) (visibleArea.y * DISPLAY_TILE_HEIGHT)
+		(float) (visibleArea.x * TILE_WIDTH),
+		(float) (visibleArea.y * TILE_HEIGHT)
 	};
 
 	_renderTerrain(fov, visibleArea, shift);
