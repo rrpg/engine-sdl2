@@ -153,7 +153,7 @@ void rRpg::render() {
 	FieldOfView fov(visibleArea);
 	fov.calculate(m_map, m_hero);
 	m_mapRenderer.render(
-		fov.getVisible(),
+		fov.getVisibleCells(),
 		center
 	);
 	// render HUD

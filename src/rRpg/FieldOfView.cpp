@@ -106,7 +106,7 @@ void FieldOfView::_lightQuadrant(
     }
 }
 
-std::vector<t_coordinates> FieldOfView::getVisible() {
+std::vector<t_coordinates> FieldOfView::getVisibleCells() {
 	long unsigned sizeView = m_vVisibleCells.size();
 	std::vector<t_coordinates> visible = {};
 	for (long unsigned i = 0; i < sizeView; ++i) {
