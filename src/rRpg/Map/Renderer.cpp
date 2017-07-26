@@ -3,6 +3,7 @@
 #include "GUI.hpp"
 #include "Actor.hpp"
 #include "GUI/Factory.hpp"
+#include "FieldOfView.hpp"
 #include "GUI/Terrain.hpp"
 #include "GUI/Object.hpp"
 #include "SDL2_framework/Vector2D.h"
@@ -17,7 +18,7 @@ void MapRenderer::setCamera(SDL_Rect camera) {
 	m_camera = camera;
 }
 
-void MapRenderer::render(std::vector<t_coordinates> fov, t_coordinates center) {
+void MapRenderer::render(FieldOfView &fov, t_coordinates center) {
 	// x,y coords in the grid
 	int cameraWidthGrid = m_camera.w / TILE_WIDTH,
 		cameraHeightGrid = m_camera.h / TILE_HEIGHT;
@@ -40,14 +41,14 @@ void MapRenderer::render(std::vector<t_coordinates> fov, t_coordinates center) {
 	_renderActors(fov, visibleArea, shift);
 }
 
-void MapRenderer::_renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
+void MapRenderer::_renderTerrain(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
 	int displayShiftX = (int) shift.getX() + m_camera.x;
 	int displayShiftY = (int) shift.getY() + m_camera.y;
-	for (auto cell : fov) {
+	for (auto cell : fov.getVisibleCells()) {
 		int x = cell.first,
 			y = cell.second;
 		if (x < visibleArea.x || x > visibleArea.x + visibleArea.w
@@ -69,12 +70,12 @@ void MapRenderer::_renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibl
 	}
 }
 
-void MapRenderer::_renderObjects(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
+void MapRenderer::_renderObjects(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift) {
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
-	for (auto cell : fov) {
+	for (auto cell : fov.getVisibleCells()) {
 		int x = cell.first,
 			y = cell.second;
 
@@ -98,10 +99,10 @@ void MapRenderer::_renderObjects(std::vector<t_coordinates> fov, SDL_Rect visibl
 	}
 }
 
-void MapRenderer::_renderActors(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift) {
+void MapRenderer::_renderActors(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift) {
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
-	for (auto cell : fov) {
+	for (auto cell : fov.getVisibleCells()) {
 		int x = cell.first,
 			y = cell.second;
 
