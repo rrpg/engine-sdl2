@@ -38,10 +38,11 @@ void MapRenderer::_renderTerrain(FieldOfView &fov, SDL_Rect visibleArea, Vector2
 	int displayShiftX = (int) shift.getX() + m_camera.x;
 	int displayShiftY = (int) shift.getY() + m_camera.y;
 	for (auto cell : fov.getVisibleCells()) {
-		int x = cell.first,
-			y = cell.second;
+		int x = cell.first.first,
+			y = cell.first.second;
 		if (x < visibleArea.x || x > visibleArea.x + visibleArea.w
 			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
+			|| !cell.second
 		) {
 			continue;
 		}
@@ -65,13 +66,14 @@ void MapRenderer::_renderObjects(FieldOfView &fov, SDL_Rect visibleArea, Vector2
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
 	for (auto cell : fov.getVisibleCells()) {
-		int x = cell.first,
-			y = cell.second;
+		int x = cell.first.first,
+			y = cell.first.second;
 
 		E_Object *object = m_map.getObjectAt(x, y);
 		if (object == NULL
 			|| x < visibleArea.x || x > visibleArea.x + visibleArea.w
 			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
+			|| !cell.second
 		) {
 			continue;
 		}
@@ -83,7 +85,7 @@ void MapRenderer::_renderObjects(FieldOfView &fov, SDL_Rect visibleArea, Vector2
 			displayShiftX,
 			displayShiftY,
 			objectData,
-			cell
+			cell.first
 		);
 	}
 }
@@ -92,13 +94,14 @@ void MapRenderer::_renderActors(FieldOfView &fov, SDL_Rect visibleArea, Vector2D
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
 	for (auto cell : fov.getVisibleCells()) {
-		int x = cell.first,
-			y = cell.second;
+		int x = cell.first.first,
+			y = cell.first.second;
 
 		std::shared_ptr<Actor> actor = m_map.getActorAt(x, y);
 		if (actor == NULL
 			|| x < visibleArea.x || x > visibleArea.x + visibleArea.w
 			|| y < visibleArea.y || y > visibleArea.y + visibleArea.h
+			|| !cell.second
 		) {
 			continue;
 		}

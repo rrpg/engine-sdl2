@@ -106,16 +106,15 @@ void FieldOfView::_lightQuadrant(
     }
 }
 
-std::vector<t_coordinates> FieldOfView::getVisibleCells() {
+std::vector<std::pair<t_coordinates, char>> FieldOfView::getVisibleCells() {
 	long unsigned sizeView = m_vVisibleCells.size();
-	std::vector<t_coordinates> visible = {};
+	std::vector<std::pair<t_coordinates, char>> visible = {};
 	for (long unsigned i = 0; i < sizeView; ++i) {
-		if (m_vVisibleCells[i]) {
-			visible.push_back({
-				(long unsigned) m_visibleArea.x + i % (long unsigned) m_visibleArea.w,
-				(long unsigned) m_visibleArea.y + i / (long unsigned) m_visibleArea.w
-			});
-		}
+		t_coordinates coords = {
+			(long unsigned) m_visibleArea.x + i % (long unsigned) m_visibleArea.w,
+			(long unsigned) m_visibleArea.y + i / (long unsigned) m_visibleArea.w
+		};
+		visible.push_back(std::make_pair(coords, m_vVisibleCells[i]));
 	}
 	return visible;
 }
