@@ -233,9 +233,9 @@ void Map::addActor(std::shared_ptr<Actor> actor) {
 int Map::_getSameNeighbours(int x, int y) {
 	E_TerrainType type = getTile(x, y);
 	int nbNeighbours = (y == 0 || getTile(x, y - 1) == type) // north
-		+ 2 * (x == 0 || getTile(x - 1, y) == type) // west
-		+ (1 << 2) * (x == m_iWidth - 1 || getTile(x + 1, y) == type) // east
-		+ (1 << 3) * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
+		+ NEIGHBOUR_WEST * (x == 0 || getTile(x - 1, y) == type) // west
+		+ NEIGHBOUR_EAST * (x == m_iWidth - 1 || getTile(x + 1, y) == type) // east
+		+ NEIGHBOUR_SOUTH * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
 
 	return nbNeighbours;
 }
