@@ -20,6 +20,7 @@ class FieldOfView {
 		double startSlope, double endSlope,
 		int xx, int xy, int yx, int yy
 	);
+	long unsigned _getRelativeIndex(int x, int y);
 	void _setCellVisible(int x, int y);
 
 	public:

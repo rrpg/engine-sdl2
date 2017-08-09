@@ -16,11 +16,14 @@ static int multipliers[4][8] = {
 FieldOfView::FieldOfView(SDL_Rect visibleArea) : m_visibleArea(visibleArea) {
 }
 
-void FieldOfView::_setCellVisible(int x, int y) {
+long unsigned FieldOfView::_getRelativeIndex(int x, int y) {
 	int relativeX = x - m_visibleArea.x,
 		relativeY = y - m_visibleArea.y;
-	long unsigned cellRelativeIndex = (long unsigned) (relativeY * m_visibleArea.w + relativeX);
-	m_vVisibleCells[cellRelativeIndex] = 1;
+	return (long unsigned) (relativeY * m_visibleArea.w + relativeX);
+}
+
+void FieldOfView::_setCellVisible(int x, int y) {
+	m_vVisibleCells[_getRelativeIndex(x, y)] = 1;
 }
 
 void FieldOfView::calculate(Map &map, std::shared_ptr<Actor> reference) {
