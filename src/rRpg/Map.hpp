@@ -87,7 +87,7 @@ class Map {
 
 	E_TerrainType getTile(int x, int y);
 	size_t getTileIndex(int x, int y);
-	S_TileData getTerrainTileData(int x, int y);
+	S_TileData getTerrainTileData(int visibleNeighbours, int x, int y);
 	void addActor(std::shared_ptr<Actor> actor);
 	std::unordered_map<std::string, std::shared_ptr<Actor>> &getActors();
 	std::shared_ptr<Actor> getActorAt(int x, int y);

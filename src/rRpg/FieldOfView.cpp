@@ -26,6 +26,10 @@ void FieldOfView::_setCellVisible(int x, int y) {
 	m_vVisibleCells[_getRelativeIndex(x, y)] = 1;
 }
 
+bool FieldOfView::isVisible(int x, int y) {
+	return m_vVisibleCells[_getRelativeIndex(x, y)] == 1;
+}
+
 void FieldOfView::calculate(Map &map, std::shared_ptr<Actor> reference) {
 	m_vVisibleCells.clear();
 	long unsigned sizeView = (unsigned) (m_visibleArea.w * m_visibleArea.h);

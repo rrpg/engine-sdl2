@@ -47,7 +47,8 @@ void MapRenderer::_renderTerrain(FieldOfView &fov, SDL_Rect visibleArea, Vector2
 			continue;
 		}
 
-		S_TileData tileData = m_map.getTerrainTileData(x, y);
+		int mask = _getMaskVisibleNeighbours(fov, x, y);
+		S_TileData tileData = m_map.getTerrainTileData(mask, x, y);
 		t_coordinates position = {x, y};
 		m_graphicFactory.getGraphicTerrain()->render(
 			manager,
@@ -58,6 +59,17 @@ void MapRenderer::_renderTerrain(FieldOfView &fov, SDL_Rect visibleArea, Vector2
 			position
 		);
 	}
+}
+
+int MapRenderer::_getMaskVisibleNeighbours(FieldOfView &fov, int x, int y) {
+	int width = fov.getVisibleArea().w,
+		height = fov.getVisibleArea().h;
+	int nbNeighbours = (y == 0 || !fov.isVisible(x, y - 1)) // north
+		+ NEIGHBOUR_WEST * (x == 0 || !fov.isVisible(x - 1, y)) // west
+		+ NEIGHBOUR_EAST * (x == width - 1 || !fov.isVisible(x + 1, y)) // east
+		+ NEIGHBOUR_SOUTH * (y == height - 1 || !fov.isVisible(x, y + 1)); // south
+
+	return nbNeighbours;
 }
 
 void MapRenderer::_renderObjects(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift) {

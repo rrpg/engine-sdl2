@@ -131,13 +131,13 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-S_TileData Map::getTerrainTileData(int x, int y) {
+S_TileData Map::getTerrainTileData(int visibleNeighbours, int x, int y) {
 	E_TerrainType type = getTile(x, y);
 	Terrain *terrain = _getTerrain(type);
 	E_TerrainTile tile = Terrain::getTerrainTile(
 		type,
 		terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
-			15 : _getSameNeighbours(x, y)
+			15 : _getSameNeighbours(x, y) | visibleNeighbours
 	);
 	if (m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
