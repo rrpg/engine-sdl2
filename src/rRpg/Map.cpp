@@ -87,10 +87,9 @@ void Map::clearDeadActors() {
 }
 
 std::string Map::_getCoordsKey(int x, int y) {
-	char xStr[100], yStr[100];
-	sprintf(xStr, "%d", x);
-	sprintf(yStr, "%d", y);
-	return std::string(xStr) + "-" + std::string(yStr);
+	char key[100];
+	sprintf(key, "%d-%d", x, y);
+	return key;
 }
 
 void Map::setType(E_MapType type) {
@@ -132,13 +131,13 @@ Terrain *Map::_getTerrain(E_TerrainType type) {
 	return m_mTerrains[type];
 }
 
-S_TileData Map::getTerrainTileData(int x, int y) {
+S_TileData Map::getTerrainTileData(int visibleNeighbours, int x, int y) {
 	E_TerrainType type = getTile(x, y);
 	Terrain *terrain = _getTerrain(type);
 	E_TerrainTile tile = Terrain::getTerrainTile(
 		type,
 		terrain->hasFlag(Terrain::TERRAIN_FLAG_BASE) ?
-			15 : _getSameNeighbours(x, y)
+			15 : _getSameNeighbours(x, y) | visibleNeighbours
 	);
 	if (m_mTerrainsTileData.find(tile) == m_mTerrainsTileData.end()) {
 		S_TileData tileData;
@@ -234,9 +233,9 @@ void Map::addActor(std::shared_ptr<Actor> actor) {
 int Map::_getSameNeighbours(int x, int y) {
 	E_TerrainType type = getTile(x, y);
 	int nbNeighbours = (y == 0 || getTile(x, y - 1) == type) // north
-		+ 2 * (x == 0 || getTile(x - 1, y) == type) // west
-		+ (1 << 2) * (x == m_iWidth - 1 || getTile(x + 1, y) == type) // east
-		+ (1 << 3) * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
+		+ NEIGHBOUR_WEST * (x == 0 || getTile(x - 1, y) == type) // west
+		+ NEIGHBOUR_EAST * (x == m_iWidth - 1 || getTile(x + 1, y) == type) // east
+		+ NEIGHBOUR_SOUTH * (y == m_iHeight - 1 || getTile(x, y + 1) == type); // south
 
 	return nbNeighbours;
 }

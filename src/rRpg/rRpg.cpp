@@ -2,6 +2,7 @@
 #include "globals.hpp"
 #include "FieldOfView.hpp"
 #include "HUD.hpp"
+#include "GUI.hpp"
 #include "Map/Manager.hpp"
 #include "Map/Renderer.hpp"
 #include "Actor.hpp"
@@ -17,10 +18,12 @@ rRpg::rRpg() :
 	m_map(Map()),
 	m_mapRenderer(MapRenderer(m_map, m_graphicFactory))
 {
-	m_mapRenderer.setCamera({
+	m_camera = {
 		0, 0,
 		Game::Instance()->getScreenWidth(), Game::Instance()->getScreenHeight()
-	});
+	};
+
+	m_mapRenderer.setCamera(m_camera);
 }
 
 rRpg::~rRpg() {}
@@ -135,13 +138,21 @@ void rRpg::update() {
 }
 
 void rRpg::render() {
-	FieldOfView fov;
-	fov.calculate(m_map, m_hero);
 	t_coordinates center = {m_hero->getX(), m_hero->getY()};
-	m_mapRenderer.render(
-		fov.getVisible(),
-		center
-	);
+	// x,y coords in the grid
+	int cameraWidthGrid = m_camera.w / TILE_WIDTH,
+		cameraHeightGrid = m_camera.h / TILE_HEIGHT;
+
+	SDL_Rect visibleArea = {
+		// portion of the map which is visible
+		center.first - cameraWidthGrid / 2,
+		center.second - cameraHeightGrid / 2,
+		cameraWidthGrid,
+		cameraHeightGrid
+	};
+	FieldOfView fov(visibleArea);
+	fov.calculate(m_map, m_hero);
+	m_mapRenderer.render(fov);
 	// render HUD
 	HUD::render(Game::Instance(), m_hero);
 }

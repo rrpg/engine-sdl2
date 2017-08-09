@@ -19,6 +19,11 @@ class Vector2D;
 const int WALKABLE_CONSTRAINT_ACTOR_IS_BLOCKING = 0x1;
 const int WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION = 0x2;
 
+const int NEIGHBOUR_NORTH = 1;
+const int NEIGHBOUR_WEST = 2;
+const int NEIGHBOUR_EAST = 4;
+const int NEIGHBOUR_SOUTH = 8;
+
 class Map {
 	private:
 	static MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> s_mEnemiesPerMapType;
@@ -82,7 +87,7 @@ class Map {
 
 	E_TerrainType getTile(int x, int y);
 	size_t getTileIndex(int x, int y);
-	S_TileData getTerrainTileData(int x, int y);
+	S_TileData getTerrainTileData(int visibleNeighbours, int x, int y);
 	void addActor(std::shared_ptr<Actor> actor);
 	std::unordered_map<std::string, std::shared_ptr<Actor>> &getActors();
 	std::shared_ptr<Actor> getActorAt(int x, int y);

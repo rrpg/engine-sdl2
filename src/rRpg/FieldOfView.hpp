@@ -4,13 +4,15 @@
 #include "types.hpp"
 #include <vector>
 #include <memory>
+#include <SDL2/SDL.h>
 
 class Actor;
 class Map;
 
 class FieldOfView {
 	private:
-	std::vector<t_coordinates> m_vVisibleCells = {};
+	std::vector<int> m_vVisibleCells = {};
+	SDL_Rect m_visibleArea;
 
 	void _lightQuadrant(
 		Map &map,
@@ -18,10 +20,15 @@ class FieldOfView {
 		double startSlope, double endSlope,
 		int xx, int xy, int yx, int yy
 	);
+	long unsigned _getRelativeIndex(int x, int y);
+	void _setCellVisible(int x, int y);
 
 	public:
+	FieldOfView(SDL_Rect visibleArea);
 	void calculate(Map &map, std::shared_ptr<Actor> reference);
-	const std::vector<t_coordinates> &getVisible();
+	std::vector<std::pair<t_coordinates, char>> getVisibleCells();
+	SDL_Rect &getVisibleArea();
+	bool isVisible(int x, int y);
 };
 
 #endif

@@ -7,6 +7,7 @@
 
 class Map;
 class Vector2D;
+class FieldOfView;
 
 class MapRenderer {
 	private:
@@ -14,14 +15,15 @@ class MapRenderer {
 	Map &m_map;
 	GraphicFactory &m_graphicFactory;
 
-	void _renderTerrain(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
-	void _renderObjects(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
-	void _renderActors(std::vector<t_coordinates> fov, SDL_Rect visibleArea, Vector2D shift);
+	void _renderTerrain(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift);
+	void _renderObjects(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift);
+	void _renderActors(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift);
+	int _getMaskVisibleNeighbours(FieldOfView &fov, int x, int y);
 
 	public:
 	MapRenderer(Map &map, GraphicFactory &graphicFactory);
 	void setCamera(SDL_Rect camera);
-	void render(std::vector<t_coordinates> fov, t_coordinates center);
+	void render(FieldOfView &fov);
 };
 
 #endif
