@@ -87,6 +87,11 @@ void FieldOfView::_lightQuadrant(
                 continue;
             }
 
+#ifdef __DEBUG__
+			_setCellVisible(ax, ay);
+			continue;
+#endif
+
             int radius2 = SQ_PLAYER_DEPTH_OF_VIEW;
             if ((int) (dx * dx + dy * dy) < radius2) {
 				_setCellVisible(ax, ay);
