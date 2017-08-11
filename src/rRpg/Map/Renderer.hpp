@@ -15,9 +15,9 @@ class MapRenderer {
 	Map &m_map;
 	GraphicFactory &m_graphicFactory;
 
-	void _renderTerrain(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift);
-	void _renderObjects(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift);
-	void _renderActors(FieldOfView &fov, SDL_Rect visibleArea, Vector2D shift);
+	void _renderTerrain(FieldOfView &fov, Vector2D shift);
+	void _renderObjects(FieldOfView &fov, Vector2D shift);
+	void _renderActors(FieldOfView &fov, Vector2D shift);
 	int _getMaskVisibleNeighbours(FieldOfView &fov, int x, int y);
 
 	public:
