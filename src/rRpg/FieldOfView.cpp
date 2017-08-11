@@ -1,9 +1,9 @@
 #include "FieldOfView.hpp"
+#include <algorithm>
 #include "Actor.hpp"
 #include "Map.hpp"
 
 #define PLAYER_DEPTH_OF_VIEW 12
-#define SQ_PLAYER_DEPTH_OF_VIEW 144
 
 // Those define the 8 quadrants of a 360 degrees field of vision
 static int multipliers[4][8] = {
@@ -64,7 +64,10 @@ void FieldOfView::_lightQuadrant(
 		return;
 	}
 	double nextStartSlope = startSlope;
-	for (int i = row; i <= PLAYER_DEPTH_OF_VIEW; i++) {
+	// min(m_visibleArea.w, m_visibleArea.h, PLAYER_DEPTH_OF_VIEW)
+	int depth = std::min(PLAYER_DEPTH_OF_VIEW, std::min(m_visibleArea.w, m_visibleArea.h));
+	int radius2 = depth * depth;
+	for (int i = row; i <= depth; i++) {
 		bool blocked = false;
 		for (int dx = -i, dy = -i; dx <= 0; dx++) {
 			double lSlope = (dx - 0.5) / (dy + 0.5);
@@ -92,7 +95,6 @@ void FieldOfView::_lightQuadrant(
 			continue;
 #endif
 
-			int radius2 = SQ_PLAYER_DEPTH_OF_VIEW;
 			if ((int) (dx * dx + dy * dy) < radius2) {
 				_setCellVisible(ax, ay);
 			}
