@@ -8,6 +8,8 @@
 class Map;
 class Vector2D;
 class FieldOfView;
+class TextureManager;
+class Game;
 
 class MapRenderer {
 	private:
@@ -15,9 +17,9 @@ class MapRenderer {
 	Map &m_map;
 	GraphicFactory &m_graphicFactory;
 
-	void _renderTerrain(FieldOfView &fov, Vector2D shift);
-	void _renderObjects(FieldOfView &fov, Vector2D shift);
-	void _renderActors(FieldOfView &fov, Vector2D shift);
+	void _renderTerrain(TextureManager *manager, Game *game, FieldOfView &fov, int displayShiftX, int displayShiftY, int x, int y);
+	void _renderObjects(TextureManager *manager, Game *game, int displayShiftX, int displayShiftY, int x, int y);
+	void _renderActors(int displayShiftX, int displayShiftY, int x, int y);
 	int _getMaskVisibleNeighbours(FieldOfView &fov, int x, int y);
 
 	public:

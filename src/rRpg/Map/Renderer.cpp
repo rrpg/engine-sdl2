@@ -25,12 +25,6 @@ void MapRenderer::render(FieldOfView &fov) {
 		(float) (visibleArea.y * TILE_HEIGHT)
 	};
 
-	_renderTerrain(fov, shift);
-	_renderObjects(fov, shift);
-	_renderActors(fov, shift);
-}
-
-void MapRenderer::_renderTerrain(FieldOfView &fov, Vector2D shift) {
 	// camera is in pixels in the window
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
@@ -38,24 +32,35 @@ void MapRenderer::_renderTerrain(FieldOfView &fov, Vector2D shift) {
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
 	for (auto cell : fov.getVisibleCells()) {
-		int x = cell.first.first,
-			y = cell.first.second;
 		if (!cell.second) {
 			continue;
 		}
 
-		int mask = _getMaskVisibleNeighbours(fov, x, y);
-		S_TileData tileData = m_map.getTerrainTileData(mask, x, y);
-		t_coordinates position = {x, y};
-		m_graphicFactory.getGraphicTerrain()->render(
-			manager,
-			game,
-			displayShiftX,
-			displayShiftY,
-			tileData,
-			position
-		);
+		int x = cell.first.first,
+			y = cell.first.second;
+		_renderTerrain(manager, game, fov, displayShiftX, displayShiftY, x, y);
+		_renderObjects(manager, game, displayShiftX, displayShiftY, x, y);
+		_renderActors(displayShiftX, displayShiftY, x, y);
 	}
+}
+
+void MapRenderer::_renderTerrain(
+	TextureManager *manager, Game *game,
+	FieldOfView &fov,
+	int displayShiftX, int displayShiftY,
+	int x, int y
+) {
+	int mask = _getMaskVisibleNeighbours(fov, x, y);
+	S_TileData tileData = m_map.getTerrainTileData(mask, x, y);
+	t_coordinates position = {x, y};
+	m_graphicFactory.getGraphicTerrain()->render(
+		manager,
+		game,
+		displayShiftX,
+		displayShiftY,
+		tileData,
+		position
+	);
 }
 
 int MapRenderer::_getMaskVisibleNeighbours(FieldOfView &fov, int x, int y) {
@@ -69,44 +74,33 @@ int MapRenderer::_getMaskVisibleNeighbours(FieldOfView &fov, int x, int y) {
 	return nbNeighbours;
 }
 
-void MapRenderer::_renderObjects(FieldOfView &fov, Vector2D shift) {
-	TextureManager *manager = TextureManager::Instance();
-	Game *game = Game::Instance();
-	int displayShiftX = m_camera.x - (int) shift.getX();
-	int displayShiftY = m_camera.y - (int) shift.getY();
-	for (auto cell : fov.getVisibleCells()) {
-		int x = cell.first.first,
-			y = cell.first.second;
-
-		E_Object *object = m_map.getObjectAt(x, y);
-		if (object == NULL || !cell.second) {
-			continue;
-		}
-
-		S_ObjectData objectData = m_map.getObjectData(*object);
-		m_graphicFactory.getGraphicObject()->render(
-			manager,
-			game,
-			displayShiftX,
-			displayShiftY,
-			objectData,
-			cell.first
-		);
+void MapRenderer::_renderObjects(
+	TextureManager *manager, Game *game,
+	int displayShiftX, int displayShiftY,
+	int x, int y
+) {
+	E_Object *object = m_map.getObjectAt(x, y);
+	if (object == NULL) {
+		return;
 	}
+
+	S_ObjectData objectData = m_map.getObjectData(*object);
+	t_coordinates position = {x, y};
+	m_graphicFactory.getGraphicObject()->render(
+		manager,
+		game,
+		displayShiftX,
+		displayShiftY,
+		objectData,
+		position
+	);
 }
 
-void MapRenderer::_renderActors(FieldOfView &fov, Vector2D shift) {
-	int displayShiftX = m_camera.x - (int) shift.getX();
-	int displayShiftY = m_camera.y - (int) shift.getY();
-	for (auto cell : fov.getVisibleCells()) {
-		int x = cell.first.first,
-			y = cell.first.second;
-
-		std::shared_ptr<Actor> actor = m_map.getActorAt(x, y);
-		if (actor == NULL || !cell.second) {
-			continue;
-		}
-
-		actor->render(displayShiftX, displayShiftY);
+void MapRenderer::_renderActors(int displayShiftX, int displayShiftY, int x, int y) {
+	std::shared_ptr<Actor> actor = m_map.getActorAt(x, y);
+	if (actor == NULL) {
+		return;
 	}
+
+	actor->render(displayShiftX, displayShiftY);
 }
