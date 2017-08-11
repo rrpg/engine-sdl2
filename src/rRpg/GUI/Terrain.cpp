@@ -10,8 +10,8 @@ void GraphicTerrain::render(
 	S_TileData tileData,
 	t_coordinates tilePosition
 ) {
-	int xScreen = tilePosition.first * tileData.width - displayShiftX,
-		yScreen = tilePosition.second * tileData.height - displayShiftY;
+	int xScreen = tilePosition.first * tileData.width + displayShiftX,
+		yScreen = tilePosition.second * tileData.height + displayShiftY;
 
 	// the rows are 1 based, and the columns are 0 based, which is
 	// stupid
