@@ -35,8 +35,8 @@ void MapRenderer::_renderTerrain(FieldOfView &fov, Vector2D shift) {
 	TextureManager *manager = TextureManager::Instance();
 	Game *game = Game::Instance();
 
-	int displayShiftX = (int) shift.getX() + m_camera.x;
-	int displayShiftY = (int) shift.getY() + m_camera.y;
+	int displayShiftX = m_camera.x - (int) shift.getX();
+	int displayShiftY = m_camera.y - (int) shift.getY();
 	for (auto cell : fov.getVisibleCells()) {
 		int x = cell.first.first,
 			y = cell.first.second;
