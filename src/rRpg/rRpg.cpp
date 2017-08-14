@@ -16,7 +16,8 @@ rRpg::rRpg() :
 	m_graphicFactory(GraphicFactory()),
 	m_actorFactory(ActorFactory(m_graphicFactory)),
 	m_map(Map()),
-	m_mapRenderer(MapRenderer(m_map, m_graphicFactory))
+	m_mapRenderer(MapRenderer(m_map, m_graphicFactory)),
+	m_camera()
 {
 	m_camera = {
 		0, 0,
