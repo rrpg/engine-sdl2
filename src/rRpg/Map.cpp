@@ -2,6 +2,8 @@
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
 #include <algorithm>
+#include <sstream>
+#include <string>
 #include "SDL2_framework/Game.h"
 
 MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>> Map::s_mEnemiesPerMapType = MyUnorderedMap<E_MapType, std::vector<S_EnemyProbability>>({});
@@ -43,11 +45,14 @@ void Map::clear() {
 }
 
 std::string Map::getKeyName(std::string name, int level) {
+	std::ostringstream os;
 	if (name == "" || level == -1) {
-		return m_sName + "-" + std::to_string(m_iLevel);
+		os << m_iLevel;
+		return m_sName + "-" + os.str();
 	}
 	else {
-		return name + "-" + std::to_string(level);
+		os << level;
+		return name + "-" + os.str();
 	}
 }
 
