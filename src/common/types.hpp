@@ -59,11 +59,6 @@ struct S_MapChangeEventData {
 	int mapLevel;
 };
 
-enum E_Object {
-	OBJECT_STAIR_UP,
-	OBJECT_STAIR_DOWN
-};
-
 // int is the perthousand of chance of encounter
 struct S_EnemyProbability {
 	E_ActorRaces race;
