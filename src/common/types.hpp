@@ -48,20 +48,19 @@ struct S_ActorRaceData {
 	int spriteY;
 };
 
+
+const unsigned int OBJECT_FLAG_WALKABLE = 1 << 0;
+const unsigned int OBJECT_FLAG_PICKABLE = 1 << 1;
 struct S_ObjectData {
 	char tileset[MAX_LENGTH_TILESET_NAME];
 	int spriteX;
 	int spriteY;
+	unsigned int flags;
 };
 
 struct S_MapChangeEventData {
 	char mapName[MAX_LENGTH_MAP_NAME];
 	int mapLevel;
-};
-
-enum E_Object {
-	OBJECT_STAIR_UP,
-	OBJECT_STAIR_DOWN
 };
 
 // int is the perthousand of chance of encounter

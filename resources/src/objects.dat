@@ -1,6 +1,6 @@
 # format:
-# tileName x y
+# tileName x y flags
 # OBJECT_STAIR_UP
-floorTiles 5 3
+floorTiles 5 3 1
 # OBJECT_STAIR_DOWN
-floorTiles 7 3
+floorTiles 7 3 1
