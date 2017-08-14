@@ -11,6 +11,8 @@ template <class resourceType> class ResourceManager {
 	std::map<int, resourceType> m_mResources = {};
 	std::ifstream m_resourceFile;
 
+	void _clean();
+
 	public:
 	ResourceManager();
 	ResourceManager(const ResourceManager &r);

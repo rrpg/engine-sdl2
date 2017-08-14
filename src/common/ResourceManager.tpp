@@ -1,18 +1,23 @@
 template <class resourceType>
 ResourceManager<resourceType>::ResourceManager() :
-	m_resourceFile(std::ifstream())
+	m_resourceFile()
 {
 }
 
 template <class resourceType>
 ResourceManager<resourceType>::ResourceManager(const ResourceManager &r) :
 	m_mResources(r.m_mResources),
-	m_resourceFile(std::ifstream())
+	m_resourceFile()
 {
 }
 
 template <class resourceType>
 ResourceManager<resourceType>::~ResourceManager() {
+	_clean();
+}
+
+template <class resourceType>
+void ResourceManager<resourceType>::_clean() {
 	if (m_resourceFile.is_open()) {
 		m_resourceFile.close();
 	}
@@ -20,7 +25,8 @@ ResourceManager<resourceType>::~ResourceManager() {
 
 template <class resourceType>
 bool ResourceManager<resourceType>::setResourceFile(std::string resourceFile) {
-	m_resourceFile = std::ifstream(resourceFile, std::ios::binary);
+	_clean();
+	m_resourceFile.open(resourceFile, std::ios::binary);
 	return m_resourceFile.is_open();
 }
 
