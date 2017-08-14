@@ -108,7 +108,7 @@ bool readRaceLine(char line[MAX_CHARS_PER_LINE], S_ActorRaceData &data) {
 bool readObjectLine(char line[MAX_CHARS_PER_LINE], S_ObjectData &data) {
 	int result = sscanf(
 		line,
-		"%s %d %d\n",
-		data.tileset, &data.spriteX, &data.spriteY);
-	return result == 3;
+		"%s %d %d %u\n",
+		data.tileset, &data.spriteX, &data.spriteY, &data.flags);
+	return result == 4;
 }

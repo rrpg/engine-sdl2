@@ -48,10 +48,14 @@ struct S_ActorRaceData {
 	int spriteY;
 };
 
+
+const unsigned int OBJECT_FLAG_WALKABLE = 1 << 0;
+const unsigned int OBJECT_FLAG_PICKABLE = 1 << 1;
 struct S_ObjectData {
 	char tileset[MAX_LENGTH_TILESET_NAME];
 	int spriteX;
 	int spriteY;
+	unsigned int flags;
 };
 
 struct S_MapChangeEventData {
