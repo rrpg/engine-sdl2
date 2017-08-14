@@ -63,7 +63,11 @@ int main(int argc, char* args[]) {
 
 void _prepareTilesets(std::string binaryPath, Game *g) {
 	ResourceManager<S_TilesetMapping> resourceManager;
-	resourceManager.setResourceFile(binaryPath + "/../resources/tilesets.dat");
+	if (!resourceManager.setResourceFile(binaryPath + "/../resources/tilesets.dat")) {
+		std::cout << "Error parsing the tilesets resource file\n";
+		return;
+	}
+
 	resourceManager.parseBinaryFile();
 	for (auto tileset : resourceManager.getParsedResources()) {
 		std::cout << "Resource found: "
