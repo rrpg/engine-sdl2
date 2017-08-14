@@ -220,7 +220,7 @@ void MapGenerator::_setStartPoint() {
 	int x = (rand() % m_map.getWidth()),
 		y = (rand() % m_map.getHeight());
 	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-	_findClosestWalkableCell(x, y, visited, x, y);
+	_findClosestCell(x, y, visited, x, y);
 	m_map.setStartPoint((float) x, (float) y);
 	_addStair(STAIR_UP, x, y);
 }
@@ -245,7 +245,7 @@ std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(const int x, co
 	return neighbours;
 }
 
-bool MapGenerator::_findClosestWalkableCell(
+bool MapGenerator::_findClosestCell(
 	const int x,
 	const int y,
 	std::vector<bool> &visited,
@@ -269,10 +269,10 @@ bool MapGenerator::_findClosestWalkableCell(
 		return true;
 	}
 
-	return _findClosestWalkableCell(x + 1, y, visited, xOut, yOut)
-		|| _findClosestWalkableCell(x - 1, y, visited, xOut, yOut)
-		|| _findClosestWalkableCell(x, y + 1, visited, xOut, yOut)
-		|| _findClosestWalkableCell(x, y - 1, visited, xOut, yOut);
+	return _findClosestCell(x + 1, y, visited, xOut, yOut)
+		|| _findClosestCell(x - 1, y, visited, xOut, yOut)
+		|| _findClosestCell(x, y + 1, visited, xOut, yOut)
+		|| _findClosestCell(x, y - 1, visited, xOut, yOut);
 }
 
 void MapGenerator::_dispatchEnemies(const int nbMaxEnemies) {
@@ -281,7 +281,7 @@ void MapGenerator::_dispatchEnemies(const int nbMaxEnemies) {
 			y = rand() % m_map.getHeight();
 
 		std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-		_findClosestWalkableCell(x, y, visited, x, y);
+		_findClosestCell(x, y, visited, x, y);
 		m_map.addEnemySpawnableCell((char) x, (char) y);
 	}
 }
@@ -295,7 +295,7 @@ void MapGenerator::_addStair(int direction, int x, int y) {
 		x = rand() % m_map.getWidth();
 		y = rand() % m_map.getHeight();
 		std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-		_findClosestWalkableCell(x, y, visited, x, y);
+		_findClosestCell(x, y, visited, x, y);
 	}
 
 	S_MapChangeEventData event;

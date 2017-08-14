@@ -22,7 +22,7 @@ class MapGenerator {
 	int _getCountAliveNeighbours(int i, int j, E_TerrainType aliveType);
 	void _setStartPoint();
 	std::vector<t_coordinates> _findWalkableNeighbours(const int x, const int y);
-	bool _findClosestWalkableCell(
+	bool _findClosestCell(
 		const int x,
 		const int y,
 		std::vector<bool> &visited,
