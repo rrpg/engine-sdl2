@@ -268,6 +268,14 @@ bool Map::isCellWalkable(int x, int y, unsigned int walkableConstraint) {
 		);
 		isWalkable &= spawnableCell == m_vEnemySpawnableCells.end();
 	}
+
+	//test if there is a non walkable object here
+	E_Object *object = getObjectAt(x, y);
+	if (object != NULL) {
+		S_ObjectData data = getObjectData(*object);
+		isWalkable &= data.flags & OBJECT_FLAG_WALKABLE;
+	}
+
 	return isWalkable;
 }
 
