@@ -21,8 +21,9 @@ class MapGenerator {
 	size_t _digBetweenRooms(CaveRoom::S_RoomCollection &roomCollection, size_t cell1Index, size_t cell2Index);
 	int _getCountAliveNeighbours(int i, int j, E_TerrainType aliveType);
 	void _setStartPoint();
-	std::vector<t_coordinates> _findWalkableNeighbours(const int x, const int y);
+	unsigned int _findWalkableMask(const int x, const int y, std::vector<std::pair<int, int>> &neighbours);
 	bool _findClosestCell(
+		unsigned int constraint,
 		const int x,
 		const int y,
 		std::vector<bool> &visited,

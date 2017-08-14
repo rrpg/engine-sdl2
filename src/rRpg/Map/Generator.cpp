@@ -9,6 +9,9 @@
 
 #define CAVE_MAX_LEVEL 10
 
+const unsigned int CURRENT_CELL_IS_WALKABLE = CURRENT_CELL;
+const unsigned int CURRENT_CELL_IS_RIM = NEIGHBOUR_NORTH | NEIGHBOUR_SOUTH | NEIGHBOUR_EAST | NEIGHBOUR_WEST;
+
 MapGenerator::MapGenerator(Map &map) : m_map(map) {
 }
 
@@ -220,32 +223,37 @@ void MapGenerator::_setStartPoint() {
 	int x = (rand() % m_map.getWidth()),
 		y = (rand() % m_map.getHeight());
 	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-	_findClosestCell(x, y, visited, x, y);
+	_findClosestCell(CURRENT_CELL_IS_WALKABLE | CURRENT_CELL_IS_RIM, x, y, visited, x, y);
 	m_map.setStartPoint((float) x, (float) y);
 	_addStair(STAIR_UP, x, y);
 }
 
-std::vector<t_coordinates> MapGenerator::_findWalkableNeighbours(const int x, const int y) {
-	int neighbourDirections[][2] = {
-		{-1, 0},
-		{1, 0},
-		{0, -1},
-		{0, 1}
+unsigned int MapGenerator::_findWalkableMask(const int x, const int y, std::vector<std::pair<int, int>> &neighbours) {
+	int neighbourDirections[][3] = {
+		{CURRENT_CELL, 0, 0},
+		{NEIGHBOUR_WEST, -1, 0},
+		{NEIGHBOUR_EAST, 1, 0},
+		{NEIGHBOUR_NORTH, 0, -1},
+		{NEIGHBOUR_SOUTH, 0, 1}
 	};
 
-	std::vector<t_coordinates> neighbours = {};
-	for (int n = 0; n < 4; ++n) {
-		int xN = x + neighbourDirections[n][0],
-			yN = y + neighbourDirections[n][1];
+	unsigned int walkableNeighbours = 0;
+	for (int n = 0; n < 5; ++n) {
+		int xN = x + neighbourDirections[n][1],
+			yN = y + neighbourDirections[n][2];
 		if (m_map.isCellWalkable(xN, yN, WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION)) {
+			walkableNeighbours |= (unsigned) neighbourDirections[n][0];
 			neighbours.push_back(std::make_pair(xN, yN));
 		}
 	}
 
-	return neighbours;
+	return walkableNeighbours;
 }
 
+// constraint is a bit mask where the bit to 1 are those of the walkable
+// neighbours (and/or current cell if the current cell is walkable)
 bool MapGenerator::_findClosestCell(
+	unsigned int constraint,
 	const int x,
 	const int y,
 	std::vector<bool> &visited,
@@ -257,22 +265,21 @@ bool MapGenerator::_findClosestCell(
 		return false;
 	}
 
-	if (m_map.isCellWalkable(x, y, WALKABLE_CONSTRAINT_ACTOR_SPAWN_LOCATION)) {
+	std::vector<std::pair<int, int>> neighbours;
+	unsigned int mask = _findWalkableMask(x, y, neighbours);
+	if (mask & constraint) {
+		xOut = neighbours[0].first;
+		yOut = neighbours[0].second;
+
 		return true;
 	}
 
 	visited[cellIndex] = true;
-	std::vector<t_coordinates> neighbours = _findWalkableNeighbours(x, y);
-	if (neighbours.size()) {
-		xOut = neighbours[0].first;
-		yOut = neighbours[0].second;
-		return true;
-	}
 
-	return _findClosestCell(x + 1, y, visited, xOut, yOut)
-		|| _findClosestCell(x - 1, y, visited, xOut, yOut)
-		|| _findClosestCell(x, y + 1, visited, xOut, yOut)
-		|| _findClosestCell(x, y - 1, visited, xOut, yOut);
+	return _findClosestCell(constraint, x + 1, y, visited, xOut, yOut)
+		|| _findClosestCell(constraint, x - 1, y, visited, xOut, yOut)
+		|| _findClosestCell(constraint, x, y + 1, visited, xOut, yOut)
+		|| _findClosestCell(constraint, x, y - 1, visited, xOut, yOut);
 }
 
 void MapGenerator::_dispatchEnemies(const int nbMaxEnemies) {
@@ -281,7 +288,7 @@ void MapGenerator::_dispatchEnemies(const int nbMaxEnemies) {
 			y = rand() % m_map.getHeight();
 
 		std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-		_findClosestCell(x, y, visited, x, y);
+		_findClosestCell(CURRENT_CELL_IS_WALKABLE | CURRENT_CELL_IS_RIM, x, y, visited, x, y);
 		m_map.addEnemySpawnableCell((char) x, (char) y);
 	}
 }
@@ -295,7 +302,7 @@ void MapGenerator::_addStair(int direction, int x, int y) {
 		x = rand() % m_map.getWidth();
 		y = rand() % m_map.getHeight();
 		std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
-		_findClosestCell(x, y, visited, x, y);
+		_findClosestCell(CURRENT_CELL_IS_WALKABLE | CURRENT_CELL_IS_RIM, x, y, visited, x, y);
 	}
 
 	S_MapChangeEventData event;
