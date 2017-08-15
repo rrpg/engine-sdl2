@@ -86,7 +86,12 @@ void FieldOfView::_lightQuadrant(
 			}
 			int ax = x + sax;
 			int ay = y + say;
-			if (!map.areCoordinatesValid(ax, ay)) {
+			if (!map.areCoordinatesValid(ax, ay) ||
+				ax < m_visibleArea.x ||
+				ay < m_visibleArea.y ||
+				ax >= m_visibleArea.x + m_visibleArea.w ||
+				ay >= m_visibleArea.y + m_visibleArea.h
+			) {
 				continue;
 			}
 
