@@ -64,8 +64,7 @@ void FieldOfView::_lightQuadrant(
 		return;
 	}
 	double nextStartSlope = startSlope;
-	// min(m_visibleArea.w, m_visibleArea.h, PLAYER_DEPTH_OF_VIEW)
-	int depth = std::min(PLAYER_DEPTH_OF_VIEW, std::min(m_visibleArea.w, m_visibleArea.h));
+	int depth = PLAYER_DEPTH_OF_VIEW;
 	int radius2 = depth * depth;
 	for (int i = row; i <= depth; i++) {
 		bool blocked = false;
@@ -86,7 +85,12 @@ void FieldOfView::_lightQuadrant(
 			}
 			int ax = x + sax;
 			int ay = y + say;
-			if (!map.areCoordinatesValid(ax, ay)) {
+			if (!map.areCoordinatesValid(ax, ay) ||
+				ax < m_visibleArea.x ||
+				ay < m_visibleArea.y ||
+				ax >= m_visibleArea.x + m_visibleArea.w ||
+				ay >= m_visibleArea.y + m_visibleArea.h
+			) {
 				continue;
 			}
 
@@ -120,16 +124,21 @@ void FieldOfView::_lightQuadrant(
 	}
 }
 
-std::vector<std::pair<t_coordinates, char>> FieldOfView::getVisibleCells() {
+std::vector<t_coordinates> FieldOfView::getVisibleCells() {
 	long unsigned sizeView = m_vVisibleCells.size();
-	std::vector<std::pair<t_coordinates, char>> visible = {};
+	std::vector<t_coordinates> visible = {};
 	for (long unsigned i = 0; i < sizeView; ++i) {
+		if (!m_vVisibleCells[i]) {
+			continue;
+		}
+
 		t_coordinates coords = {
 			(long unsigned) m_visibleArea.x + i % (long unsigned) m_visibleArea.w,
 			(long unsigned) m_visibleArea.y + i / (long unsigned) m_visibleArea.w
 		};
-		visible.push_back(std::make_pair(coords, m_vVisibleCells[i]));
+		visible.push_back(coords);
 	}
+
 	return visible;
 }
 

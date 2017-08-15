@@ -26,7 +26,7 @@ class FieldOfView {
 	public:
 	FieldOfView(SDL_Rect visibleArea);
 	void calculate(Map &map, std::shared_ptr<Actor> reference);
-	std::vector<std::pair<t_coordinates, char>> getVisibleCells();
+	std::vector<t_coordinates> getVisibleCells();
 	SDL_Rect &getVisibleArea();
 	bool isVisible(int x, int y);
 };
