@@ -32,12 +32,8 @@ void MapRenderer::render(FieldOfView &fov) {
 	int displayShiftX = m_camera.x - (int) shift.getX();
 	int displayShiftY = m_camera.y - (int) shift.getY();
 	for (auto cell : fov.getVisibleCells()) {
-		if (!cell.second) {
-			continue;
-		}
-
-		int x = cell.first.first,
-			y = cell.first.second;
+		int x = cell.first,
+			y = cell.second;
 		_renderTerrain(manager, game, fov, displayShiftX, displayShiftY, x, y);
 		_renderObjects(manager, game, displayShiftX, displayShiftY, x, y);
 		_renderActors(displayShiftX, displayShiftY, x, y);
