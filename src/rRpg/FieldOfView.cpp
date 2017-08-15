@@ -64,7 +64,6 @@ void FieldOfView::_lightQuadrant(
 		return;
 	}
 	double nextStartSlope = startSlope;
-	// min(m_visibleArea.w, m_visibleArea.h, PLAYER_DEPTH_OF_VIEW)
 	int depth = std::min(PLAYER_DEPTH_OF_VIEW, std::min(m_visibleArea.w, m_visibleArea.h));
 	int radius2 = depth * depth;
 	for (int i = row; i <= depth; i++) {
