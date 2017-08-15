@@ -39,7 +39,9 @@ DEP := $(patsubst %.o,%.deps,$(OBJ))
 
 all: game
 
-full: tools game
+full: tools game build-resources
+
+build-resources:
 	./bin/tools/data-compiler tiles resources/src/floor-tiles.dat resources/floor-tiles.dat
 	./bin/tools/data-compiler tilesets resources/src/tilesets.dat resources/tilesets.dat
 	./bin/tools/data-compiler races resources/src/taxonomy.dat resources/taxonomy.dat
@@ -71,7 +73,7 @@ gcw: $(OBJGCW)
 	mkdir -p $(BINDIR)
 	$(CC) -o $(BINDIR)/$(PROG) $^ $(CCDYNAMICFLAGS)
 
-opk:
+opk: tools build-resources
 	mkdir -p dist/bin dist/resources/DawnLike/Objects/ dist/resources/DawnLike/Characters/
 	cp -r configs dist/
 	cp resources/tilesets.dat resources/floor-tiles.dat resources/taxonomy.dat dist/resources/
