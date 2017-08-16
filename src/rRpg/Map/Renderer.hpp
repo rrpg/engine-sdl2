@@ -13,7 +13,7 @@ class Game;
 
 class MapRenderer {
 	private:
-	SDL_Rect m_camera = {};
+	SDL_Rect m_camera;
 	Map &m_map;
 	GraphicFactory &m_graphicFactory;
 

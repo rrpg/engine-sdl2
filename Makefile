@@ -76,9 +76,9 @@ gcw: $(OBJGCW)
 opk: tools build-resources
 	mkdir -p dist/bin dist/resources/DawnLike/Objects/ dist/resources/DawnLike/Characters/
 	cp -r configs dist/
-	cp resources/tilesets.dat resources/floor-tiles.dat resources/taxonomy.dat dist/resources/
+	cp resources/tilesets.dat resources/floor-tiles.dat resources/objects.dat resources/taxonomy.dat dist/resources/
 	cp resources/DawnLike/Characters/Demon1.png resources/DawnLike/Characters/Player1.png resources/DawnLike/Characters/Demon0.png resources/DawnLike/Characters/Player0.png resources/DawnLike/Characters/Rodent1.png resources/DawnLike/Characters/Rodent0.png dist/resources/DawnLike/Characters/
-	cp resources/DawnLike/Objects/Floor.png dist/resources/DawnLike/Objects/
+	cp resources/DawnLike/Objects/Floor.png resources/DawnLike/Objects/Wall.png resources/DawnLike/Objects/Tile.png dist/resources/DawnLike/Objects/
 	mkdir -p dist/bin
 	cp $(BINDIR)/$(PROG) dist/bin/
 	mksquashfs dist $(TARGETDIST) -all-root -noappend -no-exports -no-xattrs

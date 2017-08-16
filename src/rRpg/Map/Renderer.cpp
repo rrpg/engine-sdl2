@@ -9,6 +9,7 @@
 #include "SDL2_framework/Vector2D.h"
 
 MapRenderer::MapRenderer(Map &map, GraphicFactory &graphicFactory) :
+	m_camera(),
 	m_map(map),
 	m_graphicFactory(graphicFactory)
 {

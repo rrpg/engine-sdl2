@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <sstream>
+#include <string>
 #include "ActorRace.hpp"
 #include "Actor.hpp"
 #include "SDL2_framework/TextureManager.h"
@@ -28,7 +30,9 @@ std::string ActorRace::getTilesetName() {
 		int durationAnimationCycle = m_data.timePerFrame * 2;
 		int timeInCycle = (int) currTime % durationAnimationCycle;
 		int tilesetIndex = timeInCycle / m_data.timePerFrame;
-		return m_data.tileset + std::to_string(tilesetIndex);
+		std::ostringstream os;
+		os << tilesetIndex;
+		return m_data.tileset + os.str();
 	}
 }
 
