@@ -1,0 +1,8 @@
+[Desktop Entry]
+
+Type=Application
+Name=rRpg
+Comment=Roguelike Role Playing Game
+Exec=bin/rrpg
+Icon=floodit
+Categories=games;
