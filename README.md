@@ -10,6 +10,7 @@ Requires:
 
 * SDL2
 * SDL2_image
+* squashfs-tools
 
 ## Compilation
 
