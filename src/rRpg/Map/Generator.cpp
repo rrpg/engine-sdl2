@@ -39,6 +39,10 @@ void MapGenerator::_generateCave(S_MapSpecs specs) {
 		_dispatchEnemies(specs.width * specs.height * 4 / 1000);
 	}
 
+	if (specs.level == 0) {
+		_addEntrance();
+	}
+
 	if (specs.level <= CAVE_MAX_LEVEL) {
 		_addStair(STAIR_DOWN);
 	}
@@ -310,4 +314,13 @@ void MapGenerator::_addStair(int direction, int x, int y) {
 	event.mapLevel = m_map.getLevel() + direction;
 	m_map.addEvent(x, y, event);
 	m_map.addObject(x, y, direction == STAIR_UP ? OBJECT_STAIR_UP : OBJECT_STAIR_DOWN);
+}
+
+void MapGenerator::_addEntrance() {
+	int x = rand() % m_map.getWidth();
+	int y = rand() % m_map.getHeight();
+	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
+	_findClosestCell(CURRENT_CELL_IS_RIM, x, y, visited, x, y);
+
+	m_map.addObject(x, y, OBJECT_EXIT);
 }
