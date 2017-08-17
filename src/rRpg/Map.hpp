@@ -23,6 +23,7 @@ const int NEIGHBOUR_NORTH = 1;
 const int NEIGHBOUR_WEST = 2;
 const int NEIGHBOUR_EAST = 4;
 const int NEIGHBOUR_SOUTH = 8;
+const int CURRENT_CELL = 16;
 
 class Map {
 	private:
