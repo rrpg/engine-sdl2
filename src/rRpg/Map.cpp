@@ -1,4 +1,5 @@
 #include "Map.hpp"
+#include "Object.hpp"
 #include "ActorFactory.hpp"
 #include "Actor.hpp"
 #include <algorithm>
