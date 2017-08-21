@@ -43,7 +43,7 @@ void MapGenerator::_generateCave(S_MapSpecs specs) {
 		_addEntrance();
 	}
 
-	if (specs.level <= CAVE_MAX_LEVEL) {
+	if (specs.level < CAVE_MAX_LEVEL) {
 		_addStair(STAIR_DOWN);
 	}
 
