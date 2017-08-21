@@ -46,6 +46,10 @@ void MapGenerator::_generateCave(S_MapSpecs specs) {
 	if (specs.level <= CAVE_MAX_LEVEL) {
 		_addStair(STAIR_DOWN);
 	}
+
+	if (specs.level == CAVE_MAX_LEVEL) {
+		_addCaveArtifact();
+	}
 }
 
 void MapGenerator::_initialiseAutomaton() {
@@ -323,4 +327,13 @@ void MapGenerator::_addEntrance() {
 	_findClosestCell(CURRENT_CELL_IS_RIM, x, y, visited, x, y);
 
 	m_map.addObject(x, y, OBJECT_EXIT);
+}
+
+void MapGenerator::_addCaveArtifact() {
+	int x = rand() % m_map.getWidth(),
+		y = rand() % m_map.getHeight();
+
+	std::vector<bool> visited((size_t) (m_map.getWidth() * m_map.getHeight()), false);
+	_findClosestCell(CURRENT_CELL_IS_WALKABLE, x, y, visited, x, y);
+	m_map.addObject(x, y, ITEM_SCROLL);
 }

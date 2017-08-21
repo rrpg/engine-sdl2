@@ -33,6 +33,7 @@ class MapGenerator {
 	void _dispatchEnemies(const int nbMaxEnemies);
 	void _addStair(int direction, int x = -1, int y = -1);
 	void _addEntrance();
+	void _addCaveArtifact();
 
 	public:
 	MapGenerator(Map &map);
