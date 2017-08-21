@@ -94,7 +94,7 @@ void FieldOfView::_lightQuadrant(
 				continue;
 			}
 
-#ifdef __DEBUG__
+#ifdef DEBUG
 			_setCellVisible(ax, ay);
 			continue;
 #endif
