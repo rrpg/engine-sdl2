@@ -43,7 +43,8 @@ enum E_TerrainTile {
 enum E_Object {
 	OBJECT_STAIR_UP,
 	OBJECT_STAIR_DOWN,
-	OBJECT_EXIT
+	OBJECT_EXIT,
+	ITEM_SCROLL
 };
 
 
