@@ -1,16 +1,13 @@
-#ifndef __PLAY_STATE__
-#define __PLAY_STATE__
+#ifndef __GAME_OVER_STATE__
+#define __GAME_OVER_STATE__
 
 #include "SDL2_framework/State.h"
-#include "rRpg.hpp"
 
-class PlayState : public State {
+class GameOverScene : public State {
 	private:
 	static const std::string s_stateID;
-	rRpg engine;
 
 	public:
-	PlayState();
 	virtual void update();
 	virtual void render();
 	virtual bool onEnter();
