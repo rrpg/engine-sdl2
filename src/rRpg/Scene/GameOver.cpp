@@ -2,27 +2,27 @@
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/ServiceProvider.h"
 
-const std::string GameOverState::s_stateID = "GAME_OVER";
+const std::string GameOverScene::s_stateID = "GAME_OVER";
 
-void GameOverState::update() {
+void GameOverScene::update() {
 	if (ServiceProvider::getUserActions()->getActionState("QUIT")) {
 		Game::Instance()->quit();
 		return;
 	}
 }
 
-void GameOverState::render() {
+void GameOverScene::render() {
 }
 
-bool GameOverState::onEnter() {
+bool GameOverScene::onEnter() {
 	bool ret = true;
 	return ret;
 }
 
-bool GameOverState::onExit() {
+bool GameOverScene::onExit() {
 	return true;
 }
 
-std::string GameOverState::getStateID() const {
+std::string GameOverScene::getStateID() const {
 	return s_stateID;
 }

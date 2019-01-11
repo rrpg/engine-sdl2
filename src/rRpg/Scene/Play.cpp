@@ -5,11 +5,11 @@
 #include "SDL2_framework/Game.h"
 #include "SDL2_framework/ServiceProvider.h"
 
-const std::string PlayState::s_stateID = "PLAY";
+const std::string PlayScene::s_stateID = "PLAY";
 
-PlayState::PlayState() : engine(rRpg()) {}
+PlayScene::PlayScene() : engine(rRpg()) {}
 
-void PlayState::update() {
+void PlayScene::update() {
 	if (ServiceProvider::getUserActions()->getActionState("QUIT")) {
 		Game::Instance()->quit();
 		return;
@@ -18,19 +18,19 @@ void PlayState::update() {
 	engine.update();
 	if (engine.getHero()->isDead()) {
 		Game::Instance()->getStateMachine()->changeState(
-			new GameOverState()
+			new GameOverScene()
 		);
 	}
 
-	GameState::update();
+	State::update();
 }
 
-void PlayState::render() {
+void PlayScene::render() {
 	engine.render();
-	GameState::render();
+	State::render();
 }
 
-bool PlayState::onEnter() {
+bool PlayScene::onEnter() {
 	bool ret = true;
 	engine.setTilesFile(
 		Game::Instance()->getBinaryPath() + "/../resources/floor-tiles.dat"
@@ -48,10 +48,10 @@ bool PlayState::onEnter() {
 	return ret;
 }
 
-bool PlayState::onExit() {
+bool PlayScene::onExit() {
 	return true;
 }
 
-std::string PlayState::getStateID() const {
+std::string PlayScene::getStateID() const {
 	return s_stateID;
 }

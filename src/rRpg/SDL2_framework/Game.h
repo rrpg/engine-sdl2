@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "InputHandler.h"
-#include "GameStateMachine.h"
+#include "StateMachine.h"
 #include "TextureManager.h"
 #include <string>
 
@@ -46,7 +46,7 @@ class Game {
 	 */
 	unsigned long m_iNbFiles = 0;
 
-	GameStateMachine* m_gameStateMachine = 0;
+	StateMachine* m_gameStateMachine = 0;
 
 	/**
 	 * Dimensions of the screen
@@ -191,7 +191,7 @@ class Game {
 	/**
 	 * Getter for the state machine.
 	 */
-	GameStateMachine* getStateMachine();
+	StateMachine* getStateMachine();
 
 	/**
 	 * Getters for the screen dimensions
