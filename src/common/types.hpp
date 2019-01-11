@@ -57,7 +57,7 @@ struct S_ObjectData {
 };
 
 struct S_MapChangeEventData {
-	char mapName[MAX_LENGTH_MAP_NAME];
+	char mapName[MAX_LENGTH_MAP_NAME + 1];
 	int mapLevel;
 };
 
@@ -73,7 +73,7 @@ typedef std::pair<int, int> t_coordinates;
 enum E_MapType {DEFAULT, CAVE};
 
 struct S_MapSpecs {
-	char name[MAX_LENGTH_MAP_NAME];
+	char name[MAX_LENGTH_MAP_NAME + 1];
 	int level;
 	E_MapType type;
 	int width;

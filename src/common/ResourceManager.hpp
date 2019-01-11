@@ -4,7 +4,7 @@
 #include <fstream>
 #include <map>
 
-const int MAX_CHARS_PER_LINE = 1024;
+const long unsigned MAX_CHARS_PER_LINE = 1024;
 
 template <class resourceType> class ResourceManager {
 	private:

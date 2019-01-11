@@ -109,7 +109,7 @@ int UserActions::setActionsFromFile(const char* mappingFile) {
 			continue;
 		}
 
-		char commandName[MAX_CHAR_COMMAND];
+		char commandName[MAX_CHAR_COMMAND + 1];
 		char* token;
 		InputType type;
 		int value,
