@@ -1,5 +1,5 @@
-#ifndef __GameState__
-#define __GameState__
+#ifndef __State__
+#define __State__
 
 #include <string>
 
@@ -11,9 +11,9 @@
  * (to differenciate it from another state) and has two hooks (one when the
  * machine enters the state and one when the machine leaves it).
  */
-class GameState {
+class State {
 	public:
-	virtual	~GameState() {}
+	virtual	~State() {}
 	virtual void update();
 	virtual void render();
 	virtual bool onEnter() = 0;

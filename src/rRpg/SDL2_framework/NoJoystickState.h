@@ -1,12 +1,12 @@
 #ifndef __NoJoystickState__
 #define __NoJoystickState__
 
-#include "GameState.h"
+#include "State.h"
 
 /**
  * State used when a joystick is unplugged
  */
-class NoJoystickState : public GameState {
+class NoJoystickState : public State {
 	private:
 	static const std::string s_menuID;
 

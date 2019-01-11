@@ -161,7 +161,7 @@ bool Game::_loadResources() {
  * Initialises the State machine and sets the MainMenu state as initial state.
  */
 void Game::_initGameMachine() {
-	m_gameStateMachine = new GameStateMachine();
+	m_gameStateMachine = new StateMachine();
 }
 
 /**
@@ -240,7 +240,7 @@ void Game::quit() {
 	m_bRunning = false;
 }
 
-GameStateMachine* Game::getStateMachine() {
+StateMachine* Game::getStateMachine() {
 	return m_gameStateMachine;
 }
 

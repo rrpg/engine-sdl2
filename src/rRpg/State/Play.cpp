@@ -22,12 +22,12 @@ void PlayState::update() {
 		);
 	}
 
-	GameState::update();
+	State::update();
 }
 
 void PlayState::render() {
 	engine.render();
-	GameState::render();
+	State::render();
 }
 
 bool PlayState::onEnter() {

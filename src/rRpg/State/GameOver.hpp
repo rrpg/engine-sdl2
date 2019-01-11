@@ -1,9 +1,9 @@
 #ifndef __GAME_OVER_STATE__
 #define __GAME_OVER_STATE__
 
-#include "SDL2_framework/GameState.h"
+#include "SDL2_framework/State.h"
 
-class GameOverState : public GameState {
+class GameOverState : public State {
 	private:
 	static const std::string s_stateID;
 
